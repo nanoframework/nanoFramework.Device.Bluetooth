@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31410.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "nanoFramework.Device.Bluetooth", "nanoFramework.Device.Bluetooth\nanoFramework.Device.Bluetooth.nfproj", "{3E3DFD1B-89F3-455D-83D4-C34C7FC5422E}"
+EndProject
+Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "NFUnitTest1", "NFUnitTest1\NFUnitTest1.nfproj", "{F13430A1-C6F5-47D8-BCEC-8B601CF9149B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E3DFD1B-89F3-455D-83D4-C34C7FC5422E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E3DFD1B-89F3-455D-83D4-C34C7FC5422E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E3DFD1B-89F3-455D-83D4-C34C7FC5422E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3E3DFD1B-89F3-455D-83D4-C34C7FC5422E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E3DFD1B-89F3-455D-83D4-C34C7FC5422E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E3DFD1B-89F3-455D-83D4-C34C7FC5422E}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{F13430A1-C6F5-47D8-BCEC-8B601CF9149B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F13430A1-C6F5-47D8-BCEC-8B601CF9149B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F13430A1-C6F5-47D8-BCEC-8B601CF9149B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{F13430A1-C6F5-47D8-BCEC-8B601CF9149B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F13430A1-C6F5-47D8-BCEC-8B601CF9149B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F13430A1-C6F5-47D8-BCEC-8B601CF9149B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {020669FF-ED77-41DA-8477-6B4498AF1E7F}
+	EndGlobalSection
+EndGlobal
