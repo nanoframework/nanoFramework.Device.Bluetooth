@@ -1,19 +1,47 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- develop
+  branches:
+    include: [main, develop, "release-*" ]
+  paths:
+    exclude: [README.md, LICENSE.md, CHANGELOG.md, "*.md", NuGet.Config, .github_changelog_generator, .gitignore]
+  tags:
+    include: ["v*"]
+
+# PR always trigger build
+pr:
+  autoCancel: true
+
+# add nf-tools repo to resources (for Azure Pipelines templates)
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: nanoframework/nf-tools
+      endpoint: nanoframework
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'windows-2019'
+
+variables:
+  DOTNET_NOLOGO: true
+  solution: 'nanoFramework.Device.Bluetooth.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  nugetPackageName: 'nanoFramework.Device.Bluetooth'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+# step from template @ nf-tools repo
+# all build, update and publish steps
+- template: azure-pipelines-templates/class-lib-build.yml@templates
+  parameters:
+    classLibName: $(nugetPackageName)
+    sonarCloudProject: 'nanoframework_nanoFramework.Device.Bluetooth'
+    runUnitTests: true
+
+# step from template @ nf-tools repo
+# report error
+- template: azure-pipelines-templates/discord-webhook-task.yml@templates  
+  parameters:
+    status: 'failure'
+    webhookUrl: '$(DiscordWebhook)'
+    message: ''
