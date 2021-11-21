@@ -10,7 +10,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// </summary>
     public sealed class GattClientNotificationResult
     {
-        private readonly byte _result = 0;
+        private readonly byte _result;
         private readonly GattCommunicationStatus _status;
         private readonly GattSubscribedClient _client;
         private readonly ushort _bytesSent;
@@ -26,13 +26,13 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <summary>
         /// Gets the protocol error.
         /// </summary>
-        public byte ProtocolError { get =>_result; }
+        public byte ProtocolError { get => _result; }
 
         /// <summary>
         /// Gets the GATT communication status.
         /// </summary>
         public GattCommunicationStatus Status { get => _status; }
- 
+
         /// <summary>
         /// Gets the subscribed client.
         /// </summary>

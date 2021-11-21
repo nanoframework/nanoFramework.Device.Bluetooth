@@ -10,11 +10,11 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// This class is the result of the Create operation.
     /// </summary>
-    public sealed class GattServiceProviderResult : IGattServiceProviderResult
+    public sealed class GattServiceProviderResult
     {
         private readonly GattServiceProvider _serviceProvider;
         private readonly BluetoothError _error;
-        
+
         internal GattServiceProviderResult(GattServiceProvider serviceProvider, BluetoothError error)
         {
             _serviceProvider = serviceProvider;

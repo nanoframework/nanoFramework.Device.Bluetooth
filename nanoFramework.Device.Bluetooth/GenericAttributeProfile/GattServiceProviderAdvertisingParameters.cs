@@ -10,7 +10,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// This class is used to define the GATT service advertisement parameters.
     /// </summary>
-    public sealed class GattServiceProviderAdvertisingParameters : IGattServiceProviderAdvertisingParameters, IGattServiceProviderAdvertisingParameters2
+    public sealed class GattServiceProviderAdvertisingParameters
     {
         const string _defaultDeviceName = "nanoFramework";
 
@@ -35,12 +35,12 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <summary>
         /// Gets or sets a boolean indicating that the GATT service is discoverable.
         /// </summary>
-        public bool IsDiscoverable { get => _isDiscoverable; set => _isDiscoverable= value; }
+        public bool IsDiscoverable { get => _isDiscoverable; set => _isDiscoverable = value; }
 
         /// <summary>
         /// Gets or sets a boolean that indicates if the GATT service is connect-able.
         /// </summary>
-        public bool IsConnectable { get => _isConnectable; set => _isConnectable=value; }
+        public bool IsConnectable { get => _isConnectable; set => _isConnectable = value; }
 
         /// <summary>
         /// Friendly device name used for advertising service.
@@ -69,5 +69,5 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// also be included in the same section in the advertisement.
         /// </summary>
         public Buffer ServiceData { get => _serviceData; set => _serviceData = value; }
-    }       
+    }
 }

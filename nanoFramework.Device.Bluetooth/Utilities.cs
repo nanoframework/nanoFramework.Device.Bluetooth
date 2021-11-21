@@ -21,34 +21,42 @@ namespace nanoFramework.Device.Bluetooth
             /// CharacteristicExtendedProperties
             /// </summary>
             CharacteristicExtendedProperties = 0x2900,
+
             /// <summary>
             /// CharacteristicUserDescription
             /// </summary>
             CharacteristicUserDescription = 0x2901,
+
             /// <summary>
             /// ClientCharacteristicConfiguration
             /// </summary>
             ClientCharacteristicConfiguration = 0x2902,
+
             /// <summary>
             /// ServerCharacteristicConfiguration
             /// </summary>
             ServerCharacteristicConfiguration = 0x2903,
+
             /// <summary>
             /// CharacteristicPresentationFormat
             /// </summary>
             CharacteristicPresentationFormat = 0x2904,
+
             /// <summary>
             /// CharacteristicAggregateFormat
             /// </summary>
             CharacteristicAggregateFormat = 0x2905,
+
             /// <summary>
             /// ValidRange
             /// </summary>
             ValidRange = 0x2906,
+
             /// <summary>
             /// ExternalReportReference
             /// </summary>
             ExternalReportReference = 0x2907,
+
             /// <summary>
             /// ReportReference
             /// </summary>
@@ -92,6 +100,8 @@ namespace nanoFramework.Device.Bluetooth
         /// <returns></returns>
         public static Guid CreateShortUuid(string uuid16)
         {
+            // UUID is the name used by Bluetooth SIG for a Guid
+            // This is the base UUID for all standard Bluetooth SIG UUIDs 
             return new Guid("0000" + uuid16 + "-0000-1000-8000-00805f9b34fb");
         }
     }

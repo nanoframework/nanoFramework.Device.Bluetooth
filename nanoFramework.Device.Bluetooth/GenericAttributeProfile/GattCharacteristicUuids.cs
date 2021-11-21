@@ -153,7 +153,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         ///  Gets the Bluetooth SIG-defined Temperature Measurement Characteristic UUID.
         /// </summary>
         public static Guid TemperatureMeasurement { get => Utilities.CreateShortUuid("2a1c"); }
-        
+
         ////
         //// Summary:
         ////     Gets the Bluetooth SIG-defined Temperature Type Characteristic UUID.

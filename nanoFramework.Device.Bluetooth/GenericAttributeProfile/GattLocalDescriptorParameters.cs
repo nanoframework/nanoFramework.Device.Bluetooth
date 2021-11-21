@@ -31,7 +31,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <summary>
         /// Gets or sets the write protection level.
         /// </summary>
-        public GattProtectionLevel WriteProtectionLevel { get => _writeProtectionLevel; set => _writeProtectionLevel=value; }
+        public GattProtectionLevel WriteProtectionLevel { get => _writeProtectionLevel; set => _writeProtectionLevel = value; }
 
         /// <summary>
         /// Gets or sets the static value.

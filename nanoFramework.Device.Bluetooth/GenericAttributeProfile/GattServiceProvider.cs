@@ -12,7 +12,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// This class is used to advertise a GATT service.
     /// </summary>
-    public sealed class GattServiceProvider : IGattServiceProvider
+    public sealed class GattServiceProvider
     {
         private readonly GattLocalService _service;
 
@@ -36,8 +36,8 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         internal GattServiceProvider(Guid serviceUuid)
         {
             _service = new GattLocalService(serviceUuid);
-            
-           NativeInitService();
+
+            NativeInitService();
         }
 
         /// <summary>
@@ -59,8 +59,8 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             _isDiscoverable = parameters.IsDiscoverable;
             _serviceData = parameters.ServiceData;
 
-           _deviceName = Encoding.UTF8.GetBytes(parameters.DeviceName);
-            
+            _deviceName = Encoding.UTF8.GetBytes(parameters.DeviceName);
+
             if (NativeStartAdvertising())
             {
                 _status = GattServiceProviderAdvertisementStatus.Started;
@@ -111,6 +111,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern void NativeStopAdvertising();
+
         #endregion
     }
 }

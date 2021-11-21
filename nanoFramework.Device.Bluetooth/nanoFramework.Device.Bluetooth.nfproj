@@ -47,6 +47,7 @@
     <Compile Include="BluetoothError.cs" />
     <Compile Include="BluetoothEvent.cs" />
     <Compile Include="BluetoothEventListener.cs" />
+    <Compile Include="BluetoothEventType.cs" />
     <Compile Include="GenericAttributeProfile\GattCharacteristicProperties.cs" />
     <Compile Include="GenericAttributeProfile\GattCharacteristicUuids.cs" />
     <Compile Include="GenericAttributeProfile\GattClientNotificationResult.cs" />
@@ -76,10 +77,6 @@
     <Compile Include="GenericAttributeProfile\GattWriteOption.cs" />
     <Compile Include="GenericAttributeProfile\GattWriteRequest.cs" />
     <Compile Include="GenericAttributeProfile\GattWriteRequestedEventArgs.cs" />
-    <Compile Include="GenericAttributeProfile\IGattServiceProvider.cs" />
-    <Compile Include="GenericAttributeProfile\IGattServiceProviderAdvertisingParameters.cs" />
-    <Compile Include="GenericAttributeProfile\IGattServiceProviderAdvertisingParameters2.cs" />
-    <Compile Include="GenericAttributeProfile\IGattServiceProviderResult.cs" />
     <Compile Include="IO\Buffer.cs" />
     <Compile Include="IO\DataReader.cs" />
     <Compile Include="IO\DataWriter.cs" />

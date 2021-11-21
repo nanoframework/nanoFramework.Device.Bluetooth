@@ -12,7 +12,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// Extended Characteristic Properties Descriptor.
     /// </summary>
     [Flags]
-    public enum GattCharacteristicProperties: uint
+    public enum GattCharacteristicProperties : uint
     {
         /// <summary>
         /// The characteristic doesn’t have any properties that apply.

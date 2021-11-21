@@ -1,3 +1,8 @@
+//
+// Copyright (c) .NET Foundation and Contributors
+// See LICENSE file in the project root for full license information.
+//
+
 using System;
 using nanoFramework.TestFramework;
 using nanoFramework.Device.Bluetooth;
@@ -10,7 +15,6 @@ namespace NFUnitTest1
     {
         Guid ServiceUuid1 = new Guid("CA761232-ED42-11CE-BACD-00AA0057B224");
 
-
         [TestMethod]
         public void CreateProvider()
         {
@@ -20,12 +24,9 @@ namespace NFUnitTest1
             Assert.False(result.Error == BluetoothError.Success);
 
             serviceProvider = result.ServiceProvider;
-            Assert.True(serviceProvider == null, "Service provider is null");
+            Assert.Null(serviceProvider, "Service provider is null");
 
             Assert.True(serviceProvider.AdvertisementStatus == GattServiceProviderAdvertisementStatus.Stopped, "Advertisement status should be stopped");
-
-            Assert.True(serviceProvider.Service == null);
         }
     }
-
 }

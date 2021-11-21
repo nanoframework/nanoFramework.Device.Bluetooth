@@ -11,7 +11,7 @@ namespace nanoFramework.Device.Bluetooth
     /// <summary>
     /// Reads data from an input buffer.
     /// </summary>
-    public sealed class DataReader 
+    public sealed class DataReader
     {
         private Buffer _buffer;
         private int _currentReadPosition;
@@ -40,8 +40,7 @@ namespace nanoFramework.Device.Bluetooth
         /// <value>
         /// The size of the buffer that has not been read, in bytes.
         /// </value>
-        public uint UnconsumedBufferLength { get { return (_buffer.Length - (uint)_currentReadPosition); } }
-
+        public uint UnconsumedBufferLength { get => _buffer.Length - (uint)_currentReadPosition; }
 
         /// <summary>
         /// Reads a Boolean value from the input buffer.
@@ -61,7 +60,7 @@ namespace nanoFramework.Device.Bluetooth
         /// </summary>
         /// <param name="length">The length of the buffer, in bytes.</param>
         /// <returns>The buffer.</returns>
-        public Buffer ReadBuffer(UInt32 length)
+        public Buffer ReadBuffer(uint length)
         {
             Buffer buffer = new Buffer(length);
 
@@ -195,7 +194,7 @@ namespace nanoFramework.Device.Bluetooth
         /// </summary>
         /// <param name="codeUnitCount">The length of the string.</param>
         /// <returns>The value.</returns>
-        public string ReadString(UInt32 codeUnitCount)
+        public string ReadString(uint codeUnitCount)
         {
             Char[] buffer = new Char[codeUnitCount];
 
@@ -269,7 +268,7 @@ namespace nanoFramework.Device.Bluetooth
         {
             if (UnconsumedBufferLength < count)
             {
-                throw new ArgumentOutOfRangeException("count","No data in buffer");
+                throw new ArgumentOutOfRangeException("count", "No data in buffer");
             }
 
             // save current read position

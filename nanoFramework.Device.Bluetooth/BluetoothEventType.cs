@@ -6,28 +6,31 @@
 using System;
 using nanoFramework.Runtime.Events;
 
-namespace nanoFramework.Device.Bluetooth 
+namespace nanoFramework.Device.Bluetooth
 {
-    internal class BluetoothEvent : BaseEvent
+    /// <summary>
+    /// Event type for Bluetooth
+    /// </summary>
+    public enum BluetoothEventType
     {
         /// <summary>
-        /// Type of Bluetooth event
+        /// Attribute Read
         /// </summary>
-        public BluetoothEventType type;
+        Read,
 
         /// <summary>
-        /// Event or Connect ID
+        /// Attribute write
         /// </summary>
-        public ushort ID;
+        Write,
 
         /// <summary>
-        /// ID of Characteristic
+        /// Client Subscribed
         /// </summary>
-        public ushort characteristicId;
+        ClientSubscribed,
 
         /// <summary>
-        /// ID of Descriptor
+        /// Client unsubscribed or connection terminated
         /// </summary>
-        public ushort descriptorId;
+        ClientUnsubscribed
     }
 }

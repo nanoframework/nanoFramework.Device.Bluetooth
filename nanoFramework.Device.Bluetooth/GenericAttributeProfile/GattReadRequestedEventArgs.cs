@@ -10,12 +10,12 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// This class contains the arguments for the StateChanged event.
     /// </summary>
-    public sealed class GattReadRequestedEventArgs 
+    public sealed class GattReadRequestedEventArgs
     {
-        private readonly UInt16 _eventID;
+        private readonly ushort _eventID;
         private readonly GattSession _session = null;
 
-        internal GattReadRequestedEventArgs(UInt16 eventID, GattSession session)
+        internal GattReadRequestedEventArgs(ushort eventID, GattSession session)
         {
             _eventID = eventID;
             _session = session;

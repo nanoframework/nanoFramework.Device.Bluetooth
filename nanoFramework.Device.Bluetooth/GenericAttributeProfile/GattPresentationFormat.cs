@@ -8,14 +8,13 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     ///  Represents the value of a single Presentation Format GATT Descriptor.
     /// </summary>
-    public sealed class GattPresentationFormat //: IGattPresentationFormat
+    public sealed class GattPresentationFormat
     {
         private readonly byte _formatType;
         private readonly int _exponent;
         private readonly ushort _unit;
         private readonly byte _namespaceId;
         private readonly ushort _description;
-
 
         /// <summary>
         /// Creates a GattPresentationFormat object from parts.
@@ -28,7 +27,6 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <returns>An instance of GattPresentationFormat.</returns>
         public static GattPresentationFormat FromParts(byte formatType, int exponent, ushort unit, byte namespaceId, ushort description)
         {
-
             return new GattPresentationFormat(formatType, exponent, unit, namespaceId, description);
         }
 

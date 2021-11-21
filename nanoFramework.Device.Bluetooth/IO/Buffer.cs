@@ -9,12 +9,12 @@ namespace nanoFramework.Device.Bluetooth
     public class Buffer
     {
         /// <summary>
-        /// Byte 
+        /// Byte buffer
         /// </summary>
         private byte[] _buffer;
 
         /// <summary>
-        /// Length of data in buffer.
+        /// Length of data in byte buffer.
         /// </summary>
         protected uint _length;
 
@@ -55,8 +55,8 @@ namespace nanoFramework.Device.Bluetooth
                 {
                     throw new ArgumentException("Length greater than current buffer");
                 }
-                _length = value;
 
+                _length = value;
             }
         }
 

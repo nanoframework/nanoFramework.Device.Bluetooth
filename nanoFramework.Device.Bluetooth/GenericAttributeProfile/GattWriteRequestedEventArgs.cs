@@ -12,10 +12,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// </summary>
     public sealed class GattWriteRequestedEventArgs //: IGattWriteRequestedEventArgs
     {
-        private readonly UInt16 _eventID;
+        private readonly ushort _eventID;
         private readonly GattSession _session = null;
 
-        internal GattWriteRequestedEventArgs(UInt16 eventID, GattSession session)
+        internal GattWriteRequestedEventArgs(ushort eventID, GattSession session)
         {
             _eventID = eventID;
             _session = session;

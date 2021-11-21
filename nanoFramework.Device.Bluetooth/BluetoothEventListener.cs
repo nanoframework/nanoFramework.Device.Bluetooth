@@ -28,14 +28,13 @@ namespace nanoFramework.Device.Bluetooth
             return new BluetoothEvent
             {
                 // Data1, Data2 is packed by PostManagedEvent, so we need to unpack the high word.
-
+                //
                 // Data1
                 // DDCC00TT where DD = descriptorId, CC = characteristicId, TT = BluetoothEventType
-
                 type = (BluetoothEventType)(data1 & 0xff),
-                characteristicId = (UInt16)((data1 >> 16) & 0x00ff),
-                descriptorId = (UInt16)(data1 >> 24),
-                ID = (UInt16)(data2 & 0xffff)
+                characteristicId = (ushort)((data1 >> 16) & 0x00ff),
+                descriptorId = (ushort)(data1 >> 24),
+                ID = (ushort)(data2 & 0xffff)
             };
         }
 
@@ -75,6 +74,7 @@ namespace nanoFramework.Device.Bluetooth
                             lc.OnSubscribedClientsChanged(true, sc);
                         }
                         break;
+
                     case BluetoothEventType.ClientUnsubscribed:
                         {
                             GattSession gs = GattSession.FromDeviceId(new BluetoothDeviceId(btEvent.ID));
@@ -108,7 +108,7 @@ namespace nanoFramework.Device.Bluetooth
             }
         }
 
-        private GattLocalCharacteristic FindCharacteristic(UInt16 id)
+        private GattLocalCharacteristic FindCharacteristic(ushort id)
         {
             for (int i = 0; i < _characteristicMap.Count; i++)
             {
@@ -121,6 +121,5 @@ namespace nanoFramework.Device.Bluetooth
             return null;
         }
     }
-
 }
 

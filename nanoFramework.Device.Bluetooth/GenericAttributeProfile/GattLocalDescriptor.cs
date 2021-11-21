@@ -10,14 +10,14 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     ///  This class defines a descriptor of a local characteristic.
     /// </summary>
-    public sealed class GattLocalDescriptor 
+    public sealed class GattLocalDescriptor
     {
-        private static UInt16 GattLocalDescriptorIndex = 0;
+        private static ushort GattLocalDescriptorIndex = 0;
 
         // Each Descriptor will have unique _descriptorId for event lookup, events for descriptors are handled by User app.
         // This comprises of characteristic ID + GattLocalDescriptorIndex in the form
         // x'DDCC' where DD is Descriptor and CC characteristic
-        internal UInt16 _descriptorId;
+        internal ushort _descriptorId;
 
         private readonly GattLocalCharacteristic _charactisic;
 
@@ -41,7 +41,6 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <param name="WriteRequestEventArgs">Event arguments</param>
         public delegate void GattLocalDescriptorWriteEventHandler(GattLocalCharacteristic sender, GattWriteRequestedEventArgs WriteRequestEventArgs);
 
-
         internal GattLocalDescriptor(Guid uuid, GattLocalDescriptorParameters parameters, GattLocalCharacteristic charactisic)
         {
             _uuid = uuid.ToByteArray();
@@ -51,10 +50,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             _readProtectionLevel = parameters.ReadProtectionLevel;
             _staticValue = parameters.StaticValue;
 
-            _descriptorId = (UInt16)((NextDescriptorIndex() << 8) + _charactisic._characteristicId);
+            _descriptorId = (ushort)((NextDescriptorIndex() << 8) + _charactisic._characteristicId);
         }
 
-        private static UInt16 NextDescriptorIndex()
+        private static ushort NextDescriptorIndex()
         {
             return ++GattLocalDescriptorIndex;
         }
@@ -102,6 +101,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
                 ReadRequested?.Invoke(_charactisic, e);
                 return true;
             }
+
             return false;
         }
 

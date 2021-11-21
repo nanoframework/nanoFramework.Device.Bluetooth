@@ -58,7 +58,7 @@ namespace nanoFramework.Device.Bluetooth
         /// <param name="buffer">The buffer.</param>
         /// <param name="start">The starting byte to be written.</param>
         /// <param name="count">The number of bytes to write.</param>
-        public void WriteBuffer(Buffer buffer, UInt32 start, UInt32 count)
+        public void WriteBuffer(Buffer buffer, uint start, uint count)
         {
             byte[] copyBuffer = new byte[count];
             Array.Copy(buffer.Data, (int)start, copyBuffer, 0, (int)count);
@@ -188,7 +188,7 @@ namespace nanoFramework.Device.Bluetooth
         /// Writes a 32-bit unsigned integer value to the output stream.
         /// </summary>
         /// <param name="value">The value to write.</param>
-        public void WriteUInt32(UInt32 value)
+        public void WriteUInt32(uint value)
         {
             WriteBytes(BitConverter.GetBytes(value));
         }

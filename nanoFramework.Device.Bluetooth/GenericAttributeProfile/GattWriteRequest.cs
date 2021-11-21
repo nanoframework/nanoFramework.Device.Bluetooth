@@ -11,15 +11,15 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// This class represents a GATT write request.
     /// </summary>
-    public sealed class GattWriteRequest 
+    public sealed class GattWriteRequest
     {
         private readonly GattWriteOption _option = GattWriteOption.WriteWithResponse;
         private readonly uint _offset = 0;
-        private readonly Buffer _value = null ;
+        private readonly Buffer _value = null;
 
-        private readonly UInt16 _eventID;
+        private readonly ushort _eventID;
 
-        internal GattWriteRequest(UInt16 eventID)
+        internal GattWriteRequest(ushort eventID)
         {
             _eventID = eventID;
 
@@ -65,13 +65,13 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         #region external calls to native implementations
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern byte[] NativeWriteGetData(UInt16 eventID);
+        private extern byte[] NativeWriteGetData(ushort eventID);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern void NativeWriteRespond(UInt16 eventID);
+        private extern void NativeWriteRespond(ushort eventID);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern void NativeWriteRespondWithProtocolError(UInt16 eventID, byte protocolError);
+        private extern void NativeWriteRespondWithProtocolError(ushort eventID, byte protocolError);
 
         #endregion
     }

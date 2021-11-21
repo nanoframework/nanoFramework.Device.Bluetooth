@@ -10,7 +10,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// This class contains the local characteristic descriptor parameters.
     /// </summary>
-    public sealed class GattLocalCharacteristicParameters 
+    public sealed class GattLocalCharacteristicParameters
     {
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private GattProtectionLevel _writeProtectionLevel;
@@ -45,22 +45,22 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <summary>
         /// Gets and sets the write protection level.
         /// </summary>
-        public GattProtectionLevel WriteProtectionLevel { get => _writeProtectionLevel; set => _writeProtectionLevel=value; }
+        public GattProtectionLevel WriteProtectionLevel { get => _writeProtectionLevel; set => _writeProtectionLevel = value; }
 
         /// <summary>
         /// Gets or sets the user-friendly description.
         /// </summary>
-        public string UserDescription { get => _userDescription; set => _userDescription=value; }
+        public string UserDescription { get => _userDescription; set => _userDescription = value; }
 
         /// <summary>
         ///  Gets or sets the static value.
         /// </summary>
-        public Buffer StaticValue { get => _staticValue; set => _staticValue=value; }
+        public Buffer StaticValue { get => _staticValue; set => _staticValue = value; }
 
         /// <summary>
         /// Gets or sets the read protection level.
         /// </summary>
-        public GattProtectionLevel ReadProtectionLevel { get => _readProtectionLevel; set => _readProtectionLevel=value; }
+        public GattProtectionLevel ReadProtectionLevel { get => _readProtectionLevel; set => _readProtectionLevel = value; }
 
         /// <summary>
         /// Gets the properties.
@@ -77,9 +77,8 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// </summary>
         public void CreateGattPresentationFormat(byte formatType, int exponent, ushort unit, byte namespaceId, ushort decsription)
         {
-            _presentationFormats.Add(new GattPresentationFormat(formatType, exponent, unit,  namespaceId, decsription));
+            _presentationFormats.Add(new GattPresentationFormat(formatType, exponent, unit, namespaceId, decsription));
         }
-
     }
 }
 

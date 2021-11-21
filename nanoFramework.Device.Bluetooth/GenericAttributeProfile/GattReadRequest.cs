@@ -8,15 +8,15 @@ using System.Runtime.CompilerServices;
 
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 {
-     /// <summary>
+    /// <summary>
     /// This class represents a Bluetooth GATT read request.
     /// </summary>
     public sealed class GattReadRequest
     {
         private Buffer _readValue;
-        private readonly UInt16 _eventID;
+        private readonly ushort _eventID;
 
-        internal GattReadRequest( UInt16 eventID )
+        internal GattReadRequest(ushort eventID)
         {
             _eventID = eventID;
         }
@@ -49,18 +49,13 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// </summary>
         public uint Length { get => _readValue.Length; }
 
-        /// <summary>
-        /// Gets the read request offset.
-        /// </summary>
-        public uint Offset { get => 0; }
-
         #region external calls to native implementations
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern void NativeReadRespondWithValue(UInt16 eventID, byte[] value);
+        private extern void NativeReadRespondWithValue(ushort eventID, byte[] value);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern void NativeReadRespondWithProtocolError(UInt16 eventID, byte protocolError);
+        private extern void NativeReadRespondWithProtocolError(ushort eventID, byte protocolError);
 
         #endregion
     }
