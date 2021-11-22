@@ -37,7 +37,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <summary>
         /// Gets the Bluetooth SIG-defined Client Characteristic Configuration Descriptor UUID.
         /// </summary>
-        public static Guid ClientCharacteristicConfiguration { get => CreateUuidFromShortCoded((UInt16)Utilities.GattNativeDescriptorUuid.ClientCharacteristicConfiguration); }
+        public static Guid ClientCharacteristicConfiguration { get => CreateUuidFromShortCoded((ushort)Utilities.GattNativeDescriptorUuid.ClientCharacteristicConfiguration); }
 
         /// <summary>
         /// Gets the Bluetooth SIG-defined Server Characteristic Configuration Descriptor UUID.
