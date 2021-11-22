@@ -11,7 +11,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// This class represents a Bluetooth GATT read request.
     /// </summary>
-    public sealed class GattReadRequest
+    public class GattReadRequest
     {
         private Buffer _readValue;
         private readonly ushort _eventID;

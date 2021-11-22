@@ -8,7 +8,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// A result of CreateCharacteristic
     /// </summary>
-    public sealed class GattLocalCharacteristicResult
+    public class GattLocalCharacteristicResult
     {
         private readonly GattLocalCharacteristic _characteristic;
         private readonly BluetoothError _error;

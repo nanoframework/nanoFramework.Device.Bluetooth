@@ -8,7 +8,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     ///  Represents the value of a single Presentation Format GATT Descriptor.
     /// </summary>
-    public sealed class GattPresentationFormat
+    public class GattPresentationFormat
     {
         private readonly byte _formatType;
         private readonly int _exponent;

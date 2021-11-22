@@ -81,9 +81,6 @@
     <Compile Include="IO\DataReader.cs" />
     <Compile Include="IO\DataWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SPP\IBluetoothSpp.cs" />
-    <Compile Include="SPP\NordicSpp.cs" />
-    <Compile Include="SPP\SppReceiveEventArgs.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>

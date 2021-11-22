@@ -8,7 +8,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// The result of NotifyValue
     /// </summary>
-    public sealed class GattClientNotificationResult
+    public class GattClientNotificationResult
     {
         private readonly byte _result;
         private readonly GattCommunicationStatus _status;

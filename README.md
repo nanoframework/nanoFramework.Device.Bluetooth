@@ -4,7 +4,7 @@
 
 -----
 
-### Welcome to the .NET **nanoFramework** nanoFramework.Device.BluetoothLibrary repository!
+# Welcome to the .NET **nanoFramework** nanoFramework.Device.BluetoothLibrary repository!
 
 ## Build status
 
@@ -12,7 +12,6 @@
 |:-|---|---|
 | nanoFramework.Device.Bluetooth | [![Build Status](https://dev.azure.com/nanoframework/nanoFramework.Device.Bluetooth/_apis/build/status/nanoFramework.Device.Bluetooth?branchName=develop)](https://dev.azure.com/nanoframework/nanoFramework.Device.Bluetooth/_build/latest?definitionId=72&branchName=main) | [![NuGet](https://img.shields.io/nuget/v/nanoFramework.Device.Bluetooth.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.Device.Bluetooth/) |
 | nanoFramework.Device.Bluetooth (preview) | [![Build Status](https://dev.azure.com/nanoframework/nanoFramework.Device.Bluetooth/_apis/build/status/nanoframework.nanoFramework.Device.Bluetooth?branchName=develop)](https://dev.azure.com/nanoframework/nanoFramework.Device.Bluetooth/_build/latest?definitionId=72&branchName=develop) | [![NuGet](https://img.shields.io/nuget/vpre/nanoFramework.nanoFramework.Device.Bluetooth.svg?label=NuGet&style=flat&logo=nuget)](https://www.nuget.org/packages/nanoFramework.Device.Bluetooth/) |
-
 
 ## nanoFramework.Device.Bluetooth class Library
 
@@ -30,6 +29,8 @@ The restriction is due to IRam memory space in the firmware image.
 With revision 1 ESP32 devices the PSRAM implementation requires PSRAM fixes which takes space
 in IRam so PSRAM is disabled for ESP32_BLE_REV0. With revision 3 devices the Bluetooth and 
 PSRAM fit and available.
+
+## Usage
 
 
 ## Feedback and documentation
