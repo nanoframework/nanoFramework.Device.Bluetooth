@@ -64,10 +64,10 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        ///  Converts from standard 128bit UUID to the assigned 32bit UUIDs. Makes it easy to compare services
+        ///  Converts from standard 128bit UUID to the assigned 16bit UUID. Makes it easy to compare services
         ///  that devices expose to the standard list.
         /// </summary>
-        /// <param name="uuid">UUID to convert to 32 bit</param>
+        /// <param name="uuid">UUID to convert to 16 bit short code Uuid</param>
         /// <returns></returns>
         public static ushort ConvertUuidToShortId(Guid uuid)
         {
@@ -78,31 +78,24 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Converts from a buffer to a properly sized byte array
+        /// Create a Uuid/Guid from a short Bluetooth SIG short UUID
         /// </summary>
-        /// <param name="buffer"></param>
-        /// <returns></returns>
-        public static byte[] ReadBufferToBytes(Buffer buffer)
-        {
-            var dataLength = buffer.Length;
-            var data = new byte[dataLength];
-
-            var reader = DataReader.FromBuffer(buffer);
-            reader.ReadBytes(data);
-
-            return data;
-        }
-
-        /// <summary>
-        /// Create a Uuid from a short Bluetooth SIG short UUID
-        /// </summary>
-        /// <param name="uuid16">String of 4 digits of short UUID.</param>
-        /// <returns></returns>
-        public static Guid CreateShortUuid(string uuid16)
+        /// <param name="uuid16">Bluetooth Short code UUID</param>
+        /// <returns>A Guid using Bluetooth SIG UUID</returns>
+        public static Guid CreateUuidFromShortCode(ushort uuid16)
         {
             // UUID is the name used by Bluetooth SIG for a Guid
             // This is the base UUID for all standard Bluetooth SIG UUIDs 
-            return new Guid("0000" + uuid16 + "-0000-1000-8000-00805f9b34fb");
+            const string baseUuid = "00000000-0000-1000-8000-00805f9b34fb";
+
+            Guid temp = new Guid(baseUuid);
+
+            byte[] bytes = temp.ToByteArray();
+
+            bytes[0] = (byte)(0x00ff & uuid16);
+            bytes[1] = (byte)(uuid16 >> 8);
+
+            return new Guid(bytes);
         }
     }
 }

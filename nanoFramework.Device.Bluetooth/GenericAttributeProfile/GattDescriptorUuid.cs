@@ -17,47 +17,31 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <summary>
         /// Gets the Bluetooth SIG-defined Characteristic Aggregate Format Descriptor UUID.
         /// </summary>
-        public static Guid CharacteristicAggregateFormat { get => CreateUuidFromShortCoded((ushort)Utilities.GattNativeDescriptorUuid.CharacteristicAggregateFormat); }
+        public static Guid CharacteristicAggregateFormat { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.CharacteristicAggregateFormat); }
 
         /// <summary>
         ///  Gets the Bluetooth SIG-defined Characteristic Extended Properties Descriptor UUID.
         /// </summary>
-        public static Guid CharacteristicExtendedProperties { get => CreateUuidFromShortCoded((ushort)Utilities.GattNativeDescriptorUuid.CharacteristicExtendedProperties); }
+        public static Guid CharacteristicExtendedProperties { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.CharacteristicExtendedProperties); }
 
         /// <summary>
         /// Gets the Bluetooth SIG-defined Characteristic Presentation Format Descriptor
         /// </summary>
-        public static Guid CharacteristicPresentationFormat { get => CreateUuidFromShortCoded((ushort)Utilities.GattNativeDescriptorUuid.CharacteristicPresentationFormat); }
+        public static Guid CharacteristicPresentationFormat { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.CharacteristicPresentationFormat); }
 
         /// <summary>
         /// Gets the Bluetooth SIG-defined Characteristic User Description Descriptor UUID.
         /// </summary>
-        public static Guid CharacteristicUserDescription { get => CreateUuidFromShortCoded((ushort)Utilities.GattNativeDescriptorUuid.CharacteristicUserDescription); }
+        public static Guid CharacteristicUserDescription { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.CharacteristicUserDescription); }
 
         /// <summary>
         /// Gets the Bluetooth SIG-defined Client Characteristic Configuration Descriptor UUID.
         /// </summary>
-        public static Guid ClientCharacteristicConfiguration { get => CreateUuidFromShortCoded((ushort)Utilities.GattNativeDescriptorUuid.ClientCharacteristicConfiguration); }
+        public static Guid ClientCharacteristicConfiguration { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.ClientCharacteristicConfiguration); }
 
         /// <summary>
         /// Gets the Bluetooth SIG-defined Server Characteristic Configuration Descriptor UUID.
         /// </summary>
-        public static Guid ServerCharacteristicConfiguration { get => CreateUuidFromShortCoded((ushort)Utilities.GattNativeDescriptorUuid.ServerCharacteristicConfiguration); }
-
-        private static Guid CreateUuidFromShortCoded(ushort shortUuid)
-        {
-            // UUID is the name used by Bluetooth SIG for a Guid
-            // This is the base UUID for all standard Bluetooth SIG UUIDs 
-            const string baseUuid = "00000000-0000-1000-8000-00805f9b34fb";
-
-            Guid temp = new Guid(baseUuid);
-
-            byte[] bytes = temp.ToByteArray();
-
-            bytes[0] = (byte)(0x00ff & shortUuid);
-            bytes[1] = (byte)(shortUuid >> 8);
-
-            return new Guid(bytes);
-        }
+        public static Guid ServerCharacteristicConfiguration { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.ServerCharacteristicConfiguration); }
     }
 }
