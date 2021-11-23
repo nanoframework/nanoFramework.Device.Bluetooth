@@ -77,6 +77,9 @@
     <Compile Include="GenericAttributeProfile\GattWriteOption.cs" />
     <Compile Include="GenericAttributeProfile\GattWriteRequest.cs" />
     <Compile Include="GenericAttributeProfile\GattWriteRequestedEventArgs.cs" />
+    <Compile Include="GenericAttributeProfile\SPP\IBluetoothSpp.cs" />
+    <Compile Include="GenericAttributeProfile\SPP\NordicSpp.cs" />
+    <Compile Include="GenericAttributeProfile\SPP\SppReceiveEventArgs.cs" />
     <Compile Include="IO\Buffer.cs" />
     <Compile Include="IO\DataReader.cs" />
     <Compile Include="IO\DataWriter.cs" />
