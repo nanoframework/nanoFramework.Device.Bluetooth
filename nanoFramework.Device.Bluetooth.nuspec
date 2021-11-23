@@ -10,6 +10,7 @@
     <license type="file">LICENSE.md</license>
     <releaseNotes>
     </releaseNotes>
+    <readme>docs\README.md</readme>
     <developmentDependency>false</developmentDependency>
     <projectUrl>https://github.com/nanoframework/nanoFramework.Device.Bluetooth</projectUrl>
     <icon>images\nf-logo.png</icon>
