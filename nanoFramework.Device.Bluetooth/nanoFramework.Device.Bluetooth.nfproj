@@ -16,7 +16,6 @@
     <AssemblyName>nanoFramework.Device.Bluetooth</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
     <NF_IsCoreLibrary>True</NF_IsCoreLibrary>
-    <DocumentationFile>bin\$(Configuration)\System.Device.Bluetooth.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
