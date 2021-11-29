@@ -35,8 +35,7 @@ PSRAM and are both available.
 A number of Bluetooth LE samples are available in the [nanoFramework samples repo](https://github.com/nanoframework/Samples)
 
 - Nordic Spp Sample.
-- Heart Rate monitor.
-- Environmental sensor sample.
+- Environmental sensor sample. (pending)
 
 ## Usage
 
