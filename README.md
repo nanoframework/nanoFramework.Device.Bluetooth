@@ -4,7 +4,7 @@
 
 -----
 
-# Welcome to the .NET **nanoFramework** nanoFramework.Device.BluetoothLibrary repository
+# Welcome to the .NET **nanoFramework** nanoFramework.Device.Bluetooth Library repository
 
 ## Build status
 
