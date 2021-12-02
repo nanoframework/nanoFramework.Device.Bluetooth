@@ -36,7 +36,7 @@ steps:
   parameters:
     classLibName: $(nugetPackageName)
     sonarCloudProject: 'nanoframework_nanoFramework.Device.Bluetooth'
-    runUnitTests: true
+    runUnitTests: false
 
 # step from template @ nf-tools repo
 # report error

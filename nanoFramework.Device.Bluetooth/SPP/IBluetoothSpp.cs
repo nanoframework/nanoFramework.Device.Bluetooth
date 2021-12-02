@@ -16,7 +16,7 @@ namespace nanoFramework.Device.Bluetooth.Spp
         /// Receive data delegate.
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="ReadRequestEventArgs"></param>
+        /// <param name="ReadDataEventArgs"></param>
         public delegate void RxDataEventHandler(IBluetoothSpp sender, SppReceivedDataEventArgs ReadDataEventArgs);
 
         /// <summary>

@@ -16,6 +16,7 @@
     <AssemblyName>nanoFramework.Device.Bluetooth</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
     <NF_IsCoreLibrary>True</NF_IsCoreLibrary>
+    <DocumentationFile>bin\$(Configuration)\nanoFramework.Device.Bluetooth.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -32,14 +33,6 @@
     <NF_GenerateSkeletonProjectName>sys_dev_ble_native</NF_GenerateSkeletonProjectName>
     <Name>System.Device.Bluetooth</Name>
   </PropertyGroup>
-  <ItemGroup>
-    <NFMDP_PE_LoadHints Include="..\packages\nanoFramework.CoreLibrary.1.10.5\lib\mscorlib.dll">
-      <InProject>false</InProject>
-    </NFMDP_PE_LoadHints>
-    <NFMDP_PE_LoadHints Include="C:\nanoF\nanoFramework.Runtime.Events\nanoFramework.Runtime.Events\bin\Debug\nanoFramework.Runtime.Events.dll">
-      <InProject>false</InProject>
-    </NFMDP_PE_LoadHints>
-  </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="BluetoothDeviceId.cs" />
