@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>nanoFramework.Device.Bluetooth</id>
+    <version>$version$</version>
+    <title>nanoFramework.Device.Bluetooth</title>
+    <authors>nanoFramework project contributors</authors>
+    <owners>nanoFramework,dotnetfoundation</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LICENSE.md</license>
+    <releaseNotes>
+    </releaseNotes>
+    <readme>docs\README.md</readme>
+    <developmentDependency>false</developmentDependency>
+    <projectUrl>https://github.com/nanoframework/nanoFramework.Device.Bluetooth</projectUrl>
+    <icon>images\nf-logo.png</icon>
+    <repository type="git" url="https://github.com/nanoframework/nanoFramework.Device.Bluetooth" commit="$commit$" />
+    <copyright>Copyright (c) .NET Foundation and Contributors</copyright>
+    <description>This package includes the nanoFramework.Device.Bluetooth assembly for .NET nanoFramework C# projects.&#10;This package requires a target with nanoFramework.Device.Bluetooth v$nativeVersion$ (checksum $checksum$).</description>
+    <tags>nanoFramework C# csharp netmf netnf nanoFramework.Device.Bluetooth</tags>
+    <dependencies>
+      <dependency id="nanoFramework.CoreLibrary" version="1.10.5" />
+      <dependency id="nanoFramework.Runtime.Events" version="1.9.2-preview.8" />
+      <dependency id="nanoFramework.System.Text" version="1.1.1" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="nanoFramework.Device.Bluetooth\bin\Release\nanoFramework.Device.Bluetooth.dll" target="lib\nanoFramework.Device.Bluetooth.dll" />
+    <file src="nanoFramework.Device.Bluetooth\bin\Release\nanoFramework.Device.Bluetooth.pdb" target="lib\nanoFramework.Device.Bluetooth.pdb" />
+    <file src="nanoFramework.Device.Bluetooth\bin\Release\nanoFramework.Device.Bluetooth.pdbx" target="lib\nanoFramework.Device.Bluetooth.pdbx" />
+    <file src="nanoFramework.Device.Bluetooth\bin\Release\nanoFramework.Device.Bluetooth.pe" target="lib\nanoFramework.Device.Bluetooth.pe" />
+    <file src="nanoFramework.Device.Bluetooth\bin\Release\nanoFramework.Device.Bluetooth.xml" target="lib\nanoFramework.Device.Bluetooth.xml" />
+    <file src="assets\readme.txt" target="" />
+    <file src="README.md" target="docs\" />
+    <file src="assets\nf-logo.png" target="images\" />
+    <file src="LICENSE.md" target="" />
+  </files>
+</package>

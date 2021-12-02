@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <NanoFrameworkProjectSystemPath>$(MSBuildExtensionsPath)\nanoFramework\v1.0\</NanoFrameworkProjectSystemPath>
+  </PropertyGroup>
+  <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.Default.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.Default.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{11A8DD76-328B-46DF-9F39-F559912D0360};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>3e3dfd1b-89f3-455d-83d4-c34c7fc5422e</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>nanoFramework.Device.Bluetooth</RootNamespace>
+    <AssemblyName>nanoFramework.Device.Bluetooth</AssemblyName>
+    <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
+    <NF_IsCoreLibrary>True</NF_IsCoreLibrary>
+    <DocumentationFile>bin\$(Configuration)\nanoFramework.Device.Bluetooth.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- override default options for MetaDataProcessor -->
+    <NF_GenerateStubsDirectory>bin\$(Configuration)\Stubs</NF_GenerateStubsDirectory>
+    <NF_GenerateSkeletonProjectName>sys_dev_ble_native</NF_GenerateSkeletonProjectName>
+    <Name>System.Device.Bluetooth</Name>
+  </PropertyGroup>
+  <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
+  <ItemGroup>
+    <Compile Include="BluetoothDeviceId.cs" />
+    <Compile Include="BluetoothError.cs" />
+    <Compile Include="BluetoothEvent.cs" />
+    <Compile Include="BluetoothEventListener.cs" />
+    <Compile Include="BluetoothEventType.cs" />
+    <Compile Include="GenericAttributeProfile\GattCharacteristicProperties.cs" />
+    <Compile Include="GenericAttributeProfile\GattCharacteristicUuids.cs" />
+    <Compile Include="GenericAttributeProfile\GattClientNotificationResult.cs" />
+    <Compile Include="GenericAttributeProfile\GattCommunicationStatus.cs" />
+    <Compile Include="GenericAttributeProfile\GattDescriptorUuid.cs" />
+    <Compile Include="GenericAttributeProfile\GattLocalCharacteristic.cs" />
+    <Compile Include="GenericAttributeProfile\GattLocalCharacteristicParameters.cs" />
+    <Compile Include="GenericAttributeProfile\GattLocalCharacteristicResult.cs" />
+    <Compile Include="GenericAttributeProfile\GattLocalDescriptor.cs" />
+    <Compile Include="GenericAttributeProfile\GattLocalDescriptorParameters.cs" />
+    <Compile Include="GenericAttributeProfile\GattLocalDescriptorResult.cs" />
+    <Compile Include="GenericAttributeProfile\GattLocalService.cs" />
+    <Compile Include="GenericAttributeProfile\GattPresentationFormat.cs" />
+    <Compile Include="GenericAttributeProfile\GattPresentationFormatTypes.cs" />
+    <Compile Include="GenericAttributeProfile\GattProtectionLevel.cs" />
+    <Compile Include="GenericAttributeProfile\GattProtocolError.cs" />
+    <Compile Include="GenericAttributeProfile\GattReadRequest.cs" />
+    <Compile Include="GenericAttributeProfile\GattReadRequestedEventArgs.cs" />
+    <Compile Include="GenericAttributeProfile\GattServiceProvider.cs" />
+    <Compile Include="GenericAttributeProfile\GattServiceProviderAdvertisementStatus.cs" />
+    <Compile Include="GenericAttributeProfile\GattServiceProviderAdvertisingParameters.cs" />
+    <Compile Include="GenericAttributeProfile\GattServiceProviderResult.cs" />
+    <Compile Include="GenericAttributeProfile\GattServiceUuids.cs" />
+    <Compile Include="GenericAttributeProfile\GattSession.cs" />
+    <Compile Include="GenericAttributeProfile\GattSessionStatus.cs" />
+    <Compile Include="GenericAttributeProfile\GattSubscribedClient.cs" />
+    <Compile Include="GenericAttributeProfile\GattWriteOption.cs" />
+    <Compile Include="GenericAttributeProfile\GattWriteRequest.cs" />
+    <Compile Include="GenericAttributeProfile\GattWriteRequestedEventArgs.cs" />
+    <Compile Include="SPP\IBluetoothSpp.cs" />
+    <Compile Include="SPP\NordicSpp.cs" />
+    <Compile Include="SPP\SppReceiveEventArgs.cs" />
+    <Compile Include="IO\Buffer.cs" />
+    <Compile Include="IO\DataReader.cs" />
+    <Compile Include="IO\DataWriter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.snk" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib, Version=1.10.5.4, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\packages\nanoFramework.CoreLibrary.1.10.5\lib\mscorlib.dll</HintPath>
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="nanoFramework.Runtime.Events, Version=1.9.2.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\packages\nanoFramework.Runtime.Events.1.9.2-preview.8\lib\nanoFramework.Runtime.Events.dll</HintPath>
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="nanoFramework.System.Text, Version=1.1.1.3, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\packages\nanoFramework.System.Text.1.1.1\lib\nanoFramework.System.Text.dll</HintPath>
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
+  <ProjectExtensions>
+    <ProjectCapabilities>
+      <ProjectConfigurationsDeclaredAsItems />
+    </ProjectCapabilities>
+  </ProjectExtensions>
+  <Import Project="..\packages\Nerdbank.GitVersioning.3.4.231\build\Nerdbank.GitVersioning.targets" Condition="Exists('..\packages\Nerdbank.GitVersioning.3.4.231\build\Nerdbank.GitVersioning.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Nerdbank.GitVersioning.3.4.231\build\Nerdbank.GitVersioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Nerdbank.GitVersioning.3.4.231\build\Nerdbank.GitVersioning.targets'))" />
+  </Target>
+</Project>
