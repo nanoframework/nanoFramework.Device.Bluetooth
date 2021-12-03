@@ -34,8 +34,8 @@ PSRAM and are both available.
 
 A number of Bluetooth LE samples are available in the [nanoFramework samples repo](https://github.com/nanoframework/Samples)
 
-- Nordic Spp Sample.
-- Environmental sensor sample. (pending)
+- Nordic Spp Sample. (coming soon)
+- Environmental sensor sample. (coming soon)
 
 ## Usage
 
