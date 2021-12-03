@@ -65,7 +65,7 @@ Guid uuid1 = Utility.CreateUuidFromShortCode(0x2A19);
 
 ### Defining the service and associated Characteristics
 
-The GattServiceProvider is used to create and advertise the primary service definition. An extra device information service will also be automatically created.
+The GattServiceProvider is used to create and advertise the primary service definition. An extra device information service will be automatically created.
 
 ```csharp
 GattServiceProviderResult result = GattServiceProvider.Create(uuid);
@@ -184,7 +184,7 @@ private static void UpdateNotifyValue(double newValue)
 
 ### Read requested event
 
-When a client requests to read a characteristic the managed event will be called assuming a static value hasn't been set.
+When a client requests to read a characteristic, the managed event will be called assuming a static value hasn't been set.
 If no event handler is set or you don't respond in a timely manner an Unlikely bluetooth error will be returned to client.  
 If reading the value from a peripheral device takes time then best to put this outside the event handler.
 
@@ -215,7 +215,7 @@ set or you don't respond in a timely manner an Unlikely bluetooth error will be 
 The data received is a array of bytes and this is formatted as required by characteristic. This could be a single
 value of Int16, Int32, string etc. or it could be a number of different values.
 
-This shows the reading of a single Int32 value from buffer and returns and error if wrong number 
+This shows the reading of a single Int32 value from buffer and returns an error if the wrong number 
 of bytes has been supplied.
 
 ```csharp
@@ -264,7 +264,7 @@ private static void _notifyCharacteristic_SubscribedClientsChanged(GattLocalChar
 # Bluetooth Serial Port Profile(SPP)
 
 This assembly has an implementation of the Nordic SPP which can easily be used to send messages between a Bluetooth client and the device 
-running the SPP. This is a simple way of provisioning the device with any extra information required like WiFi details.
+running the SPP. This is a simple way of provisioning a device with any extra information like WiFi details.
 
 There are a number of Android and IOS app that support Nordic SPP that can be used to send/receive messages.
 
@@ -284,7 +284,7 @@ spp.Start("MySpp");
 
 ```
 
-When complete call the Stop method to stop the SPP.
+When complete, call the Stop method to stop the SPP.
 
 ## Handling Read Data events
 
