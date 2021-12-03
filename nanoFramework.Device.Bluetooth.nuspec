@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>nanoFramework.Device.Bluetooth</id>
@@ -16,12 +16,13 @@
     <icon>images\nf-logo.png</icon>
     <repository type="git" url="https://github.com/nanoframework/nanoFramework.Device.Bluetooth" commit="$commit$" />
     <copyright>Copyright (c) .NET Foundation and Contributors</copyright>
-    <description>This package includes the nanoFramework.Device.Bluetooth assembly for .NET nanoFramework C# projects.&#10;This package requires a target with nanoFramework.Device.Bluetooth v$nativeVersion$ (checksum $checksum$).</description>
+    <description>This package includes the nanoFramework.Device.Bluetooth assembly for .NET nanoFramework C# projects.
+This package requires a target with nanoFramework.Device.Bluetooth v$nativeVersion$ (checksum $checksum$).</description>
     <tags>nanoFramework C# csharp netmf netnf nanoFramework.Device.Bluetooth</tags>
     <dependencies>
-      <dependency id="nanoFramework.CoreLibrary" version="1.10.5" />
-      <dependency id="nanoFramework.Runtime.Events" version="1.9.2-preview.8" />
-      <dependency id="nanoFramework.System.Text" version="1.1.1" />
+      <dependency id="nanoFramework.CoreLibrary" version="1.11.7" />
+      <dependency id="nanoFramework.Runtime.Events" version="1.9.2" />
+      <dependency id="nanoFramework.System.Text" version="1.1.2" />
     </dependencies>
   </metadata>
   <files>
