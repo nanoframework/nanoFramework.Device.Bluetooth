@@ -20,7 +20,6 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         {
             _serviceUuid = serviceUuid.ToByteArray();
             _characteristics = new ArrayList();
-            _characteristics.Add(new GattLocalCharacteristic(serviceUuid, new GattLocalCharacteristicParameters()));
         }
 
         /// <summary>
