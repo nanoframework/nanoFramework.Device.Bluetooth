@@ -58,7 +58,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
             // ManufacturerNameString Characteristic (0x2A29)
             DataWriter manufacturerName = new DataWriter();
-            manufacturerName.WriteString("Nanoframework");
+            manufacturerName.WriteString("nanoFramework");
 
             dinfService.CreateCharacteristic(GattCharacteristicUuids.ManufacturerNameString,
                 new GattLocalCharacteristicParameters()
