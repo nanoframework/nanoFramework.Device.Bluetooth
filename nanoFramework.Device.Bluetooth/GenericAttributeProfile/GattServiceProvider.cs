@@ -12,7 +12,7 @@ using nanoFramework.Runtime.Native;
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 {
     /// <summary>
-    /// This class is used to advertise a GATT services.
+    /// This class is used to advertise GATT services.
     /// </summary>
     public sealed class GattServiceProvider
     {
