@@ -15,12 +15,8 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     public static class GattCharacteristicUuids
     {
         /// <summary>
-        /// Gets the Bluetooth SIG-defined Heart Rate Measurement Characteristic UUID (0x2A37)
-        /// </summary>
-        public static Guid HeartRateMeasurement { get => Utilities.CreateUuidFromShortCode(0x2A37); }
-
-        /// <summary>
         /// Gets the Bluetooth SIG-defined Battery Level Characteristic UUID (0x2A19).
+        /// Percentage 0% to 100%, byte
         /// </summary>
         public static Guid BatteryLevel { get => Utilities.CreateUuidFromShortCode(0x2A19); }
 
@@ -70,6 +66,17 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         public static Guid HeartRateControlPoint { get => Utilities.CreateUuidFromShortCode(0x2A39); }
 
         /// <summary>
+        /// Gets the Bluetooth SIG-defined Heart Rate Measurement Characteristic UUID (0x2A37)
+        /// </summary>
+        public static Guid HeartRateMeasurement { get => Utilities.CreateUuidFromShortCode(0x2A37); }
+
+        /// <summary>
+        /// Gets the Bluetooth SIG-defined Humidity Characteristic UUID (0x2A6F)
+        /// Uint16, Percentage 0-100 expressed in 0.01 units, 50%=5000
+        /// </summary>
+        public static Guid Humidity { get => Utilities.CreateUuidFromShortCode(0x2A6F); }
+
+        /// <summary>
         /// Gets the Bluetooth SIG-defined Intermediate Cuff Pressure Characteristic UUID (0x2A36).
         /// </summary>
         public static Guid IntermediateCuffPressure { get => Utilities.CreateUuidFromShortCode(0x2A36); }
@@ -83,6 +90,18 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// Gets the Bluetooth SIG-defined Measurement Interval Characteristic UUID (0x2A21).
         /// </summary>
         public static Guid MeasurementInterval { get => Utilities.CreateUuidFromShortCode(0x2A21); }
+
+        /// <summary>
+        /// Gets the Bluetooth SIG-defined Pressure Characteristic UUID (0x2A6D).
+        /// Uint32, Unit is Pascal with resolution of 0.1 Pa
+        /// </summary>
+        public static Guid Pressure { get => Utilities.CreateUuidFromShortCode(0x2A6D); }
+
+        /// <summary>
+        /// Gets the Bluetooth SIG-defined Rainfall Characteristic UUID (0x2A78).
+        /// Uint16, Unit is Meters with resolution of 1mm
+        /// </summary>
+        public static Guid Rainfall { get => Utilities.CreateUuidFromShortCode(0x2A78); }
 
         /// <summary>
         /// Gets the Bluetooth SIG-defined Record Access Control Point Characteristic UUID (0x2A52).
@@ -108,6 +127,12 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// Gets the Bluetooth SIG-defined Sensor Location Characteristic UUID (0x2A5D).
         /// </summary>
         public static Guid SensorLocation { get => Utilities.CreateUuidFromShortCode(0x2A5D); }
+
+        /// <summary>
+        ///  Gets the Bluetooth SIG-defined Temperature Characteristic UUID (0x2A6E).
+        ///  Int16, -273.15 to 327.67 Celsius. Resolution 0.01,  89.5c = 8950
+        /// </summary>
+        public static Guid Temperature { get => Utilities.CreateUuidFromShortCode(0x2a6e); }
 
         /// <summary>
         ///  Gets the Bluetooth SIG-defined Temperature Measurement Characteristic UUID (0x2a1c).

@@ -43,5 +43,30 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// Gets the Bluetooth SIG-defined Server Characteristic Configuration Descriptor UUID.
         /// </summary>
         public static Guid ServerCharacteristicConfiguration { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.ServerCharacteristicConfiguration); }
+
+        /// <summary>
+        /// Gets the Bluetooth SIG-defined Value trigger settings Descriptor UUID.
+        /// </summary>
+        public static Guid ValueTriggerSetting { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.ValueTriggerSetting); }
+
+        /// <summary>
+        /// Gets the Bluetooth SIG-defined Environmental Sensing Configuration Descriptor UUID.
+        /// </summary>
+        public static Guid EssConfiguration { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.EssConfiguration); }
+
+        /// <summary>
+        /// Gets the Bluetooth SIG-defined Environmental Sensing Measurement Descriptor UUID.
+        /// </summary>
+        public static Guid EssMeasurement { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.EssMeasurement); }
+
+        /// <summary>
+        /// Gets the Bluetooth SIG-defined Environmental Sensing Trigger Setting Descriptor UUID.
+        /// </summary>
+        public static Guid EssTriggerSetting { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.EssTriggerSetting); }
+
+        /// <summary>
+        /// Gets the Bluetooth SIG-defined Time Trigger Setting  Descriptor UUID.
+        /// </summary>
+        public static Guid TimeTriggerSetting { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.TimeTriggerSetting); }
     }
 }

@@ -5,16 +5,18 @@
 
 using System;
 using System.Text;
+using System.Collections;
 using System.Runtime.CompilerServices;
+using nanoFramework.Runtime.Native;
 
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 {
     /// <summary>
-    /// This class is used to advertise a GATT service.
+    /// This class is used to advertise GATT services.
     /// </summary>
     public sealed class GattServiceProvider
     {
-        private readonly GattLocalService _service;
+        private readonly ArrayList _services;
 
         GattServiceProviderAdvertisementStatus _status = GattServiceProviderAdvertisementStatus.Created;
 
@@ -35,9 +37,46 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
         internal GattServiceProvider(Guid serviceUuid)
         {
-            _service = new GattLocalService(serviceUuid);
+            _services = new ArrayList();
+
+            // Add primary
+            AddService(serviceUuid);
+
+            // Add default Device Information service 
+            AddDeviceInformationService();
 
             NativeInitService();
+        }
+
+        /// <summary>
+        /// Add default Device Information Service
+        /// </summary>
+        private void AddDeviceInformationService()
+        {
+            // Add and initialised Device Information defaults
+            GattLocalService dinfService = AddService(GattServiceUuids.DeviceInformation);
+
+            // ManufacturerNameString Characteristic (0x2A29)
+            DataWriter manufacturerName = new DataWriter();
+            manufacturerName.WriteString("nanoFramework");
+
+            dinfService.CreateCharacteristic(GattCharacteristicUuids.ManufacturerNameString,
+                new GattLocalCharacteristicParameters()
+                {
+                    StaticValue = manufacturerName.DetachBuffer(),
+                    CharacteristicProperties = GattCharacteristicProperties.Read
+                });
+
+            // ModelNumberString Characteristic (0x2A24)
+            DataWriter modelNumber = new DataWriter();
+            modelNumber.WriteString(SystemInfo.Platform);
+
+            dinfService.CreateCharacteristic(GattCharacteristicUuids.ModelNumberString,
+                new GattLocalCharacteristicParameters()
+                {
+                    StaticValue = modelNumber.DetachBuffer(),
+                    CharacteristicProperties = GattCharacteristicProperties.Read
+                });
         }
 
         /// <summary>
@@ -96,10 +135,46 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         public GattServiceProviderAdvertisementStatus AdvertisementStatus { get => _status; }
 
         /// <summary>
-        /// Gets the GATT service.
+        /// Gets the GATT primary service.
         /// </summary>
-        /// <returns>The GATT service.</returns>
-        public GattLocalService Service { get => _service; }
+        /// <returns>The primary service.</returns>
+        public GattLocalService Service { get => Services[0]; }
+
+        /// <summary>
+        /// Get an array of all associated services for this service provider.
+        /// </summary>
+        /// <remarks>
+        /// The primary service will be index 0 followed by the Device Information at index 1.
+        /// Any other Services added to provider will follow these in the order they were created.
+        /// </remarks>
+        public GattLocalService[] Services { get { return (GattLocalService[])_services.ToArray(typeof(GattLocalService)); } }
+
+        /// <summary>
+        /// Creates a new service or replaces an existing service.
+        /// Created service is added to this service provider.
+        /// </summary>
+        /// <param name="serviceUuid">Uuid for the service to be created/replaced.</param>
+        /// <returns>
+        /// Returns the created service.
+        /// </returns>
+        public GattLocalService AddService(Guid serviceUuid)
+        {
+            for (int index = 0; index < _services.Count; index++)
+            {
+                if (((GattLocalService)_services[index]).Uuid.Equals(serviceUuid))
+                {
+                    // Replace existing service on index
+                    GattLocalService replacementService = new GattLocalService(serviceUuid);
+                    _services[index] = replacementService;
+                    return replacementService;
+                }
+            }
+
+            // Add new service
+            GattLocalService newService = new GattLocalService(serviceUuid);
+            _services.Add(newService);
+            return newService;
+        }
 
         #region external calls to native implementations
 
