@@ -12,7 +12,7 @@ using nanoFramework.Runtime.Native;
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 {
     /// <summary>
-    /// This class is used to advertise a GATT services.
+    /// This class is used to advertise GATT services.
     /// </summary>
     public sealed class GattServiceProvider
     {
@@ -58,7 +58,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
             // ManufacturerNameString Characteristic (0x2A29)
             DataWriter manufacturerName = new DataWriter();
-            manufacturerName.WriteString("Nanoframework");
+            manufacturerName.WriteString("nanoFramework");
 
             dinfService.CreateCharacteristic(GattCharacteristicUuids.ManufacturerNameString,
                 new GattLocalCharacteristicParameters()
