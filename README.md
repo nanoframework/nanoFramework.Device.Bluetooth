@@ -31,18 +31,18 @@ Bluetooth is currently only supported on ESP32 devices with following firmware.
 - ESP32_BLE_REV3
 
 This restriction is due to IRAM memory space in the firmware image. 
-With revision 1 ESP32 devices the PSRAM implementation requires a large number of PSRAM fixes which reduces the 
-available space in the IRAM area so PSRAM is currently disabled for ESP32_BLE_REV0.  With the revision 3 devices the Bluetooth and 
-PSRAM and are both available.
+With revision 1 of ESP32 devices, the PSRAM implementation requires a large number of PSRAM fixes which reduces the 
+available space in the IRAM area so PSRAM is currently disabled for ESP32_BLE_REV0. With the revision 3 devices the Bluetooth and 
+PSRAM are both available.
 
 ## Samples
 
-A number of Bluetooth LE samples are available in the [nanoFramework samples repo](https://github.com/nanoframework/Samples)
+A number of Bluetooth LE samples are available in the [nanoFramework samples repo](https://github.com/nanoframework/Samples/)
 
-- Bluetooth Low energy serial(SPP) 
-- Bluetooth Low energy sample 1 (Basic Read/Write/Notify)
-- Bluetooth Low energy sample 2 (Add Security)
-- Bluetooth Low energy sample 3 (Show cases adding or replacing some standard services)
+- [Bluetooth Low energy sample 1 (Basic Read/Write/Notify)](https://github.com/nanoframework/Samples/tree/main/samples/Bluetooth/BluetoothLESample1)
+- [Bluetooth Low energy sample 2 (Add Security)](https://github.com/nanoframework/Samples/tree/main/samples/Bluetooth/BluetoothLESample2)
+- [Bluetooth Low energy sample 3 (Show cases adding or replacing some standard services)](https://github.com/nanoframework/Samples/tree/main/samples/Bluetooth/BluetoothLESample3)
+- [Bluetooth Low energy serial (SPP)](https://github.com/nanoframework/Samples/tree/main/samples/Bluetooth/BluetoothLESerial) 
 
 ## Usage
 
@@ -269,7 +269,7 @@ private static void _notifyCharacteristic_SubscribedClientsChanged(GattLocalChar
 ```
 
 ### Adding extra services
-You can add or replace existing services and there are no restriction on which services you add. 
+You can add or replace existing services and there are no restrictions on which services you add. 
 See the Bluetooth sample 3 for an example of adding the bluetooth standard 
 services, Device Information, Current Time, Battery level and Environmental Sensor.
 
@@ -294,7 +294,6 @@ serviceProvider.StartAdvertising(new GattServiceProviderAdvertisingParameters()
     IsDiscoverable = true
 });
 ```
-
 
 # Bluetooth Serial Port Profile(SPP)
 
