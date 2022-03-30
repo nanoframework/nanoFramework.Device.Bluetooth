@@ -18,30 +18,37 @@
 Bluetooth Low Energy library.
 
 This library is based on the Windows.Devices.Bluetooth UWP class library but simplified and with all the async related calls removed.
-The original .Net assembly depended on Windows.Storage.Streams for DataReader & DataWriter; this library has simplified inbuilt versions. References to IBuffer in .Net UWP examples should now use Buffer instead.
+The original .Net assembly depended on Windows.Storage.Streams for DataReader & DataWriter; this library has simplified inbuilt versions. 
+So references to IBuffer in .Net UWP examples should now use Buffer instead. 
 
-Currently only supported on ESP32 devices with following firmware.
+We have also added an extension to this assembly allowing extra services to be added with no restriction on type.
+
+## Firmware versions
+
+Bluetooth is currently only supported on ESP32 devices with following firmware.
 
 - ESP32_BLE_REV0
 - ESP32_BLE_REV3
 
 This restriction is due to IRAM memory space in the firmware image. 
-With revision 1 ESP32 devices the PSRAM implementation requires PSRAM fixes which takes space
-in IRAM so PSRAM is currently disabled for ESP32_BLE_REV0.  With the revision 3 devices the Bluetooth and 
-PSRAM and are both available.
+With revision 1 of ESP32 devices, the PSRAM implementation requires a large number of PSRAM fixes which reduces the 
+available space in the IRAM area so PSRAM is currently disabled for ESP32_BLE_REV0. With the revision 3 devices the Bluetooth and 
+PSRAM are both available.
 
 ## Samples
 
-A number of Bluetooth LE samples are available in the [nanoFramework samples repo](https://github.com/nanoframework/Samples)
+A number of Bluetooth LE samples are available in the [nanoFramework samples repo](https://github.com/nanoframework/Samples/)
 
-- Nordic Spp Sample. (coming soon)
-- Environmental sensor sample. (coming soon)
+- [Bluetooth Low energy sample 1 (Basic Read/Write/Notify)](https://github.com/nanoframework/Samples/tree/main/samples/Bluetooth/BluetoothLESample1)
+- [Bluetooth Low energy sample 2 (Add Security)](https://github.com/nanoframework/Samples/tree/main/samples/Bluetooth/BluetoothLESample2)
+- [Bluetooth Low energy sample 3 (Show cases adding or replacing some standard services)](https://github.com/nanoframework/Samples/tree/main/samples/Bluetooth/BluetoothLESample3)
+- [Bluetooth Low energy serial (SPP)](https://github.com/nanoframework/Samples/tree/main/samples/Bluetooth/BluetoothLESerial) 
 
 ## Usage
 
 ### Overview
 
-The current implementation only supports the Gatt Server calls. 
+The current implementation only supports the Gatt Server calls. A future version will include the Gatt Client. 
 
 Also as part of this assembly is the NordicSPP class which implements a Serial Protocol Profile based on 
 the Nordic specification. This allows clients to easily connect via Bluetooth LE to send and receive messages via a 
@@ -259,6 +266,33 @@ private static void _notifyCharacteristic_SubscribedClientsChanged(GattLocalChar
          Debug.WriteLine($"Client connected ");
     }
 }
+```
+
+### Adding extra services
+You can add or replace existing services and there are no restrictions on which services you add. 
+See the Bluetooth sample 3 for an example of adding the bluetooth standard 
+services, Device Information, Current Time, Battery level and Environmental Sensor.
+
+```csharp
+// Battery service exposes the current battery level percentage
+BatteryService BatService = new BatteryService(serviceProvider);
+
+// Update the Battery service with the current battery level when ever it is read.
+BatService.BatteryLevel = 94;
+```
+
+## Advertising your service
+
+Once all the Characteristics have been created you need to advertise the Service so other devices can see it 
+and/or connect to it. We also provide the device name seen on the disovery.
+
+```csharp
+serviceProvider.StartAdvertising(new GattServiceProviderAdvertisingParameters()
+{
+    DeviceName = "My Example Device",
+    IsConnectable = true,
+    IsDiscoverable = true
+});
 ```
 
 # Bluetooth Serial Port Profile(SPP)

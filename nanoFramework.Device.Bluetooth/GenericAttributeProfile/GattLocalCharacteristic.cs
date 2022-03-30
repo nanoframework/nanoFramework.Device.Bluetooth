@@ -205,7 +205,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <summary>
         ///  Gets a vector list of all the descriptors for this local characteristic.
         /// </summary>
-        public GattLocalDescriptor[] Descriptors { get => (GattLocalDescriptor[])_descriptors.ToArray(); }
+        public GattLocalDescriptor[] Descriptors { get => (GattLocalDescriptor[])_descriptors.ToArray(typeof(GattLocalDescriptor)); }
 
         /// <summary>
         /// Gets the presentation formats for this local characteristic.

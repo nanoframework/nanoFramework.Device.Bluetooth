@@ -60,7 +60,37 @@ namespace nanoFramework.Device.Bluetooth
             /// <summary>
             /// ReportReference
             /// </summary>
-            ReportReference = 0x2908
+            ReportReference = 0x2908,
+
+            /// <summary>
+            /// Number of Digitals 
+            /// </summary>
+            NumberDigitals = 0x2909,
+
+            /// <summary>
+            /// Value trigger settings
+            /// </summary>
+            ValueTriggerSetting = 0x290A,
+
+            /// <summary>
+            /// Environmental Sensing Configuration
+            /// </summary>
+            EssConfiguration = 0x290B,
+
+            /// <summary>
+            /// Environmental Sensing Measurement
+            /// </summary>
+            EssMeasurement = 0x290C,
+
+            /// <summary>
+            /// Environmental Sensing Trigger Setting
+            /// </summary>
+            EssTriggerSetting = 0x290D,
+
+            /// <summary>
+            /// Time Trigger Setting 
+            /// </summary>
+            TimeTriggerSetting = 0x290E
         }
 
         /// <summary>
