@@ -6,6 +6,7 @@
 
 **Documentation and other chores:**
 
+- Update 5 NuGet dependencies [\#26](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/26)
 - Update README.md [\#21](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/21)
 
 ## [v1.0.0-preview.31](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/v1.0.0-preview.31) (2022-03-28)
