@@ -30,10 +30,10 @@ namespace nanoFramework.Device.Bluetooth
                 // Data1, Data2 is packed by PostManagedEvent, so we need to unpack the high word.
                 //
                 // Data1
-                // DDCC00TT where DD = descriptorId, CC = characteristicId, TT = BluetoothEventType
+                // DDCC00TT where DDCC = descriptorId, CC = characteristicId, TT = BluetoothEventType
                 type = (BluetoothEventType)(data1 & 0xff),
                 characteristicId = (ushort)((data1 >> 16) & 0x00ff),
-                descriptorId = (ushort)(data1 >> 24),
+                descriptorId = (ushort)(data1 >> 16),
                 ID = (ushort)(data2 & 0xffff)
             };
         }
