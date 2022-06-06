@@ -4,8 +4,16 @@
 
 [Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.0.0-preview.31...HEAD)
 
+**Fixed bugs:**
+
+- Fix descriptor events for Bluetooth on ESP32 [\#31](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/31)
+
 **Documentation and other chores:**
 
+- Update 1 NuGet dependencies [\#30](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/30)
+- Update 1 NuGet dependencies [\#29](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/29)
+- Update 1 NuGet dependencies [\#28](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/28)
+- Update 1 NuGet dependencies [\#27](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/27)
 - Update 5 NuGet dependencies [\#26](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/26)
 - Update README.md [\#21](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/21)
 
