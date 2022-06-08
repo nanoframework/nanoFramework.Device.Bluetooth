@@ -98,7 +98,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
                 DataWriter dr = new DataWriter();
 
                 dr.WriteByte(gpf.FormatType);
-                dr.WriteInt32(gpf.Exponent);
+                dr.WriteByte((byte)gpf.Exponent);
                 dr.WriteUInt16(gpf.Unit);
                 dr.WriteByte(gpf.Namespace);
                 dr.WriteUInt16(gpf.Description);
