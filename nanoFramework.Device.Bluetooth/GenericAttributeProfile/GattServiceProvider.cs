@@ -119,9 +119,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         }
 
         /// <summary>
-        ///  Creates a new GATT service with the specified serviceUuid
+        ///  Creates a new GATT service with the specified serviceUuid using the specified nativeDevice
         /// </summary>
         /// <param name="serviceUuid">The service UUID.</param>
+        /// <param name="nativeDevice">The native device.</param>
         /// <returns>A GattServiceProviderResult object.</returns>
         public static GattServiceProviderResult Create(Guid serviceUuid, INativeDevice nativeDevice)
         {
