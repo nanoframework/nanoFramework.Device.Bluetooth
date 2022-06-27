@@ -35,7 +35,6 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
 
         internal static readonly BluetoothEventListener _bluetoothEventManager = new BluetoothEventListener();
-        private INativeDevice _nativeDevice1;
 
         internal GattServiceProvider(Guid serviceUuid, INativeDevice nativeDevice, INativeDevice nativeDevice1)
         {
@@ -49,7 +48,6 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             AddDeviceInformationService();
 
             _nativeDevice.InitService();
-            _nativeDevice1 = nativeDevice1;
         }
 
         /// <summary>
@@ -175,7 +173,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             }
 
             // Add new service
-            GattLocalService newService = new GattLocalService(serviceUuid, _nativeDevice1);
+            GattLocalService newService = new GattLocalService(serviceUuid, _nativeDevice);
             _services.Add(newService);
             return newService;
         }
