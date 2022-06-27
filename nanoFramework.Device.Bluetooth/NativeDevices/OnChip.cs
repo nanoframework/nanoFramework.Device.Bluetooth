@@ -30,7 +30,37 @@ namespace nanoFramework.Device.Bluetooth.NativeDevices
         {
             return NativeNotifyClient(connection, characteristicId, notifyBuffer);
         }
+
+        /// <inheritdoc />
+        public void ReadRespondWithValue(ushort eventId, byte[] data)
+        {
+            NativeReadRespondWithValue(eventId, data);
+        }
+
+        /// <inheritdoc />
+        public void ReadRespondWithProtocolError(ushort eventId, byte otherError)
+        {
+            NativeReadRespondWithProtocolError(eventId, otherError);
+        }
         
+        /// <inheritdoc />
+        public byte[] WriteGetData(ushort eventId)
+        {
+            return NativeWriteGetData(eventId);
+        }
+
+        /// <inheritdoc />
+        public void WriteRespond(ushort eventId)
+        {
+            NativeWriteRespond(eventId);
+        }
+
+        /// <inheritdoc />
+        public void WriteRespondWithProtocolError(ushort eventId, byte protocolError)
+        {
+            NativeWriteRespondWithProtocolError(eventId, protocolError);
+        }
+
         #region external calls to native implementations
 
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -44,7 +74,22 @@ namespace nanoFramework.Device.Bluetooth.NativeDevices
         
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern int NativeNotifyClient(ushort connection, ushort characteristicId, byte[] notifyBuffer);
+        
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern void NativeReadRespondWithValue(ushort eventID, byte[] value);
 
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern void NativeReadRespondWithProtocolError(ushort eventID, byte protocolError);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern byte[] NativeWriteGetData(ushort eventID);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern void NativeWriteRespond(ushort eventID);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern void NativeWriteRespondWithProtocolError(ushort eventID, byte protocolError);
+        
         #endregion
     }
 }

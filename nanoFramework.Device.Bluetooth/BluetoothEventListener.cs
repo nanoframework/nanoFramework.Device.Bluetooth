@@ -16,9 +16,11 @@ namespace nanoFramework.Device.Bluetooth
     {
         // Map of Bluetooth Characteristic numbers to GattLocalCharacteristic objects.
         private static readonly ArrayList _characteristicMap = new ArrayList();
+        private readonly INativeDevice _nativeDevice;
 
-        public BluetoothEventListener()
+        public BluetoothEventListener(INativeDevice nativeDevice)
         {
+            _nativeDevice = nativeDevice;
             EventSink.AddEventProcessor(EventCategory.Bluetooth, this);
             EventSink.AddEventListener(EventCategory.Bluetooth, this);
         }
@@ -60,11 +62,11 @@ namespace nanoFramework.Device.Bluetooth
                 switch (btEvent.type)
                 {
                     case BluetoothEventType.Read:
-                        lc.OnReadRequested(btEvent.descriptorId, new GattReadRequestedEventArgs(btEvent.ID, null));
+                        lc.OnReadRequested(btEvent.descriptorId, new GattReadRequestedEventArgs(btEvent.ID, null, _nativeDevice));
                         break;
 
                     case BluetoothEventType.Write:
-                        lc.OnWriteRequested(btEvent.descriptorId, new GattWriteRequestedEventArgs(btEvent.ID, null));
+                        lc.OnWriteRequested(btEvent.descriptorId, new GattWriteRequestedEventArgs(btEvent.ID, null, _nativeDevice));
                         break;
 
                     case BluetoothEventType.ClientSubscribed:

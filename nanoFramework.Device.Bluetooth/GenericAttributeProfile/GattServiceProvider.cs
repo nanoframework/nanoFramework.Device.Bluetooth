@@ -34,12 +34,13 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         private Buffer _serviceData;
 
 
-        internal static readonly BluetoothEventListener _bluetoothEventManager = new BluetoothEventListener();
+        internal static BluetoothEventListener _bluetoothEventManager ;
 
-        internal GattServiceProvider(Guid serviceUuid, INativeDevice nativeDevice, INativeDevice nativeDevice1)
+        internal GattServiceProvider(Guid serviceUuid, INativeDevice nativeDevice)
         {
             _services = new ArrayList();
             _nativeDevice = nativeDevice;
+            _bluetoothEventManager = new BluetoothEventListener(_nativeDevice);
 
             // Add primary
             AddService(serviceUuid);
@@ -126,7 +127,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <returns>A GattServiceProviderResult object.</returns>
         public static GattServiceProviderResult Create(Guid serviceUuid, INativeDevice nativeDevice)
         {
-            GattServiceProvider serviceProvider = new GattServiceProvider(serviceUuid, nativeDevice, nativeDevice);
+            GattServiceProvider serviceProvider = new GattServiceProvider(serviceUuid, nativeDevice);
 
             return new GattServiceProviderResult(serviceProvider, BluetoothError.Success);
         }

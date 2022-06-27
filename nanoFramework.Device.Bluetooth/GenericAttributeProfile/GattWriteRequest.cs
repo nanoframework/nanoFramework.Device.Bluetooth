@@ -18,13 +18,15 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         private readonly Buffer _value = null;
 
         private readonly ushort _eventID;
+        private readonly INativeDevice _nativeDevice;
 
-        internal GattWriteRequest(ushort eventID)
+        internal GattWriteRequest(ushort eventID, INativeDevice nativeDevice)
         {
             _eventID = eventID;
+            _nativeDevice = nativeDevice;
 
             // Get a copy of data from Native for this event
-            byte[] data = NativeWriteGetData(eventID);
+            byte[] data = _nativeDevice.WriteGetData(eventID);
 
             // and save it
             _value = new Buffer(data);
@@ -35,7 +37,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// </summary>
         public void Respond()
         {
-            NativeWriteRespond(_eventID);
+            _nativeDevice.WriteRespond(_eventID);
         }
 
         /// <summary>
@@ -44,7 +46,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <param name="protocolError">Error byte</param>
         public void RespondWithProtocolError(byte protocolError)
         {
-            NativeWriteRespondWithProtocolError(_eventID, protocolError);
+            _nativeDevice.WriteRespondWithProtocolError(_eventID, protocolError);
         }
 
         /// <summary>
@@ -61,18 +63,5 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// Gets the buffer value of the write request.
         /// </summary>
         public Buffer Value { get => _value; }
-
-        #region external calls to native implementations
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern byte[] NativeWriteGetData(ushort eventID);
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern void NativeWriteRespond(ushort eventID);
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern void NativeWriteRespondWithProtocolError(ushort eventID, byte protocolError);
-
-        #endregion
     }
 }

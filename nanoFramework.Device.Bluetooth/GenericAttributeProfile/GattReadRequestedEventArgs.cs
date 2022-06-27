@@ -14,9 +14,11 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     {
         private readonly ushort _eventID;
         private readonly GattSession _session = null;
+        private readonly INativeDevice _nativeDevice;
 
-        internal GattReadRequestedEventArgs(ushort eventID, GattSession session)
+        internal GattReadRequestedEventArgs(ushort eventID, GattSession session, INativeDevice nativeDevice)
         {
+            _nativeDevice = nativeDevice;
             _eventID = eventID;
             _session = session;
         }
@@ -27,7 +29,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <returns>Returns a GattReadRequest object.</returns>
         public GattReadRequest GetRequest()
         {
-            return new GattReadRequest(_eventID);
+            return new GattReadRequest(_eventID, _nativeDevice);
         }
 
         /// <summary>
