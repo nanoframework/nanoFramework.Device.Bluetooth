@@ -26,6 +26,8 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         private readonly GattCharacteristicProperties _properties;
         private readonly ArrayList _descriptors;
         private readonly ArrayList _subscribedClients;
+        
+        private readonly INativeDevice _nativeDevice;
 
         // Built in descriptors
         private readonly string _userDescription;
@@ -57,8 +59,9 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <param name="args"></param>
         public delegate void GattLocalCharacteristicClientsChangedEventHandler(GattLocalCharacteristic sender, object args);
 
-        internal GattLocalCharacteristic(Guid characteristicUuid, GattLocalCharacteristicParameters parameters)
+        internal GattLocalCharacteristic(Guid characteristicUuid, GattLocalCharacteristicParameters parameters, INativeDevice nativeDevice)
         {
+            _nativeDevice = nativeDevice;
             _characteristicUuid = characteristicUuid.ToByteArray();
             _writeProtectionLevel = parameters.WriteProtectionLevel;
             _readProtectionLevel = parameters.ReadProtectionLevel;
@@ -66,7 +69,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             _properties = parameters.CharacteristicProperties;
 
             _staticValue = parameters.StaticValue;
-
+            
             _descriptors = new ArrayList();
             _subscribedClients = new ArrayList();
 
@@ -193,7 +196,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             Byte[] buffer = new byte[value.Length];
             Array.Copy(value.Data, buffer, (int)value.Length);
 
-            int rc = NativeNotifyClient((ushort)subscribedClient.Session.DeviceId.Id, _characteristicId, buffer);
+            int rc = _nativeDevice.NotifyClient((ushort)subscribedClient.Session.DeviceId.Id, _characteristicId, buffer);
 
             result = new GattClientNotificationResult((byte)rc, rc == 0 ? GattCommunicationStatus.Success : GattCommunicationStatus.Unreachable, subscribedClient, (ushort)value.Length);
 
@@ -397,11 +400,5 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             }
             return null;
         }
-
-        #region Native
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern int NativeNotifyClient(ushort connection, ushort CharacteristicId, byte[] notifyBuffer);
-
-        #endregion
     }
 }
