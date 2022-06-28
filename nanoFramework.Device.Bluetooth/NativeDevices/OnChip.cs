@@ -1,4 +1,9 @@
-﻿using System.Runtime.CompilerServices;
+﻿//
+// Copyright (c) .NET Foundation and Contributors
+// See LICENSE file in the project root for full license information.
+//
+
+using System.Runtime.CompilerServices;
 
 namespace nanoFramework.Device.Bluetooth.NativeDevices
 {
@@ -42,7 +47,7 @@ namespace nanoFramework.Device.Bluetooth.NativeDevices
         {
             NativeReadRespondWithProtocolError(eventId, otherError);
         }
-        
+
         /// <inheritdoc />
         public byte[] WriteGetData(ushort eventId)
         {
@@ -82,10 +87,10 @@ namespace nanoFramework.Device.Bluetooth.NativeDevices
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern void NativeStopAdvertising();
-        
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern int NativeNotifyClient(ushort connection, ushort characteristicId, byte[] notifyBuffer);
-        
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern void NativeReadRespondWithValue(ushort eventID, byte[] value);
 
@@ -100,7 +105,7 @@ namespace nanoFramework.Device.Bluetooth.NativeDevices
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern void NativeWriteRespondWithProtocolError(ushort eventID, byte protocolError);
-        
+
         #endregion
     }
 }

@@ -26,7 +26,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         private readonly GattCharacteristicProperties _properties;
         private readonly ArrayList _descriptors;
         private readonly ArrayList _subscribedClients;
-        
+
         private readonly INativeDevice _nativeDevice;
 
         // Built in descriptors
@@ -69,7 +69,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             _properties = parameters.CharacteristicProperties;
 
             _staticValue = parameters.StaticValue;
-            
+
             _descriptors = new ArrayList();
             _subscribedClients = new ArrayList();
 
@@ -306,7 +306,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
             if (WriteRequested != null)
             {
-                int descritorIndex = (descritorId >> 8);  
+                int descritorIndex = (descritorId >> 8);
 
                 // LocalCharacteristic event ?
                 if (descritorIndex == 0)
