@@ -61,6 +61,17 @@ namespace nanoFramework.Device.Bluetooth.NativeDevices
             NativeWriteRespondWithProtocolError(eventId, protocolError);
         }
 
+        #region Dispose
+
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+
+        }
+
+        #endregion
+
         #region external calls to native implementations
 
         [MethodImpl(MethodImplOptions.InternalCall)]

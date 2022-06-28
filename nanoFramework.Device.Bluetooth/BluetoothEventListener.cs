@@ -9,18 +9,21 @@ using System.Diagnostics;
 
 using nanoFramework.Runtime.Events;
 using nanoFramework.Device.Bluetooth.GenericAttributeProfile;
+using nanoFramework.Device.Bluetooth.NativeDevices;
 
 namespace nanoFramework.Device.Bluetooth
 {
-    internal class BluetoothEventListener : IEventProcessor, IEventListener
+    internal class BluetoothEventListener : IEventProcessor, IEventListener, IDisposable
     {
         // Map of Bluetooth Characteristic numbers to GattLocalCharacteristic objects.
         private static readonly ArrayList _characteristicMap = new ArrayList();
         private readonly INativeDevice _nativeDevice;
+        private readonly bool _shouldDispose;
 
-        public BluetoothEventListener(INativeDevice nativeDevice)
+        public BluetoothEventListener(INativeDevice nativeDevice = null)
         {
-            _nativeDevice = nativeDevice;
+            _shouldDispose = nativeDevice == null;
+            _nativeDevice = nativeDevice != null ? nativeDevice : new OnChip();
             EventSink.AddEventProcessor(EventCategory.Bluetooth, this);
             EventSink.AddEventListener(EventCategory.Bluetooth, this);
         }
@@ -122,6 +125,18 @@ namespace nanoFramework.Device.Bluetooth
 
             return null;
         }
+
+        #region Dispose
+
+        public void Dispose()
+        {
+            if (_shouldDispose)
+            {
+                _nativeDevice.Dispose();
+            }
+        }
+
+        #endregion
     }
 }
 
