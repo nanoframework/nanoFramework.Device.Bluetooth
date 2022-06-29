@@ -84,6 +84,7 @@ serviceProvider = result.ServiceProvider;
 ```
 
 Optionally the `Create` function can be supplied with an extra argument specifying the Bluetooth device.
+
 ```csharp
 GattServiceProviderResult result = GattServiceProvider.Create(uuid, new BlueNrg2());
 ```
