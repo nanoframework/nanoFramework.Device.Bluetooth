@@ -132,7 +132,7 @@ namespace nanoFramework.Device.Bluetooth
         {
             if (_shouldDispose)
             {
-                _nativeDevice.Dispose();
+                _nativeDevice?.Dispose();
             }
         }
 
