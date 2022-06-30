@@ -4,6 +4,7 @@
 //
 
 using System;
+using System.Collections;
 
 namespace nanoFramework.Device.Bluetooth
 {
@@ -21,7 +22,7 @@ namespace nanoFramework.Device.Bluetooth
         /// Starts Advertising the Gatt service.
         /// </summary>
         /// <returns>if advertising started correctly.</returns>
-        bool StartAdvertising();
+        bool StartAdvertising(bool isDiscoverable, bool isConnectable, byte[] deviceName, ArrayList services);
 
         /// <summary>
         /// Stops advertising the Gatt service.

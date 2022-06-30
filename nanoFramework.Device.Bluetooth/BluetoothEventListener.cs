@@ -5,11 +5,9 @@
 
 using System;
 using System.Collections;
-using System.Diagnostics;
 
 using nanoFramework.Runtime.Events;
 using nanoFramework.Device.Bluetooth.GenericAttributeProfile;
-using nanoFramework.Device.Bluetooth.NativeDevices;
 
 namespace nanoFramework.Device.Bluetooth
 {
@@ -23,7 +21,7 @@ namespace nanoFramework.Device.Bluetooth
         public BluetoothEventListener(INativeDevice nativeDevice = null)
         {
             _shouldDispose = nativeDevice == null;
-            _nativeDevice = nativeDevice != null ? nativeDevice : new OnChip();
+            _nativeDevice = nativeDevice != null ? nativeDevice : throw new ArgumentNullException(nameof(nativeDevice));
             EventSink.AddEventProcessor(EventCategory.Bluetooth, this);
             EventSink.AddEventListener(EventCategory.Bluetooth, this);
         }

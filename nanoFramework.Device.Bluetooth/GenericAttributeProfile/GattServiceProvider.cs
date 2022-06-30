@@ -6,7 +6,6 @@
 using System;
 using System.Text;
 using System.Collections;
-using System.Runtime.CompilerServices;
 using nanoFramework.Runtime.Native;
 
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
@@ -103,7 +102,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
             _deviceName = Encoding.UTF8.GetBytes(parameters.DeviceName);
 
-            if (_nativeDevice.StartAdvertising())
+            if (_nativeDevice.StartAdvertising(_isDiscoverable, _isConnectable, _deviceName, _services))
             {
                 _status = GattServiceProviderAdvertisementStatus.Started;
             }

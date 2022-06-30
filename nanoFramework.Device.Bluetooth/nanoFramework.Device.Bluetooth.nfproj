@@ -27,11 +27,8 @@
   <PropertyGroup>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
-  <PropertyGroup>
-    <!-- override default options for MetaDataProcessor -->
-    <NF_GenerateStubsDirectory>bin\$(Configuration)\Stubs</NF_GenerateStubsDirectory>
-    <NF_GenerateSkeletonProjectName>sys_dev_ble_native</NF_GenerateSkeletonProjectName>
-    <Name>System.Device.Bluetooth</Name>
+  <PropertyGroup Label="nanoFramework">
+    <NFMDP_GENERATE_STUBS>False</NFMDP_GENERATE_STUBS>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
@@ -70,7 +67,6 @@
     <Compile Include="GenericAttributeProfile\GattWriteRequest.cs" />
     <Compile Include="GenericAttributeProfile\GattWriteRequestedEventArgs.cs" />
     <Compile Include="INativeDevice.cs" />
-    <Compile Include="NativeDevices\OnChip.cs" />
     <Compile Include="SPP\IBluetoothSpp.cs" />
     <Compile Include="SPP\NordicSpp.cs" />
     <Compile Include="SPP\SppReceiveEventArgs.cs" />
