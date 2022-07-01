@@ -21,6 +21,7 @@ namespace nanoFramework.Device.Bluetooth
         /// <summary>
         /// Starts Advertising the Gatt service.
         /// </summary>
+        /// <param name="services">List of GattLocalServices.</param>
         /// <returns>if advertising started correctly.</returns>
         bool StartAdvertising(bool isDiscoverable, bool isConnectable, byte[] deviceName, ArrayList services);
 
