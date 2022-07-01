@@ -10,52 +10,52 @@ namespace NfUnitTest1
 {
     class TestBleDevice : INativeDevice
     {
-        public Void Dispose()
+        public void Dispose()
         {
             throw new NotImplementedException();
         }
 
-        public Void InitService()
+        public void InitService()
         {
             throw new NotImplementedException();
         }
 
-        public Void StopAdvertising()
+        public void StopAdvertising()
         {
             throw new NotImplementedException();
         }
 
-        public Void WriteRespondWithProtocolError(ushort eventId, Byte protocolError)
+        public void WriteRespondWithProtocolError(ushort eventId, Byte protocolError)
         {
             throw new NotImplementedException();
         }
 
-        public Void WriteRespond(ushort eventId)
+        public void WriteRespond(ushort eventId)
         {
             throw new NotImplementedException();
         }
 
-        public Byte[] WriteGetData(ushort eventId)
+        public byte[] WriteGetData(ushort eventId)
         {
             throw new NotImplementedException();
         }
 
-        public Void ReadRespondWithProtocolError(ushort eventId, byte otherError)
+        public void ReadRespondWithProtocolError(ushort eventId, byte otherError)
         {
             throw new NotImplementedException();
         }
 
-        public Void ReadRespondWithValue(ushort eventId, byte[] data)
+        public void ReadRespondWithValue(ushort eventId, byte[] data)
         {
             throw new NotImplementedException();
         }
 
-        public Int32 NotifyClient(ushort connection, ushort characteristicId, byte[] notifyBuffer)
+        public int NotifyClient(ushort connection, ushort characteristicId, byte[] notifyBuffer)
         {
             throw new NotImplementedException();
         }
 
-        public Boolean StartAdvertising(bool isDiscoverable, bool isConnectable, byte[] deviceName, ArrayList services)
+        public bool StartAdvertising(bool isDiscoverable, bool isConnectable, byte[] deviceName, ArrayList services)
         {
             throw new NotImplementedException();
         }
