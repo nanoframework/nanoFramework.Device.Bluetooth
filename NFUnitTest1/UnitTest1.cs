@@ -7,7 +7,7 @@ using System;
 using nanoFramework.TestFramework;
 using nanoFramework.Device.Bluetooth;
 using nanoFramework.Device.Bluetooth.GenericAttributeProfile;
-using nanoFramework.Device.Bluetooth.NativeDevices;
+using NfUnitTest1;
 
 namespace NFUnitTest1
 {
@@ -21,7 +21,7 @@ namespace NFUnitTest1
         {
             GattServiceProvider serviceProvider = null;
 
-            GattServiceProviderResult result = GattServiceProvider.Create(ServiceUuid1, new OnChip());
+            GattServiceProviderResult result = GattServiceProvider.Create(ServiceUuid1, new TestBleDevice());
             Assert.False(result.Error == BluetoothError.Success);
 
             serviceProvider = result.ServiceProvider;
