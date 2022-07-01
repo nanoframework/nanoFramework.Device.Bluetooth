@@ -17,11 +17,15 @@ namespace nanoFramework.Device.Bluetooth
         private static readonly ArrayList _characteristicMap = new ArrayList();
         private readonly INativeDevice _nativeDevice;
         private readonly bool _shouldDispose;
-
-        public BluetoothEventListener(INativeDevice nativeDevice = null)
+        
+        /// <summary>
+        /// Creates a new instance of BluetoothEventListener.
+        /// </summary>
+        /// <param name="nativeDevice">The physical device used for bluetooth.</param>
+        /// <exception cref="ArgumentNullException">Thrown when nativeDevice is null.</exception>
+        public BluetoothEventListener(INativeDevice nativeDevice)
         {
-            _shouldDispose = nativeDevice == null;
-            _nativeDevice = nativeDevice != null ? nativeDevice : throw new ArgumentNullException(nameof(nativeDevice));
+            _nativeDevice = nativeDevice ?? throw new ArgumentNullException();
             EventSink.AddEventProcessor(EventCategory.Bluetooth, this);
             EventSink.AddEventListener(EventCategory.Bluetooth, this);
         }
