@@ -4,6 +4,7 @@
 //
 
 using System;
+using System.Collections;
 using nanoFramework.Device.Bluetooth;
 
 namespace NfUnitTest1
