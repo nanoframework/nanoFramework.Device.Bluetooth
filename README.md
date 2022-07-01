@@ -72,21 +72,16 @@ Guid uuid1 = Utility.CreateUuidFromShortCode(0x2A19);
 ### Defining the service and associated Characteristics
 
 The GattServiceProvider is used to create and advertise the primary service definition. An extra device information service will be automatically created.
+The NativeDevice is supplied by a `nanoFramework.Bluetooth.*` package or an IoT package.
 
 ```csharp
-GattServiceProviderResult result = GattServiceProvider.Create(uuid);
+GattServiceProviderResult result = GattServiceProvider.Create(uuid, new NativeDevice());
 if (result.Error != BluetoothError.Success)
 {
     return result.Error;
 }
 
 serviceProvider = result.ServiceProvider;
-```
-
-Optionally the `Create` function can be supplied with an extra argument specifying the Bluetooth device.
-
-```csharp
-GattServiceProviderResult result = GattServiceProvider.Create(uuid, new BlueNrg2());
 ```
 
 Now add to the service all the required characteristics and descriptors. 
