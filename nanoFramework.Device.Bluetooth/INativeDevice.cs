@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections;
+using nanoFramework.Device.Bluetooth.GenericAttributeProfile;
 
 namespace nanoFramework.Device.Bluetooth
 {
@@ -13,6 +14,11 @@ namespace nanoFramework.Device.Bluetooth
     /// </summary>
     public interface INativeDevice : IDisposable
     {
+        event EventHandler<GattReadRequestedEventArgs> OnReadRequested;
+        event EventHandler<GattWriteRequestedEventArgs> OnWriteRequested;
+        event EventHandler<GattSubscribedCliensChangedEventArgs> OnClientSubscribed;
+        event EventHandler<GattSubscribedCliensChangedEventArgs> OnClientUnsubscribed;
+
         /// <summary>
         /// Initializes the Gatt service.
         /// </summary>

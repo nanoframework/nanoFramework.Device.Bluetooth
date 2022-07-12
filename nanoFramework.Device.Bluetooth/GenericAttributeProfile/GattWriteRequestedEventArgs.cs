@@ -16,7 +16,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         private readonly GattSession _session = null;
         private readonly INativeDevice _nativeDevice;
 
-        internal GattWriteRequestedEventArgs(ushort eventID, GattSession session, INativeDevice nativeDevice)
+        public GattWriteRequestedEventArgs(ushort eventID, GattSession session, INativeDevice nativeDevice)
         {
             _nativeDevice = nativeDevice;
             _eventID = eventID;
