@@ -12,20 +12,23 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// </summary>
     public sealed class GattReadRequestedEventArgs
     {
-        private readonly ushort _eventID;
+        private readonly ushort _descriptorId;
+        private readonly ushort _eventId;
         private readonly GattSession _session = null;
         private readonly INativeDevice _nativeDevice;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="eventID"></param>
+        /// <param name="eventId"></param>
         /// <param name="session"></param>
         /// <param name="nativeDevice"></param>
-        public GattReadRequestedEventArgs(ushort eventID, GattSession session, INativeDevice nativeDevice)
+        /// <param name="descriptorId"></param>
+        public GattReadRequestedEventArgs(ushort descriptorId, ushort eventId, GattSession session, INativeDevice nativeDevice)
         {
+            _descriptorId = descriptorId;
             _nativeDevice = nativeDevice;
-            _eventID = eventID;
+            _eventId = eventId;
             _session = session;
         }
 
@@ -35,8 +38,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <returns>Returns a GattReadRequest object.</returns>
         public GattReadRequest GetRequest()
         {
-            return new GattReadRequest(_eventID, _nativeDevice);
+            return new GattReadRequest(_eventId, _nativeDevice);
         }
+        
+        internal ushort DescriptorId { get => _descriptorId; }
 
         /// <summary>
         /// Gets the session.

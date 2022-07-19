@@ -6,6 +6,7 @@
 using System;
 using System.Collections;
 using nanoFramework.Device.Bluetooth;
+using nanoFramework.Device.Bluetooth.GenericAttributeProfile;
 
 namespace NfUnitTest1
 {
@@ -15,6 +16,11 @@ namespace NfUnitTest1
         {
             throw new NotImplementedException();
         }
+
+        public event EventHandler<GattReadRequestedEventArgs> OnReadRequested;
+        public event EventHandler<GattWriteRequestedEventArgs> OnWriteRequested;
+        public event EventHandler<GattSubscribedClientsChangedEventArgs> OnClientSubscribed;
+        public event EventHandler<GattSubscribedClientsChangedEventArgs> OnClientUnsubscribed;
 
         public void InitService()
         {

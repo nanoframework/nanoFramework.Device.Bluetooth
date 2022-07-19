@@ -62,11 +62,11 @@
     <Compile Include="GenericAttributeProfile\GattServiceUuids.cs" />
     <Compile Include="GenericAttributeProfile\GattSession.cs" />
     <Compile Include="GenericAttributeProfile\GattSessionStatus.cs" />
+    <Compile Include="GenericAttributeProfile\GattSubscribedClientsChangedEventArgs.cs" />
     <Compile Include="GenericAttributeProfile\GattSubscribedClient.cs" />
     <Compile Include="GenericAttributeProfile\GattWriteOption.cs" />
     <Compile Include="GenericAttributeProfile\GattWriteRequest.cs" />
     <Compile Include="GenericAttributeProfile\GattWriteRequestedEventArgs.cs" />
-    <Compile Include="GenericAttributeProfile\GattSubscribedCliensChangedEventArgs.cs" />
     <Compile Include="INativeDevice.cs" />
     <Compile Include="SPP\IBluetoothSpp.cs" />
     <Compile Include="SPP\NordicSpp.cs" />

@@ -274,59 +274,59 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             bool handled = false;
 
             // Static value for Characteristic ?
-            int descritorIndex = (descritorId >> 8);
+            int descritorIndex = (args.DescriptorId >> 8);
             if (_staticValue != null && descritorIndex == 0)
             {
                 handled = true;
                 // Handle static values internally, don't fire an event
                 DataWriter writer = new DataWriter();
                 writer.WriteBuffer(_staticValue);
-                e.GetRequest().RespondWithValue(_staticValue);
+                args.GetRequest().RespondWithValue(_staticValue);
             }
             else if (descritorIndex != 0)
             {
                 // Descriptor event, let descriptor handle it
-                GattLocalDescriptor des = FindDescriptor(descritorId);
+                GattLocalDescriptor des = FindDescriptor(args.DescriptorId);
                 if (des != null)
                 {
-                    handled = des.OnReadRequested(e);
+                    handled = des.OnReadRequested(args);
                 }
             }
             else if (ReadRequested != null)
             {
                 // LocalCharacteristic event ?
                 handled = true;
-                ReadRequested?.Invoke(this, e);
+                ReadRequested?.Invoke(this, args);
             }
 
             if (!handled)
             {
                 // No event handler, respond with error
-                e.GetRequest().RespondWithProtocolError(GattProtocolError.UnlikelyError);
+                args.GetRequest().RespondWithProtocolError(GattProtocolError.UnlikelyError);
             }
         }
 
-        internal void OnWriteRequested(ushort descritorId, GattWriteRequestedEventArgs e)
+        internal void OnWriteRequested(object sender, GattWriteRequestedEventArgs args)
         {
             bool handled = false;
 
             if (WriteRequested != null)
             {
-                int descritorIndex = (descritorId >> 8);
+                int descritorIndex = (args.DescriptorId >> 8);
 
                 // LocalCharacteristic event ?
                 if (descritorIndex == 0)
                 {
                     handled = true;
-                    WriteRequested?.Invoke(this, e);
+                    WriteRequested?.Invoke(this, args);
                 }
                 else
                 {
                     // Descriptor event
-                    GattLocalDescriptor des = FindDescriptor(descritorId);
+                    GattLocalDescriptor des = FindDescriptor(args.DescriptorId);
                     if (des != null)
                     {
-                        handled = des.OnWriteRequested(e);
+                        handled = des.OnWriteRequested(args);
                     }
                 }
             }
@@ -334,7 +334,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             if (!handled)
             {
                 // No event handler, respond with error
-                e.GetRequest().RespondWithProtocolError(GattProtocolError.UnlikelyError);
+                args.GetRequest().RespondWithProtocolError(GattProtocolError.UnlikelyError);
             }
         }
 
@@ -354,17 +354,17 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             return -1;
         }
 
-        internal void OnSubscribedClientsChanged(bool subscribe, GattSubscribedClient client)
+        internal void OnSubscribedClientsChanged(object sender, GattSubscribedClientsChangedEventArgs args)
         {
             lock (_subscribedClients)
             {
-                int index = ClientSubscribed(client);
+                int index = ClientSubscribed(args.Client);
 
-                if (subscribe)
+                if (args.Subscribed)
                 {
                     if (index < 0)
                     {
-                        _subscribedClients.Add(client);
+                        _subscribedClients.Add(args.Client);
                     }
                 }
                 else

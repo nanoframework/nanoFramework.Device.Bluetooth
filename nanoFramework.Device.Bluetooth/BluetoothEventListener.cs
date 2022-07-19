@@ -67,18 +67,18 @@ namespace nanoFramework.Device.Bluetooth
                 switch (btEvent.type)
                 {
                     case BluetoothEventType.Read:
-                        lc.OnReadRequested(btEvent.descriptorId, new GattReadRequestedEventArgs(btEvent.ID, null, _nativeDevice));
+                        lc.OnReadRequested(this, new GattReadRequestedEventArgs(btEvent.descriptorId, btEvent.ID, null, _nativeDevice));
                         break;
 
                     case BluetoothEventType.Write:
-                        lc.OnWriteRequested(btEvent.descriptorId, new GattWriteRequestedEventArgs(btEvent.ID, null, _nativeDevice));
+                        lc.OnWriteRequested(this, new GattWriteRequestedEventArgs(btEvent.descriptorId, btEvent.ID, null, _nativeDevice));
                         break;
 
                     case BluetoothEventType.ClientSubscribed:
                         {
                             GattSession gs = GattSession.FromDeviceId(new BluetoothDeviceId(btEvent.ID));
                             GattSubscribedClient sc = new GattSubscribedClient(gs);
-                            lc.OnSubscribedClientsChanged(true, sc);
+                            lc.OnSubscribedClientsChanged(this, new GattSubscribedClientsChangedEventArgs(true, sc));
                         }
                         break;
 
@@ -86,7 +86,7 @@ namespace nanoFramework.Device.Bluetooth
                         {
                             GattSession gs = GattSession.FromDeviceId(new BluetoothDeviceId(btEvent.ID));
                             GattSubscribedClient sc = new GattSubscribedClient(gs);
-                            lc.OnSubscribedClientsChanged(false, sc);
+                            lc.OnSubscribedClientsChanged(this, new GattSubscribedClientsChangedEventArgs(false, sc));
                         }
                         break;
                 }

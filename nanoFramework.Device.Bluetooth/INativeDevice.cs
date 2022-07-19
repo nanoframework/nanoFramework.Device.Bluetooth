@@ -16,8 +16,8 @@ namespace nanoFramework.Device.Bluetooth
     {
         event EventHandler<GattReadRequestedEventArgs> OnReadRequested;
         event EventHandler<GattWriteRequestedEventArgs> OnWriteRequested;
-        event EventHandler<GattSubscribedCliensChangedEventArgs> OnClientSubscribed;
-        event EventHandler<GattSubscribedCliensChangedEventArgs> OnClientUnsubscribed;
+        event EventHandler<GattSubscribedClientsChangedEventArgs> OnClientSubscribed;
+        event EventHandler<GattSubscribedClientsChangedEventArgs> OnClientUnsubscribed;
 
         /// <summary>
         /// Initializes the Gatt service.

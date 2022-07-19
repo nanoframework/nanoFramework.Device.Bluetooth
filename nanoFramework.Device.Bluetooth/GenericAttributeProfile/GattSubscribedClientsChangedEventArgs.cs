@@ -10,7 +10,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GattSubscribedCliensChangedEventArgs : EventArgs
+    public sealed class GattSubscribedClientsChangedEventArgs : EventArgs
     {
         private readonly bool _subscribed;
         private readonly GattSubscribedClient _client = null;
@@ -20,7 +20,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// </summary>
         /// <param name="subscribed"></param>
         /// <param name="client"></param>
-        public GattSubscribedCliensChangedEventArgs(bool subscribed, GattSubscribedClient client)
+        public GattSubscribedClientsChangedEventArgs(bool subscribed, GattSubscribedClient client)
         {
             _subscribed = subscribed;
             _client = client;
