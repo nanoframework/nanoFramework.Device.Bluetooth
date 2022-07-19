@@ -7,7 +7,7 @@ using System;
 using System.Collections;
 using nanoFramework.Device.Bluetooth.GenericAttributeProfile;
 
-namespace nanoFramework.Device.Bluetooth
+namespace nanoFramework.Device.Bluetooth.NativeDevice
 {
     /// <summary>
     /// Interface to be implemented by native devices.

@@ -6,6 +6,7 @@
 using System;
 using System.Text;
 using System.Collections;
+using nanoFramework.Device.Bluetooth.NativeDevice;
 using nanoFramework.Runtime.Native;
 
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile

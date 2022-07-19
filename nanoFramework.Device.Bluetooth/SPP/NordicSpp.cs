@@ -7,6 +7,7 @@ using System;
 using nanoFramework.Device.Bluetooth.GenericAttributeProfile;
 using System.Diagnostics;
 using System.Text;
+using nanoFramework.Device.Bluetooth.NativeDevice;
 
 namespace nanoFramework.Device.Bluetooth.Spp
 {

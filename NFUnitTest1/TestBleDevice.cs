@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using nanoFramework.Device.Bluetooth;
 using nanoFramework.Device.Bluetooth.GenericAttributeProfile;
+using nanoFramework.Device.Bluetooth.NativeDevice;
 
 namespace NfUnitTest1
 {

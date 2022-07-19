@@ -1,7 +1,7 @@
 ﻿using System;
 using nanoFramework.Device.Bluetooth.GenericAttributeProfile;
 
-namespace nanoFramework.Device.Bluetooth
+namespace nanoFramework.Device.Bluetooth.NativeDevice
 {
     public class NativeReadRequestedEventArgs : EventArgs
     {

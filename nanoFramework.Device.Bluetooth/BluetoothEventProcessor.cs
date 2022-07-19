@@ -1,4 +1,5 @@
 ﻿using nanoFramework.Device.Bluetooth.GenericAttributeProfile;
+using nanoFramework.Device.Bluetooth.NativeDevice;
 
 namespace nanoFramework.Device.Bluetooth
 {
