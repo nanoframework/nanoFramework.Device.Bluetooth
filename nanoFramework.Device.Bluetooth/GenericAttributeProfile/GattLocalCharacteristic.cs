@@ -73,6 +73,12 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             _descriptors = new ArrayList();
             _subscribedClients = new ArrayList();
 
+            // register events
+            nativeDevice.OnReadRequested += OnReadRequested;
+            nativeDevice.OnWriteRequested += OnWriteRequested;
+            nativeDevice.OnClientSubscribed += OnSubscribedClientsChanged;
+            nativeDevice.OnClientUnsubscribed += OnSubscribedClientsChanged;
+
             // Give it next id
             _characteristicId = NextCharacteristicIndex();
             // Start at 1 for descriptors
@@ -263,7 +269,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// </summary>
         public event GattLocalCharacteristicClientsChangedEventHandler SubscribedClientsChanged;
 
-        internal void OnReadRequested(ushort descritorId, GattReadRequestedEventArgs e)
+        internal void OnReadRequested(object sender, GattReadRequestedEventArgs args)
         {
             bool handled = false;
 
