@@ -3,8 +3,6 @@
 // See LICENSE file in the project root for full license information.
 //
 
-using System;
-
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 {
     /// <summary>
@@ -12,12 +10,12 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// </summary>
     public sealed class GattWriteRequestedEventArgs //: IGattWriteRequestedEventArgs
     {
-        private readonly ushort _eventID;
-        private readonly GattSession _session = null;
+        private readonly ushort _eventId;
+        private readonly GattSession _session;
 
-        internal GattWriteRequestedEventArgs(ushort eventID, GattSession session)
+        internal GattWriteRequestedEventArgs(ushort eventId, GattSession session)
         {
-            _eventID = eventID;
+            _eventId = eventId;
             _session = session;
         }
 
@@ -27,7 +25,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <returns>Returns a write request.</returns>
         public GattWriteRequest GetRequest()
         {
-            return new GattWriteRequest(_eventID);
+            return new GattWriteRequest(_eventId);
         }
 
         /// <summary>

@@ -16,7 +16,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         internal GattLocalDescriptorResult(GattLocalDescriptor descriptor, BluetoothError error)
         {
             _descriptor = descriptor;
-            _error = Error;
+            _error = error;
         }
 
         /// <summary>

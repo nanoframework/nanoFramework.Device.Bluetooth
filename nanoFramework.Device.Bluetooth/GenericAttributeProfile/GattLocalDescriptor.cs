@@ -15,9 +15,9 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         // Each Descriptor will have unique _descriptorId for event lookup, events for descriptors are handled by User app.
         // This comprises of characteristic ID + GattLocalDescriptorIndex in the form
         // x'DDCC' where DD is Descriptor and CC characteristic
-        internal ushort _descriptorId;
+        internal readonly ushort DescriptorId;
 
-        private readonly GattLocalCharacteristic _charactisic;
+        private readonly GattLocalCharacteristic _characteristic;
 
         private readonly GattProtectionLevel _writeProtectionLevel;
         private readonly GattProtectionLevel _readProtectionLevel;
@@ -29,26 +29,26 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// Delegate for Read requests
         /// </summary>
         /// <param name="sender">GattLocalDescriptor sending event</param>
-        /// <param name="ReadRequestEventArgs">Event arguments</param>
-        public delegate void GattLocalDescriptorReadEventHandler(GattLocalCharacteristic sender, GattReadRequestedEventArgs ReadRequestEventArgs);
+        /// <param name="readRequestEventArgs">Event arguments</param>
+        public delegate void GattLocalDescriptorReadEventHandler(GattLocalCharacteristic sender, GattReadRequestedEventArgs readRequestEventArgs);
 
         /// <summary>
         /// Delegate for Write requests
         /// </summary>
         /// <param name="sender">GattLocalDescriptor sending event</param>
-        /// <param name="WriteRequestEventArgs">Event arguments</param>
-        public delegate void GattLocalDescriptorWriteEventHandler(GattLocalCharacteristic sender, GattWriteRequestedEventArgs WriteRequestEventArgs);
+        /// <param name="writeRequestEventArgs">Event arguments</param>
+        public delegate void GattLocalDescriptorWriteEventHandler(GattLocalCharacteristic sender, GattWriteRequestedEventArgs writeRequestEventArgs);
 
-        internal GattLocalDescriptor(Guid uuid, GattLocalDescriptorParameters parameters, GattLocalCharacteristic charactisic, int descriptorIndex)
+        internal GattLocalDescriptor(Guid uuid, GattLocalDescriptorParameters parameters, GattLocalCharacteristic characteristic, int descriptorIndex)
         {
             _uuid = uuid.ToByteArray();
-            _charactisic = charactisic;
+            _characteristic = characteristic;
 
             _writeProtectionLevel = parameters.WriteProtectionLevel;
             _readProtectionLevel = parameters.ReadProtectionLevel;
             _staticValue = parameters.StaticValue;
 
-            _descriptorId = (ushort)((descriptorIndex << 8) + _charactisic._characteristicId);
+            DescriptorId = (ushort)((descriptorIndex << 8) + _characteristic.CharacteristicId);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
             if (ReadRequested != null)
             {
-                ReadRequested?.Invoke(_charactisic, e);
+                ReadRequested?.Invoke(_characteristic, e);
                 return true;
             }
 
@@ -102,7 +102,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         {
             if (WriteRequested != null)
             {
-                WriteRequested?.Invoke(_charactisic, e);
+                WriteRequested?.Invoke(_characteristic, e);
                 return true;
             }
 

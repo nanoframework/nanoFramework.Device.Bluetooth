@@ -3,8 +3,6 @@
 // See LICENSE file in the project root for full license information.
 //
 
-using System;
-
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 {
     /// <summary>

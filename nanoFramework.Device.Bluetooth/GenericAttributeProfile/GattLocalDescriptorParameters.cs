@@ -17,7 +17,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         private GattProtectionLevel _readProtectionLevel;
 
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        private Buffer _staticValue = null;
+        private Buffer _staticValue;
 
         /// <summary>
         /// Creates a new GattLocalDescriptorParameters object.

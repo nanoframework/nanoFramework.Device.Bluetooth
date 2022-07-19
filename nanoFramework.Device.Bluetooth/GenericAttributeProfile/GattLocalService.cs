@@ -30,10 +30,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <returns>An GattLocalCharacteristicResult object</returns>
         public GattLocalCharacteristicResult CreateCharacteristic(Guid characteristicUuid, GattLocalCharacteristicParameters parameters)
         {
-            GattLocalCharacteristic Characteristic = new GattLocalCharacteristic(characteristicUuid, parameters);
-            _characteristics.Add(Characteristic);
+            GattLocalCharacteristic characteristic = new GattLocalCharacteristic(characteristicUuid, parameters);
+            _characteristics.Add(characteristic);
 
-            return new GattLocalCharacteristicResult(Characteristic, BluetoothError.Success);
+            return new GattLocalCharacteristicResult(characteristic, BluetoothError.Success);
         }
 
         /// <summary>
