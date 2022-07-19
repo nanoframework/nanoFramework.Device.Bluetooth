@@ -8,6 +8,10 @@ namespace nanoFramework.Device.Bluetooth.NativeDevice
     /// </summary>
     public sealed class NativeReadRequestedEventArgs : EventArgs
     {
+        private readonly ushort _id;
+        private readonly ushort _descriptorId;
+        private readonly GattLocalCharacteristic _localCharacteristic;
+
         /// <summary>
         /// 
         /// </summary>
@@ -16,15 +20,15 @@ namespace nanoFramework.Device.Bluetooth.NativeDevice
         /// <param name="localCharacteristic"></param>
         public NativeReadRequestedEventArgs(ushort eventId, ushort descriptorId, GattLocalCharacteristic localCharacteristic)
         {
-            Id = eventId;
-            DescriptorId = descriptorId;
-            LocalCharacteristic = localCharacteristic;
+            _id = eventId;
+            _descriptorId = descriptorId;
+            _localCharacteristic = localCharacteristic;
         }
-        
-        internal ushort Id { get; }
-        
-        internal ushort DescriptorId { get; }
-        
-        internal GattLocalCharacteristic LocalCharacteristic { get; }
+
+        internal ushort Id { get { return _id; } }
+
+        internal ushort DescriptorId { get { return _descriptorId; } }
+
+        internal GattLocalCharacteristic LocalCharacteristic { get { return _localCharacteristic; } }
     }
 }
