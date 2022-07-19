@@ -11,7 +11,7 @@ using nanoFramework.Device.Bluetooth.NativeDevice;
 
 namespace NfUnitTest1
 {
-    class TestBleDevice : INativeDevice
+    internal class TestBleDevice : INativeDevice
     {
         public void Dispose()
         {
@@ -29,6 +29,11 @@ namespace NfUnitTest1
         }
 
         public void AddCharacteristic(GattLocalCharacteristic characteristic)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveCharacteristic(GattLocalCharacteristic characteristic)
         {
             throw new NotImplementedException();
         }
@@ -68,7 +73,7 @@ namespace NfUnitTest1
             throw new NotImplementedException();
         }
 
-        public bool StartAdvertising(bool isDiscoverable, bool isConnectable, byte[] deviceName, ArrayList services)
+        public bool StartAdvertising(bool isConnectable, bool isDiscoverable, Buffer serviceData, byte[] deviceName, ArrayList services)
         {
             throw new NotImplementedException();
         }

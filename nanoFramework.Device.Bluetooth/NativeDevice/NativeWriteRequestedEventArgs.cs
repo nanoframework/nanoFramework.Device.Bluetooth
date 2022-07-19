@@ -3,10 +3,26 @@ using nanoFramework.Device.Bluetooth.GenericAttributeProfile;
 
 namespace nanoFramework.Device.Bluetooth.NativeDevice
 {
-    public class NativeWriteRequestedEventArgs : EventArgs
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class NativeWriteRequestedEventArgs : EventArgs
     {
-        public GattLocalCharacteristic LocalCharacteristic { get; }
-        public ushort DescriptorId { get; }
-        public ushort Id { get; }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="descriptorId"></param>
+        /// <param name="localCharacteristic"></param>
+        public NativeWriteRequestedEventArgs(ushort eventId, ushort descriptorId, GattLocalCharacteristic localCharacteristic)
+        {
+            Id = eventId;
+            DescriptorId = descriptorId;
+            LocalCharacteristic = localCharacteristic;
+        }
+
+        internal ushort Id { get; }
+        internal ushort DescriptorId { get; }
+        internal GattLocalCharacteristic LocalCharacteristic { get; }
     }
 }

@@ -15,22 +15,22 @@ namespace nanoFramework.Device.Bluetooth.NativeDevice
     public interface INativeDevice : IDisposable
     {
         /// <summary>
-        /// 
+        /// Event triggered when A read from the device is requested over bluetooth.
         /// </summary>
         event EventHandler<NativeReadRequestedEventArgs> OnReadRequested;
         
         /// <summary>
-        /// 
+        /// Event triggered when a write to the device is requested over bluetooth.
         /// </summary>
         event EventHandler<NativeWriteRequestedEventArgs> OnWriteRequested;
         
         /// <summary>
-        /// 
+        /// Event triggered when a client has subscribed to a characteristic.
         /// </summary>
         event EventHandler<NativeSubscribedClientsChangedEventArgs> OnClientSubscribed;
         
         /// <summary>
-        /// 
+        /// Event triggered when a client has unsubscribed from a characteristic.
         /// </summary>
         event EventHandler<NativeSubscribedClientsChangedEventArgs> OnClientUnsubscribed;
 
@@ -40,17 +40,28 @@ namespace nanoFramework.Device.Bluetooth.NativeDevice
         void InitService();
 
         /// <summary>
-        /// 
+        /// Adds a characteristic to the service.
         /// </summary>
-        /// <param name="characteristic"></param>
+        /// <param name="characteristic">the characteristic to add</param>
         void AddCharacteristic(GattLocalCharacteristic characteristic);
+
+        /// <summary>
+        /// Removes a characteristic from the service.
+        /// </summary>
+        /// <param name="characteristic">the characteristic to remove</param>
+        void RemoveCharacteristic(GattLocalCharacteristic characteristic);
 
         /// <summary>
         /// Starts Advertising the Gatt service.
         /// </summary>
+        /// <param name="isConnectable">if the Gatt service should be connectable</param>
+        /// <param name="isDiscoverable">if the Gatt service should be discoverable</param>
+        /// <param name="serviceData">adds an additional **ServiceData** section
+        /// to the advertisement payload for the service's service UUID.</param>
+        /// <param name="deviceName">the name of the BLE device when advertising</param>
         /// <param name="services">List of GattLocalServices.</param>
         /// <returns>if advertising started correctly.</returns>
-        bool StartAdvertising(bool isDiscoverable, bool isConnectable, byte[] deviceName, ArrayList services);
+        bool StartAdvertising(bool isConnectable, bool isDiscoverable, Buffer serviceData, byte[] deviceName, ArrayList services);
 
         /// <summary>
         /// Stops advertising the Gatt service.
@@ -81,7 +92,7 @@ namespace nanoFramework.Device.Bluetooth.NativeDevice
         void ReadRespondWithProtocolError(ushort eventId, byte otherError);
 
         /// <summary>
-        /// Gets the Get data from the write request.
+        /// Reads the data written to the device after a write request.
         /// </summary>
         /// <param name="eventId">The requests eventId.</param>
         /// <returns></returns>

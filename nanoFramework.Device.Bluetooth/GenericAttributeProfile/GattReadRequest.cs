@@ -4,7 +4,6 @@
 //
 
 using System;
-using System.Runtime.CompilerServices;
 
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 {

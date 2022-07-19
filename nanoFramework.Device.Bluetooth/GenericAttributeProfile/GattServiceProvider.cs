@@ -102,7 +102,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
             _deviceName = Encoding.UTF8.GetBytes(parameters.DeviceName);
 
-            if (NativeDevice.StartAdvertising(_isDiscoverable, _isConnectable, _deviceName, _services))
+            if (NativeDevice.StartAdvertising(_isConnectable, _isDiscoverable, _serviceData, _deviceName, _services))
             {
                 _status = GattServiceProviderAdvertisementStatus.Started;
             }

@@ -6,9 +6,20 @@ namespace nanoFramework.Device.Bluetooth.NativeDevice
     /// <summary>
     /// 
     /// </summary>
-    public class NativeSubscribedClientsChangedEventArgs : EventArgs
+    public sealed class NativeSubscribedClientsChangedEventArgs : EventArgs
     {
-        public ushort Id { get; }
-        public GattLocalCharacteristic LocalCharacteristic { get; }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="localCharacteristic"></param>
+        public NativeSubscribedClientsChangedEventArgs(ushort eventId, GattLocalCharacteristic localCharacteristic)
+        {
+            Id = eventId;
+            LocalCharacteristic = localCharacteristic;
+        }
+        
+        internal ushort Id { get; }
+        internal GattLocalCharacteristic LocalCharacteristic { get; }
     }
 }
