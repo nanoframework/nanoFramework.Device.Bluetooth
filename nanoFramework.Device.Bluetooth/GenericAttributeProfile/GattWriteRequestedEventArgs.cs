@@ -12,15 +12,11 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// </summary>
     public sealed class GattWriteRequestedEventArgs //: IGattWriteRequestedEventArgs
     {
-        private readonly ushort _descriptorId;
         private readonly ushort _eventID;
         private readonly GattSession _session = null;
-        private readonly INativeDevice _nativeDevice;
 
-        public GattWriteRequestedEventArgs(ushort descriptorId,ushort eventID, GattSession session, INativeDevice nativeDevice)
+        internal GattWriteRequestedEventArgs(ushort eventID, GattSession session)
         {
-            _descriptorId = descriptorId;
-            _nativeDevice = nativeDevice;
             _eventID = eventID;
             _session = session;
         }
@@ -31,11 +27,9 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <returns>Returns a write request.</returns>
         public GattWriteRequest GetRequest()
         {
-            return new GattWriteRequest(_eventID, _nativeDevice);
+            return new GattWriteRequest(_eventID);
         }
 
-        internal ushort DescriptorId { get => _descriptorId; }
-        
         /// <summary>
         ///  Gets the session.
         /// </summary>

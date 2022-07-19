@@ -19,7 +19,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         // Each Characteristic will have unique _CharacteristicId for event lookup
         internal ushort _characteristicId;
 
-        private ushort _descriptorNextID;
+        private ushort _descriptorNextId;
         private readonly byte[] _characteristicUuid;
         private readonly GattProtectionLevel _writeProtectionLevel;
         private readonly GattProtectionLevel _readProtectionLevel;
@@ -27,14 +27,12 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         private readonly ArrayList _descriptors;
         private readonly ArrayList _subscribedClients;
 
-        private readonly INativeDevice _nativeDevice;
-
         // Built in descriptors
         private readonly string _userDescription;
         private readonly GattLocalDescriptor _userDescriptionDescriptor;
 
         private readonly ArrayList _presentationFormats;
-        private readonly ArrayList _presentationFormatsDescriptors;  // of GattLocalDescriptor
+        private readonly ArrayList _presentationFormatsDescriptors; // of GattLocalDescriptor
 
         private readonly Buffer _staticValue;
 
@@ -50,7 +48,9 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// </summary>
         /// <param name="sender">GattLocalCharacteristic sending event</param>
         /// <param name="WriteRequestEventArgs">Event arguments</param>
-        public delegate void GattLocalCharacteristicWriteEventHandler(GattLocalCharacteristic sender, GattWriteRequestedEventArgs WriteRequestEventArgs);
+        public delegate void GattLocalCharacteristicWriteEventHandler(
+            GattLocalCharacteristic sender,
+            GattWriteRequestedEventArgs WriteRequestEventArgs);
 
         /// <summary>
         /// Delegate for Clients Changed events
@@ -59,9 +59,8 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <param name="args"></param>
         public delegate void GattLocalCharacteristicClientsChangedEventHandler(GattLocalCharacteristic sender, object args);
 
-        internal GattLocalCharacteristic(Guid characteristicUuid, GattLocalCharacteristicParameters parameters, INativeDevice nativeDevice)
+        internal GattLocalCharacteristic(Guid characteristicUuid, GattLocalCharacteristicParameters parameters)
         {
-            _nativeDevice = nativeDevice;
             _characteristicUuid = characteristicUuid.ToByteArray();
             _writeProtectionLevel = parameters.WriteProtectionLevel;
             _readProtectionLevel = parameters.ReadProtectionLevel;
@@ -73,16 +72,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             _descriptors = new ArrayList();
             _subscribedClients = new ArrayList();
 
-            // register events
-            nativeDevice.OnReadRequested += OnReadRequested;
-            nativeDevice.OnWriteRequested += OnWriteRequested;
-            nativeDevice.OnClientSubscribed += OnSubscribedClientsChanged;
-            nativeDevice.OnClientUnsubscribed += OnSubscribedClientsChanged;
-
             // Give it next id
             _characteristicId = NextCharacteristicIndex();
             // Start at 1 for descriptors
-            _descriptorNextID = 1;
+            _descriptorNextId = 1;
 
             _userDescription = parameters.UserDescription;
             if (!string.IsNullOrEmpty(_userDescription))
@@ -94,7 +87,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
                 dr.WriteString(_userDescription);
                 dp.StaticValue = dr.DetachBuffer();
 
-                _userDescriptionDescriptor = new GattLocalDescriptor(GattDescriptorUuids.CharacteristicUserDescription, dp, this, _descriptorNextID++);
+                _userDescriptionDescriptor = new GattLocalDescriptor(GattDescriptorUuids.CharacteristicUserDescription, dp, this, _descriptorNextId++);
             }
 
             _presentationFormats = new ArrayList();
@@ -115,11 +108,13 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
                 GattLocalDescriptorParameters dp = new GattLocalDescriptorParameters();
                 dp.StaticValue = dr.DetachBuffer();
 
-                _presentationFormatsDescriptors.Add(new GattLocalDescriptor(GattDescriptorUuids.CharacteristicPresentationFormat, dp, this, _descriptorNextID++));
+                _presentationFormatsDescriptors.Add(
+                    new GattLocalDescriptor(GattDescriptorUuids.CharacteristicPresentationFormat, dp, this, _descriptorNextId++)
+                );
             }
 
             // Register with Events
-            GattServiceProvider._bluetoothEventManager.AddCharacteristic(this);
+            GattServiceProvider.NativeDevice.AddCharacteristic(this);
         }
 
         private static ushort NextCharacteristicIndex()
@@ -152,14 +147,14 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             // Not a standard descriptor
             ushort suuid = Utilities.ConvertUuidToShortId(descriptorUuid);
             if (suuid == (ushort)Utilities.GattNativeDescriptorUuid.CharacteristicUserDescription ||
-                 suuid == (ushort)Utilities.GattNativeDescriptorUuid.CharacteristicPresentationFormat)
+                suuid == (ushort)Utilities.GattNativeDescriptorUuid.CharacteristicPresentationFormat)
             {
                 result = BluetoothError.ResourceInUse;
             }
 
             if (result == BluetoothError.Success)
             {
-                decriptor = new GattLocalDescriptor(descriptorUuid, parameters, this, _descriptorNextID++);
+                decriptor = new GattLocalDescriptor(descriptorUuid, parameters, this, _descriptorNextId++);
                 _descriptors.Add(decriptor);
             }
 
@@ -202,9 +197,14 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             Byte[] buffer = new byte[value.Length];
             Array.Copy(value.Data, buffer, (int)value.Length);
 
-            int rc = _nativeDevice.NotifyClient((ushort)subscribedClient.Session.DeviceId.Id, _characteristicId, buffer);
+            int rc = GattServiceProvider.NativeDevice.NotifyClient((ushort)subscribedClient.Session.DeviceId.Id, _characteristicId, buffer);
 
-            result = new GattClientNotificationResult((byte)rc, rc == 0 ? GattCommunicationStatus.Success : GattCommunicationStatus.Unreachable, subscribedClient, (ushort)value.Length);
+            result = new GattClientNotificationResult(
+                (byte)rc,
+                rc == 0 ? GattCommunicationStatus.Success : GattCommunicationStatus.Unreachable,
+                subscribedClient,
+                (ushort)value.Length
+            );
 
             return result;
         }
@@ -212,47 +212,74 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <summary>
         /// Gets the local characteristic properties.
         /// </summary>
-        public GattCharacteristicProperties CharacteristicProperties { get => _properties; }
+        public GattCharacteristicProperties CharacteristicProperties
+        {
+            get => _properties;
+        }
 
         /// <summary>
         ///  Gets a vector list of all the descriptors for this local characteristic.
         /// </summary>
-        public GattLocalDescriptor[] Descriptors { get => (GattLocalDescriptor[])_descriptors.ToArray(typeof(GattLocalDescriptor)); }
+        public GattLocalDescriptor[] Descriptors
+        {
+            get => (GattLocalDescriptor[])_descriptors.ToArray(typeof(GattLocalDescriptor));
+        }
 
         /// <summary>
         /// Gets the presentation formats for this local characteristic.
         /// </summary>
-        public GattPresentationFormat[] PresentationFormats { get => (GattPresentationFormat[])_presentationFormats.ToArray(typeof(GattPresentationFormat)); }
+        public GattPresentationFormat[] PresentationFormats
+        {
+            get => (GattPresentationFormat[])_presentationFormats.ToArray(typeof(GattPresentationFormat));
+        }
 
         /// <summary>
         /// Gets the read protection level of this local characteristic.
         /// </summary>
-        public GattProtectionLevel ReadProtectionLevel { get => _readProtectionLevel; }
+        public GattProtectionLevel ReadProtectionLevel
+        {
+            get => _readProtectionLevel;
+        }
 
         /// <summary>
         /// Gets the static value for this local GATT characteristic.
         /// </summary>
-        public Buffer StaticValue { get => _staticValue; }
+        public Buffer StaticValue
+        {
+            get => _staticValue;
+        }
 
         /// <summary>
         /// Gets an array of all clients that are subscribed to this local characteristic.
         /// </summary>
-        public GattSubscribedClient[] SubscribedClients { get => (GattSubscribedClient[])_subscribedClients.ToArray(typeof(GattSubscribedClient)); }
+        public GattSubscribedClient[] SubscribedClients
+        {
+            get => (GattSubscribedClient[])_subscribedClients.ToArray(typeof(GattSubscribedClient));
+        }
 
         /// <summary>
         /// Gets the user-friendly description for this local characteristic.
         /// </summary>
-        public string UserDescription { get => _userDescription; }
+        public string UserDescription
+        {
+            get => _userDescription;
+        }
 
         /// <summary>
         /// Gets the BluetoothSIG-defined UUID for this local characteristic.
         /// </summary>
-        public Guid Uuid { get => new Guid(_characteristicUuid); }
+        public Guid Uuid
+        {
+            get => new Guid(_characteristicUuid);
+        }
 
         /// <summary>
         /// Gets the write protection level of this local characteristic.
         /// </summary>
-        public GattProtectionLevel WriteProtectionLevel { get => _writeProtectionLevel; }
+        public GattProtectionLevel WriteProtectionLevel
+        {
+            get => _writeProtectionLevel;
+        }
 
         /// <summary>
         /// An event that is triggered when a GATT client requests a read operation.
@@ -269,64 +296,64 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// </summary>
         public event GattLocalCharacteristicClientsChangedEventHandler SubscribedClientsChanged;
 
-        internal void OnReadRequested(object sender, GattReadRequestedEventArgs args)
+        internal void OnReadRequested(ushort descriptorId, GattReadRequestedEventArgs e)
         {
             bool handled = false;
 
             // Static value for Characteristic ?
-            int descritorIndex = (args.DescriptorId >> 8);
+            int descritorIndex = (descriptorId >> 8);
             if (_staticValue != null && descritorIndex == 0)
             {
                 handled = true;
                 // Handle static values internally, don't fire an event
                 DataWriter writer = new DataWriter();
                 writer.WriteBuffer(_staticValue);
-                args.GetRequest().RespondWithValue(_staticValue);
+                e.GetRequest().RespondWithValue(_staticValue);
             }
             else if (descritorIndex != 0)
             {
                 // Descriptor event, let descriptor handle it
-                GattLocalDescriptor des = FindDescriptor(args.DescriptorId);
+                GattLocalDescriptor des = FindDescriptor(descriptorId);
                 if (des != null)
                 {
-                    handled = des.OnReadRequested(args);
+                    handled = des.OnReadRequested(e);
                 }
             }
             else if (ReadRequested != null)
             {
                 // LocalCharacteristic event ?
                 handled = true;
-                ReadRequested?.Invoke(this, args);
+                ReadRequested?.Invoke(this, e);
             }
 
             if (!handled)
             {
                 // No event handler, respond with error
-                args.GetRequest().RespondWithProtocolError(GattProtocolError.UnlikelyError);
+                e.GetRequest().RespondWithProtocolError(GattProtocolError.UnlikelyError);
             }
         }
 
-        internal void OnWriteRequested(object sender, GattWriteRequestedEventArgs args)
+        internal void OnWriteRequested(ushort descriptorId, GattWriteRequestedEventArgs e)
         {
             bool handled = false;
 
             if (WriteRequested != null)
             {
-                int descritorIndex = (args.DescriptorId >> 8);
+                int descritorIndex = (descriptorId >> 8);
 
                 // LocalCharacteristic event ?
                 if (descritorIndex == 0)
                 {
                     handled = true;
-                    WriteRequested?.Invoke(this, args);
+                    WriteRequested?.Invoke(this, e);
                 }
                 else
                 {
                     // Descriptor event
-                    GattLocalDescriptor des = FindDescriptor(args.DescriptorId);
+                    GattLocalDescriptor des = FindDescriptor(descriptorId);
                     if (des != null)
                     {
-                        handled = des.OnWriteRequested(args);
+                        handled = des.OnWriteRequested(e);
                     }
                 }
             }
@@ -334,7 +361,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             if (!handled)
             {
                 // No event handler, respond with error
-                args.GetRequest().RespondWithProtocolError(GattProtocolError.UnlikelyError);
+                e.GetRequest().RespondWithProtocolError(GattProtocolError.UnlikelyError);
             }
         }
 
@@ -354,17 +381,17 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             return -1;
         }
 
-        internal void OnSubscribedClientsChanged(object sender, GattSubscribedClientsChangedEventArgs args)
+        internal void OnSubscribedClientsChanged(bool subscribe, GattSubscribedClient client)
         {
             lock (_subscribedClients)
             {
-                int index = ClientSubscribed(args.Client);
+                int index = ClientSubscribed(client);
 
-                if (args.Subscribed)
+                if (subscribe)
                 {
                     if (index < 0)
                     {
-                        _subscribedClients.Add(args.Client);
+                        _subscribedClients.Add(client);
                     }
                 }
                 else
@@ -404,6 +431,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
                     return desc;
                 }
             }
+
             return null;
         }
     }

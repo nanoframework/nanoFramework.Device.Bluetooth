@@ -14,15 +14,36 @@ namespace nanoFramework.Device.Bluetooth
     /// </summary>
     public interface INativeDevice : IDisposable
     {
-        event EventHandler<GattReadRequestedEventArgs> OnReadRequested;
-        event EventHandler<GattWriteRequestedEventArgs> OnWriteRequested;
-        event EventHandler<GattSubscribedClientsChangedEventArgs> OnClientSubscribed;
-        event EventHandler<GattSubscribedClientsChangedEventArgs> OnClientUnsubscribed;
+        /// <summary>
+        /// 
+        /// </summary>
+        event EventHandler<NativeReadRequestedEventArgs> OnReadRequested;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        event EventHandler<NativeWriteRequestedEventArgs> OnWriteRequested;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        event EventHandler<NativeSubscribedClientsChangedEventArgs> OnClientSubscribed;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        event EventHandler<NativeSubscribedClientsChangedEventArgs> OnClientUnsubscribed;
 
         /// <summary>
         /// Initializes the Gatt service.
         /// </summary>
         void InitService();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="characteristic"></param>
+        void AddCharacteristic(GattLocalCharacteristic characteristic);
 
         /// <summary>
         /// Starts Advertising the Gatt service.

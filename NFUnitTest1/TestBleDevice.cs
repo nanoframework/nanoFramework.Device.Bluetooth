@@ -17,12 +17,17 @@ namespace NfUnitTest1
             throw new NotImplementedException();
         }
 
-        public event EventHandler<GattReadRequestedEventArgs> OnReadRequested;
-        public event EventHandler<GattWriteRequestedEventArgs> OnWriteRequested;
-        public event EventHandler<GattSubscribedClientsChangedEventArgs> OnClientSubscribed;
-        public event EventHandler<GattSubscribedClientsChangedEventArgs> OnClientUnsubscribed;
+        public event EventHandler<NativeReadRequestedEventArgs> OnReadRequested;
+        public event EventHandler<NativeWriteRequestedEventArgs> OnWriteRequested;
+        public event EventHandler<NativeSubscribedClientsChangedEventArgs> OnClientSubscribed;
+        public event EventHandler<NativeSubscribedClientsChangedEventArgs> OnClientUnsubscribed;
 
         public void InitService()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddCharacteristic(GattLocalCharacteristic characteristic)
         {
             throw new NotImplementedException();
         }

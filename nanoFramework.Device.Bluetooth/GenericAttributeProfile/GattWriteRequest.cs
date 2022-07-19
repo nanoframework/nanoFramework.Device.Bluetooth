@@ -18,15 +18,13 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         private readonly Buffer _value = null;
 
         private readonly ushort _eventID;
-        private readonly INativeDevice _nativeDevice;
 
-        internal GattWriteRequest(ushort eventID, INativeDevice nativeDevice)
+        internal GattWriteRequest(ushort eventID)
         {
             _eventID = eventID;
-            _nativeDevice = nativeDevice;
 
             // Get a copy of data from Native for this event
-            byte[] data = _nativeDevice.WriteGetData(eventID);
+            byte[] data = GattServiceProvider.NativeDevice.WriteGetData(eventID);
 
             // and save it
             _value = new Buffer(data);
@@ -37,7 +35,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// </summary>
         public void Respond()
         {
-            _nativeDevice.WriteRespond(_eventID);
+            GattServiceProvider.NativeDevice.WriteRespond(_eventID);
         }
 
         /// <summary>
@@ -46,7 +44,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <param name="protocolError">Error byte</param>
         public void RespondWithProtocolError(byte protocolError)
         {
-            _nativeDevice.WriteRespondWithProtocolError(_eventID, protocolError);
+            GattServiceProvider.NativeDevice.WriteRespondWithProtocolError(_eventID, protocolError);
         }
 
         /// <summary>

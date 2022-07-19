@@ -15,12 +15,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     {
         private readonly byte[] _serviceUuid;
         private readonly ArrayList _characteristics;
-        private readonly INativeDevice _nativeDevice;
 
-        internal GattLocalService(Guid serviceUuid, INativeDevice nativeDevice)
+        internal GattLocalService(Guid serviceUuid)
         {
             _serviceUuid = serviceUuid.ToByteArray();
-            _nativeDevice = nativeDevice;
             _characteristics = new ArrayList();
         }
 
@@ -32,7 +30,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <returns>An GattLocalCharacteristicResult object</returns>
         public GattLocalCharacteristicResult CreateCharacteristic(Guid characteristicUuid, GattLocalCharacteristicParameters parameters)
         {
-            GattLocalCharacteristic Characteristic = new GattLocalCharacteristic(characteristicUuid, parameters, _nativeDevice);
+            GattLocalCharacteristic Characteristic = new GattLocalCharacteristic(characteristicUuid, parameters);
             _characteristics.Add(Characteristic);
 
             return new GattLocalCharacteristicResult(Characteristic, BluetoothError.Success);

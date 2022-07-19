@@ -14,13 +14,11 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     public class GattReadRequest
     {
         private Buffer _readValue;
-        private readonly ushort _eventID;
-        private readonly INativeDevice _nativeDevice;
+        private readonly ushort _eventId;
 
-        internal GattReadRequest(ushort eventID, INativeDevice nativeDevice)
+        internal GattReadRequest(ushort eventId)
         {
-            _eventID = eventID;
-            _nativeDevice = nativeDevice;
+            _eventId = eventId;
         }
 
         /// <summary>
@@ -34,7 +32,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             byte[] data = new byte[_readValue.Length];
             Array.Copy(_readValue.Data, data, (int)_readValue.Length);
 
-            _nativeDevice.ReadRespondWithValue(_eventID, data);
+            GattServiceProvider.NativeDevice.ReadRespondWithValue(_eventId, data);
         }
 
         /// <summary>
@@ -43,12 +41,15 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <param name="protocolError">The protocol error to send. A list of errors with the byte values can be found in GattProtocolError.</param>
         public void RespondWithProtocolError(byte protocolError)
         {
-            _nativeDevice.ReadRespondWithProtocolError(_eventID, (byte)BluetoothError.OtherError);
+            GattServiceProvider.NativeDevice.ReadRespondWithProtocolError(_eventId, (byte)BluetoothError.OtherError);
         }
 
         /// <summary>
         ///  Gets the buffer length of the read request.
         /// </summary>
-        public uint Length { get => _readValue.Length; }
+        public uint Length
+        {
+            get => _readValue.Length;
+        }
     }
 }
