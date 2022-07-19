@@ -300,8 +300,8 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             bool handled = false;
 
             // Static value for Characteristic ?
-            int descritorIndex = (descriptorId >> 8);
-            if (_staticValue != null && descritorIndex == 0)
+            int descriptorIndex = descriptorId;
+            if (_staticValue != null && descriptorIndex == 0)
             {
                 handled = true;
                 // Handle static values internally, don't fire an event
@@ -309,7 +309,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
                 writer.WriteBuffer(_staticValue);
                 e.GetRequest().RespondWithValue(_staticValue);
             }
-            else if (descritorIndex != 0)
+            else if (descriptorIndex != 0)
             {
                 // Descriptor event, let descriptor handle it
                 GattLocalDescriptor des = FindDescriptor(descriptorId);
@@ -338,10 +338,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
             if (WriteRequested != null)
             {
-                int descritorIndex = (descriptorId >> 8);
+                int descriptorIndex = descriptorId;
 
                 // LocalCharacteristic event ?
-                if (descritorIndex == 0)
+                if (descriptorIndex == 0)
                 {
                     handled = true;
                     WriteRequested?.Invoke(this, e);
