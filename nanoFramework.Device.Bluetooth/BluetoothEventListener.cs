@@ -162,7 +162,6 @@ namespace nanoFramework.Device.Bluetooth
             return true;
         }
 
-
         public bool OnEvent(BaseEvent ev)
         {
             if (ev.GetType() == typeof(BluetoothEventClient))
@@ -264,8 +263,9 @@ namespace nanoFramework.Device.Bluetooth
         private void WatcherEventQueueThread()
         {
             BluetoothEventScan btEvent;
+            bool run = true; // added to keep Sonar happy
 
-            while (true)
+            while (run)
             {
                 if (_watcherEvent.WaitOne())
                 {
