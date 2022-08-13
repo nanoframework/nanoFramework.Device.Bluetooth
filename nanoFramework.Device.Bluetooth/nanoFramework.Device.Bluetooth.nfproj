@@ -35,16 +35,38 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
+    <Compile Include="BluetoothAddressType.cs" />
+    <Compile Include="BluetoothConnectionStatus.cs" />
     <Compile Include="BluetoothDeviceId.cs" />
     <Compile Include="BluetoothError.cs" />
     <Compile Include="BluetoothEvent.cs" />
     <Compile Include="BluetoothEventListener.cs" />
     <Compile Include="BluetoothEventType.cs" />
+    <Compile Include="Advertisement\BluetoothLEAdvertisement.cs" />
+    <Compile Include="Advertisement\BluetoothLEAdvertisementDataSection.cs" />
+    <Compile Include="Advertisement\BluetoothLEAdvertisementFilter.cs" />
+    <Compile Include="Advertisement\BluetoothLEAdvertisementFlags.cs" />
+    <Compile Include="Advertisement\BluetoothLEAdvertisementReceivedEventArgs.cs" />
+    <Compile Include="Advertisement\BluetoothLEAdvertisementType.cs" />
+    <Compile Include="Advertisement\BluetoothLEAdvertisementWatcherStoppedEventArgs.cs" />
+    <Compile Include="BluetoothLEAdvertisementWatcher.cs" />
+    <Compile Include="BluetoothLEAdvertisementWatcherStatus.cs" />
+    <Compile Include="BluetoothLEDevice.cs" />
+    <Compile Include="BluetoothLEManufacturerData.cs" />
+    <Compile Include="BluetoothLEScanningMode.cs" />
+    <Compile Include="BluetoothNanoDevice.cs" />
+    <Compile Include="BluetoothSignalStrengthFilter.cs" />
+    <Compile Include="GenericAttributeProfile\GattCharacteristic.cs" />
     <Compile Include="GenericAttributeProfile\GattCharacteristicProperties.cs" />
+    <Compile Include="GenericAttributeProfile\GattCharacteristicResult.cs" />
     <Compile Include="GenericAttributeProfile\GattCharacteristicUuids.cs" />
+    <Compile Include="GenericAttributeProfile\GattClientCharacteristicConfigurationDescriptorValue.cs" />
     <Compile Include="GenericAttributeProfile\GattClientNotificationResult.cs" />
     <Compile Include="GenericAttributeProfile\GattCommunicationStatus.cs" />
+    <Compile Include="GenericAttributeProfile\GattDescriptor.cs" />
     <Compile Include="GenericAttributeProfile\GattDescriptorUuid.cs" />
+    <Compile Include="GenericAttributeProfile\GattDeviceService.cs" />
+    <Compile Include="GenericAttributeProfile\GattDeviceServicesResult.cs" />
     <Compile Include="GenericAttributeProfile\GattLocalCharacteristic.cs" />
     <Compile Include="GenericAttributeProfile\GattLocalCharacteristicParameters.cs" />
     <Compile Include="GenericAttributeProfile\GattLocalCharacteristicResult.cs" />
@@ -56,8 +78,10 @@
     <Compile Include="GenericAttributeProfile\GattPresentationFormatTypes.cs" />
     <Compile Include="GenericAttributeProfile\GattProtectionLevel.cs" />
     <Compile Include="GenericAttributeProfile\GattProtocolError.cs" />
+    <Compile Include="GenericAttributeProfile\GattReadClientCharacteristicConfigurationDescriptorResult.cs" />
     <Compile Include="GenericAttributeProfile\GattReadRequest.cs" />
     <Compile Include="GenericAttributeProfile\GattReadRequestedEventArgs.cs" />
+    <Compile Include="GenericAttributeProfile\GattReadResult.cs" />
     <Compile Include="GenericAttributeProfile\GattServiceProvider.cs" />
     <Compile Include="GenericAttributeProfile\GattServiceProviderAdvertisementStatus.cs" />
     <Compile Include="GenericAttributeProfile\GattServiceProviderAdvertisingParameters.cs" />
@@ -66,9 +90,13 @@
     <Compile Include="GenericAttributeProfile\GattSession.cs" />
     <Compile Include="GenericAttributeProfile\GattSessionStatus.cs" />
     <Compile Include="GenericAttributeProfile\GattSubscribedClient.cs" />
+    <Compile Include="GenericAttributeProfile\GattValueChangedEventArgs.cs" />
     <Compile Include="GenericAttributeProfile\GattWriteOption.cs" />
     <Compile Include="GenericAttributeProfile\GattWriteRequest.cs" />
     <Compile Include="GenericAttributeProfile\GattWriteRequestedEventArgs.cs" />
+    <Compile Include="GenericAttributeProfile\GattDescriptorResult.cs" />
+    <Compile Include="GenericAttributeProfile\GattWriteResult.cs" />
+    <Compile Include="GenericAttributeProfile\IGattAttribute.cs" />
     <Compile Include="SPP\IBluetoothSpp.cs" />
     <Compile Include="SPP\NordicSpp.cs" />
     <Compile Include="SPP\SppReceiveEventArgs.cs" />
@@ -86,18 +114,27 @@
     <Reference Include="mscorlib, Version=1.12.0.4, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\packages\nanoFramework.CoreLibrary.1.12.0\lib\mscorlib.dll</HintPath>
       <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
     </Reference>
     <Reference Include="nanoFramework.Runtime.Events, Version=1.10.0.3, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\packages\nanoFramework.Runtime.Events.1.10.0\lib\nanoFramework.Runtime.Events.dll</HintPath>
       <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
     </Reference>
     <Reference Include="nanoFramework.Runtime.Native, Version=1.5.4.3, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\packages\nanoFramework.Runtime.Native.1.5.4\lib\nanoFramework.Runtime.Native.dll</HintPath>
       <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="nanoFramework.System.Collections, Version=1.4.0.3, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\packages\nanoFramework.System.Collections.1.4.0\lib\nanoFramework.System.Collections.dll</HintPath>
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
     </Reference>
     <Reference Include="nanoFramework.System.Text, Version=1.2.3.51943, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\packages\nanoFramework.System.Text.1.2.3\lib\nanoFramework.System.Text.dll</HintPath>
       <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
     </Reference>
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
@@ -106,11 +143,11 @@
       <ProjectConfigurationsDeclaredAsItems />
     </ProjectCapabilities>
   </ProjectExtensions>
-  <Import Project="..\packages\Nerdbank.GitVersioning.3.5.107\build\Nerdbank.GitVersioning.targets" Condition="Exists('..\packages\Nerdbank.GitVersioning.3.5.107\build\Nerdbank.GitVersioning.targets')" />
+  <Import Project="..\packages\Nerdbank.GitVersioning.3.4.231\build\Nerdbank.GitVersioning.targets" Condition="Exists('..\packages\Nerdbank.GitVersioning.3.4.231\build\Nerdbank.GitVersioning.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Nerdbank.GitVersioning.3.5.107\build\Nerdbank.GitVersioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Nerdbank.GitVersioning.3.5.107\build\Nerdbank.GitVersioning.targets'))" />
+    <Error Condition="!Exists('..\packages\Nerdbank.GitVersioning.3.4.231\build\Nerdbank.GitVersioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Nerdbank.GitVersioning.3.4.231\build\Nerdbank.GitVersioning.targets'))" />
   </Target>
 </Project>

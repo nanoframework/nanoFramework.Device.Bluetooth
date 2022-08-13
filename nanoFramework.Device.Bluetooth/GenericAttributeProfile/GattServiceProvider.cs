@@ -14,9 +14,9 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// This class is used to advertise GATT services.
     /// </summary>
-    public sealed class GattServiceProvider
+    public class GattServiceProvider
     {
-        private readonly ArrayList _services;
+        private  ArrayList _services;
 
         GattServiceProviderAdvertisementStatus _status = GattServiceProviderAdvertisementStatus.Created;
 
@@ -33,10 +33,12 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         private Buffer _serviceData;
 
 
-        internal static readonly BluetoothEventListener _bluetoothEventManager = new BluetoothEventListener();
+        internal static readonly BluetoothEventListener _bluetoothEventManager = new();
 
         internal GattServiceProvider(Guid serviceUuid)
         {
+            _bluetoothEventManager.Reset();
+
             _services = new ArrayList();
 
             // Add primary
@@ -57,7 +59,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             GattLocalService dinfService = AddService(GattServiceUuids.DeviceInformation);
 
             // ManufacturerNameString Characteristic (0x2A29)
-            DataWriter manufacturerName = new DataWriter();
+            DataWriter manufacturerName = new();
             manufacturerName.WriteString("nanoFramework");
 
             dinfService.CreateCharacteristic(GattCharacteristicUuids.ManufacturerNameString,
@@ -68,7 +70,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
                 });
 
             // ModelNumberString Characteristic (0x2A24)
-            DataWriter modelNumber = new DataWriter();
+            DataWriter modelNumber = new();
             modelNumber.WriteString(SystemInfo.Platform);
 
             dinfService.CreateCharacteristic(GattCharacteristicUuids.ModelNumberString,
@@ -93,6 +95,16 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <param name="parameters">The advertising parameters.</param>
         public void StartAdvertising(GattServiceProviderAdvertisingParameters parameters)
         {
+            if (BluetoothNanoDevice.RunMode != BluetoothNanoDevice.Mode.NotRunning)
+            {
+                throw new InvalidOperationException("Wrong state");
+            }
+
+            BluetoothNanoDevice.DeviceName = parameters.DeviceName;
+
+            // Switch to client/server mode
+            BluetoothNanoDevice.RunMode = BluetoothNanoDevice.Mode.Server;
+
             // Save parameters
             _isConnectable = parameters.IsConnectable;
             _isDiscoverable = parameters.IsDiscoverable;
@@ -100,6 +112,9 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
             _deviceName = Encoding.UTF8.GetBytes(parameters.DeviceName);
 
+            // Start advertising.
+            // Native code will use the data provided by this GattServiceProvider instance to
+            // initialise the BLE advert, service and characteristic definitions.
             if (NativeStartAdvertising())
             {
                 _status = GattServiceProviderAdvertisementStatus.Started;
@@ -111,9 +126,12 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// </summary>
         public void StopAdvertising()
         {
+            // Stop advertising and dispose of native data.
             NativeStopAdvertising();
 
             _status = GattServiceProviderAdvertisementStatus.Stopped;
+
+            BluetoothNanoDevice.RunMode = BluetoothNanoDevice.Mode.NotRunning;
         }
 
         /// <summary>
@@ -123,7 +141,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <returns>A GattServiceProviderResult object.</returns>
         public static GattServiceProviderResult Create(Guid serviceUuid)
         {
-            GattServiceProvider serviceProvider = new GattServiceProvider(serviceUuid);
+            GattServiceProvider serviceProvider = new(serviceUuid);
 
             return new GattServiceProviderResult(serviceProvider, BluetoothError.Success);
         }
@@ -164,14 +182,14 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
                 if (((GattLocalService)_services[index]).Uuid.Equals(serviceUuid))
                 {
                     // Replace existing service on index
-                    GattLocalService replacementService = new GattLocalService(serviceUuid);
+                    GattLocalService replacementService = new(serviceUuid);
                     _services[index] = replacementService;
                     return replacementService;
                 }
             }
 
             // Add new service
-            GattLocalService newService = new GattLocalService(serviceUuid);
+            GattLocalService newService = new(serviceUuid);
             _services.Add(newService);
             return newService;
         }

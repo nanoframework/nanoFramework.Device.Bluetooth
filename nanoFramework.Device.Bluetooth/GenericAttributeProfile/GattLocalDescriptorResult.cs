@@ -8,7 +8,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     ///  The result of local characteristic descriptor operations like CreateDescriptorAsync.
     /// </summary>
-    public sealed class GattLocalDescriptorResult //: IGattLocalDescriptorResult
+    public class GattLocalDescriptorResult 
     {
         private readonly BluetoothError _error;
         private readonly GattLocalDescriptor _descriptor;
@@ -16,7 +16,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         internal GattLocalDescriptorResult(GattLocalDescriptor descriptor, BluetoothError error)
         {
             _descriptor = descriptor;
-            _error = Error;
+            _error = error;
         }
 
         /// <summary>

@@ -8,7 +8,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     ///  This class represents a subscribed client of a GATT session.
     /// </summary>
-    public sealed class GattSubscribedClient
+    public class GattSubscribedClient
     {
         private readonly GattSession _session;
 

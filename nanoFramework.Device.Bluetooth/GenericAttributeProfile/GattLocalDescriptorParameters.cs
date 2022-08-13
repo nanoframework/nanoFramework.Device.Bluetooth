@@ -8,7 +8,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// This class defines the parameters of a descriptor.
     /// </summary>
-    public sealed class GattLocalDescriptorParameters //: IGattLocalDescriptorParameters
+    public class GattLocalDescriptorParameters 
     {
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private GattProtectionLevel _writeProtectionLevel;

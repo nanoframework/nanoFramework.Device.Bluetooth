@@ -10,7 +10,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// This class represents a GATT session.
     /// </summary>
-    public sealed class GattSession : IDisposable
+    public class GattSession : IDisposable
     {
         private readonly BluetoothDeviceId _deviceId;
 
@@ -38,7 +38,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         }
 
         /// <summary>
-        /// Gets the device ID.
+        /// Gets the device id.
         /// </summary>
         public BluetoothDeviceId DeviceId { get => _deviceId; }
     }
