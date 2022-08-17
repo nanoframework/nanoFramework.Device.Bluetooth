@@ -3,9 +3,6 @@
 // See LICENSE file in the project root for full license information.
 //
 
-using System;
-using System.Runtime.CompilerServices;
-
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 {
     /// <summary>
@@ -15,16 +12,16 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     {
         private readonly GattWriteOption _option = GattWriteOption.WriteWithResponse;
         private readonly uint _offset = 0;
-        private readonly Buffer _value = null;
+        private readonly Buffer _value;
 
-        private readonly ushort _eventID;
+        private readonly ushort _eventId;
 
-        internal GattWriteRequest(ushort eventID)
+        internal GattWriteRequest(ushort eventId)
         {
-            _eventID = eventID;
+            _eventId = eventId;
 
             // Get a copy of data from Native for this event
-            byte[] data = NativeWriteGetData(eventID);
+            byte[] data = GattServiceProvider.NativeDevice.WriteGetData(eventId);
 
             // and save it
             _value = new Buffer(data);
@@ -35,7 +32,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// </summary>
         public void Respond()
         {
-            NativeWriteRespond(_eventID);
+            GattServiceProvider.NativeDevice.WriteRespond(_eventId);
         }
 
         /// <summary>
@@ -44,7 +41,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <param name="protocolError">Error byte</param>
         public void RespondWithProtocolError(byte protocolError)
         {
-            NativeWriteRespondWithProtocolError(_eventID, protocolError);
+            GattServiceProvider.NativeDevice.WriteRespondWithProtocolError(_eventId, protocolError);
         }
 
         /// <summary>
@@ -61,18 +58,5 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// Gets the buffer value of the write request.
         /// </summary>
         public Buffer Value { get => _value; }
-
-        #region external calls to native implementations
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern byte[] NativeWriteGetData(ushort eventID);
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern void NativeWriteRespond(ushort eventID);
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern void NativeWriteRespondWithProtocolError(ushort eventID, byte protocolError);
-
-        #endregion
     }
 }

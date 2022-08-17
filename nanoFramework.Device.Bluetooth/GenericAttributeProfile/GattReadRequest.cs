@@ -4,7 +4,6 @@
 //
 
 using System;
-using System.Runtime.CompilerServices;
 
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 {
@@ -14,11 +13,11 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     public class GattReadRequest
     {
         private Buffer _readValue;
-        private readonly ushort _eventID;
+        private readonly ushort _eventId;
 
-        internal GattReadRequest(ushort eventID)
+        internal GattReadRequest(ushort eventId)
         {
-            _eventID = eventID;
+            _eventId = eventId;
         }
 
         /// <summary>
@@ -32,7 +31,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             byte[] data = new byte[_readValue.Length];
             Array.Copy(_readValue.Data, data, (int)_readValue.Length);
 
-            NativeReadRespondWithValue(_eventID, data);
+            GattServiceProvider.NativeDevice.ReadRespondWithValue(_eventId, data);
         }
 
         /// <summary>
@@ -41,22 +40,15 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <param name="protocolError">The protocol error to send. A list of errors with the byte values can be found in GattProtocolError.</param>
         public void RespondWithProtocolError(byte protocolError)
         {
-            NativeReadRespondWithProtocolError(_eventID, (byte)BluetoothError.OtherError);
+            GattServiceProvider.NativeDevice.ReadRespondWithProtocolError(_eventId, (byte)BluetoothError.OtherError);
         }
 
         /// <summary>
         ///  Gets the buffer length of the read request.
         /// </summary>
-        public uint Length { get => _readValue.Length; }
-
-        #region external calls to native implementations
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern void NativeReadRespondWithValue(ushort eventID, byte[] value);
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern void NativeReadRespondWithProtocolError(ushort eventID, byte protocolError);
-
-        #endregion
+        public uint Length
+        {
+            get => _readValue.Length;
+        }
     }
 }

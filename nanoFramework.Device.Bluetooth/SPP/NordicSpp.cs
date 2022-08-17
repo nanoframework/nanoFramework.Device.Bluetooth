@@ -7,6 +7,7 @@ using System;
 using nanoFramework.Device.Bluetooth.GenericAttributeProfile;
 using System.Diagnostics;
 using System.Text;
+using nanoFramework.Device.Bluetooth.NativeDevice;
 
 namespace nanoFramework.Device.Bluetooth.Spp
 {
@@ -43,9 +44,9 @@ namespace nanoFramework.Device.Bluetooth.Spp
         /// <summary>
         /// Constructor for Nordic serial SPP profile
         /// </summary>
-        public NordicSpp()
+        public NordicSpp(INativeDevice nativeDevice)
         {
-            GattServiceProviderResult gspr = GattServiceProvider.Create(ServiceUUID);
+            GattServiceProviderResult gspr = GattServiceProvider.Create(ServiceUUID, nativeDevice);
             if (gspr.Error != nanoFramework.Device.Bluetooth.BluetoothError.Success)
             {
                 throw new ArgumentException("Unable to create service");

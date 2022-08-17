@@ -13,10 +13,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         private readonly GattLocalCharacteristic _characteristic;
         private readonly BluetoothError _error;
 
-        internal GattLocalCharacteristicResult(GattLocalCharacteristic Characteristic, BluetoothError Error)
+        internal GattLocalCharacteristicResult(GattLocalCharacteristic characteristic, BluetoothError error)
         {
-            _characteristic = Characteristic;
-            _error = Error;
+            _characteristic = characteristic;
+            _error = error;
         }
 
         /// <summary>

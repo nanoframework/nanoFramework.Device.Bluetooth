@@ -6,7 +6,7 @@
 using System;
 using System.Text;
 using System.Collections;
-using System.Runtime.CompilerServices;
+using nanoFramework.Device.Bluetooth.NativeDevice;
 using nanoFramework.Runtime.Native;
 
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
@@ -17,8 +17,9 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     public sealed class GattServiceProvider
     {
         private readonly ArrayList _services;
+        private static BluetoothEventProcessor _bluetoothEventProcessor;
 
-        GattServiceProviderAdvertisementStatus _status = GattServiceProviderAdvertisementStatus.Created;
+        private GattServiceProviderAdvertisementStatus _status = GattServiceProviderAdvertisementStatus.Created;
 
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private byte[] _deviceName;
@@ -32,12 +33,13 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private Buffer _serviceData;
 
+        internal static INativeDevice NativeDevice;
 
-        internal static readonly BluetoothEventListener _bluetoothEventManager = new BluetoothEventListener();
-
-        internal GattServiceProvider(Guid serviceUuid)
+        private GattServiceProvider(Guid serviceUuid, INativeDevice nativeDevice)
         {
             _services = new ArrayList();
+            NativeDevice = nativeDevice;
+            _bluetoothEventProcessor = new BluetoothEventProcessor(NativeDevice);
 
             // Add primary
             AddService(serviceUuid);
@@ -45,7 +47,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             // Add default Device Information service 
             AddDeviceInformationService();
 
-            NativeInitService();
+            NativeDevice.InitService();
         }
 
         /// <summary>
@@ -100,7 +102,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
             _deviceName = Encoding.UTF8.GetBytes(parameters.DeviceName);
 
-            if (NativeStartAdvertising())
+            if (NativeDevice.StartAdvertising(_isConnectable, _isDiscoverable, _serviceData, _deviceName, _services))
             {
                 _status = GattServiceProviderAdvertisementStatus.Started;
             }
@@ -111,19 +113,20 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// </summary>
         public void StopAdvertising()
         {
-            NativeStopAdvertising();
+            NativeDevice.StopAdvertising();
 
             _status = GattServiceProviderAdvertisementStatus.Stopped;
         }
 
         /// <summary>
-        ///  Creates a new GATT service with the specified serviceUuid
+        ///  Creates a new GATT service with the specified serviceUuid using the specified nativeDevice
         /// </summary>
         /// <param name="serviceUuid">The service UUID.</param>
+        /// <param name="nativeDevice">The native device.</param>
         /// <returns>A GattServiceProviderResult object.</returns>
-        public static GattServiceProviderResult Create(Guid serviceUuid)
+        public static GattServiceProviderResult Create(Guid serviceUuid, INativeDevice nativeDevice)
         {
-            GattServiceProvider serviceProvider = new GattServiceProvider(serviceUuid);
+            GattServiceProvider serviceProvider = new GattServiceProvider(serviceUuid, nativeDevice);
 
             return new GattServiceProviderResult(serviceProvider, BluetoothError.Success);
         }
@@ -176,17 +179,5 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             return newService;
         }
 
-        #region external calls to native implementations
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern bool NativeInitService();
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern bool NativeStartAdvertising();
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern void NativeStopAdvertising();
-
-        #endregion
     }
 }
