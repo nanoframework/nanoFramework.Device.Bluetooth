@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.0.2.6...HEAD)
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.2...HEAD)
+
+**Implemented enhancements:**
+
+- Initial version of BLE central/Client [\#37](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/37)
+
+## [v1.1.2](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/v1.1.2) (2022-08-04)
+
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.0.2.6...v1.1.2)
 
 **Documentation and other chores:**
 
