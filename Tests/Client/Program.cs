@@ -44,7 +44,6 @@ namespace TestClient
             Guid serviceUuid = new("A7EEDF2C-DA87-4CB5-A9C5-5151C78B0066");
             Guid readStaticCharUuid = new("A7EEDF2C-DA89-4CB5-A9C5-5151C78B0057");
 
-
             Console.WriteLine("Create Primary service - UUID A7EEDF2C-DA87-4CB5-A9C5-5151C78B0066");
 
             //The GattServiceProvider is used to create and advertise the primary service definition.
@@ -92,7 +91,6 @@ namespace TestClient
                     "v1.0",
                     SystemInfo.Version.ToString(),
                     "");
-
 
             Console.WriteLine("Create Environmental Sensor Service");
 

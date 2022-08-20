@@ -131,14 +131,6 @@ namespace nanoFramework.Device.Bluetooth
             }
         }
 
-        //
-        //  Rssi filter ( in range, Going out, Out of range
-        //  If out of range remove
-        //
-        //  if first time Going out , record time
-        //
-
-
         /// <summary>
         /// Check Event against RSSI filter
         /// </summary>
@@ -146,7 +138,6 @@ namespace nanoFramework.Device.Bluetooth
         /// <returns>Returns False to ignore event</returns>
         internal bool ScanRssiFilter(BluetoothLEAdvertisementReceivedEventArgs args)
         {
-
             ScanItem scan = FindScanEntry(args.BluetoothAddress);
             bool inRange = (args.RawSignalStrengthInDBm >= SignalStrengthFilter.InRangeThresholdInDBm);
             if (scan == null && inRange)

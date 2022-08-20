@@ -619,7 +619,6 @@ namespace nanoFramework.Device.Bluetooth
 
         #region external calls to native implementations
 
-
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern ushort NativeConnect(ulong address, BluetoothAddressType addressType, ushort eventRouting);
 

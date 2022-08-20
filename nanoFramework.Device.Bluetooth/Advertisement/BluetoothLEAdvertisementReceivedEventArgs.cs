@@ -16,6 +16,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
     public class BluetoothLEAdvertisementReceivedEventArgs
     {
         private readonly ulong _bluetoothAddress;
+        private readonly BluetoothAddressType _bluetoothAddressType;
         private readonly BluetoothLEAdvertisement _advertisement;
         private readonly BluetoothLEAdvertisementType _advertisementType;
         private readonly short _rawSignalStrengthInDBm;
@@ -31,6 +32,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
 
         internal BluetoothLEAdvertisementReceivedEventArgs(
                 ulong BluetoothAddress,
+                BluetoothAddressType BluetoothAddressType,
                 BluetoothLEAdvertisementType AdvertisementType,
                 BluetoothLEAdvertisement Advertisement,
                 short RawSignalStrengthInDBm,
@@ -38,6 +40,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
             )
         {
             _bluetoothAddress = BluetoothAddress;
+            _bluetoothAddressType = BluetoothAddressType;
             _advertisement = Advertisement;
             _advertisementType = AdvertisementType;
             _rawSignalStrengthInDBm = RawSignalStrengthInDBm;
@@ -55,7 +58,6 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
             return ad;
         }
 
-
         /// <summary>
         /// Gets the Bluetooth LE advertisement payload data received.
         /// </summary>
@@ -70,6 +72,11 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         /// Gets the Bluetooth address of the device sending the Bluetooth LE advertisement.
         /// </summary>
         public ulong BluetoothAddress { get => _bluetoothAddress; }
+
+        /// <summary>
+        /// Get the Bluetooth address type of BluetoothAddress.
+        /// </summary>
+        public BluetoothAddressType BluetoothAddressType { get => _bluetoothAddressType; }
 
         /// <summary>
         /// Gets the received signal strength indicator (RSSI) value, in dBm, for this received

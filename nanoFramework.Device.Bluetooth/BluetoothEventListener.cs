@@ -282,7 +282,6 @@ namespace nanoFramework.Device.Bluetooth
                                 BluetoothLEAdvertisementReceivedEventArgs eventRxArgs = BluetoothLEAdvertisementReceivedEventArgs.CreateFromEvent(btEvent.id);
                                 eventRxArgs.Timestamp = DateTime.UtcNow;
                                 _watcher?.OnReceived(eventRxArgs);
-
                                 break;
 
                             case BluetoothEventType.ScanningComplete:
