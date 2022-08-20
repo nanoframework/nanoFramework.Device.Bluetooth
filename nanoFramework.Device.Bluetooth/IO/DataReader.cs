@@ -11,7 +11,7 @@ namespace nanoFramework.Device.Bluetooth
     /// <summary>
     /// Reads data from an input buffer.
     /// </summary>
-    public sealed class DataReader
+    public class DataReader
     {
         private Buffer _buffer;
         private int _currentReadPosition;
@@ -62,7 +62,7 @@ namespace nanoFramework.Device.Bluetooth
         /// <returns>The buffer.</returns>
         public Buffer ReadBuffer(uint length)
         {
-            Buffer buffer = new Buffer(length);
+            Buffer buffer = new(length);
 
             Array.Copy(_buffer.Data, IncreaseReadPosition((int)length), buffer.Data, 0, (int)length);
 
@@ -196,12 +196,9 @@ namespace nanoFramework.Device.Bluetooth
         /// <returns>The value.</returns>
         public string ReadString(uint codeUnitCount)
         {
-            Char[] buffer = new Char[codeUnitCount];
-
             int readPosition = IncreaseReadPosition((int)codeUnitCount);
 
-            Encoding.UTF8.GetDecoder().Convert(_buffer.Data, readPosition, (int)codeUnitCount, buffer, 0, (int)codeUnitCount, false, out Int32 bytesUsed, out Int32 charsUsed, out Boolean completed);
-            var value = new String(buffer, 0, charsUsed);
+            string value = Encoding.UTF8.GetString(_buffer.Data, readPosition, (int)codeUnitCount);
 
             CheckReadPosition();
 

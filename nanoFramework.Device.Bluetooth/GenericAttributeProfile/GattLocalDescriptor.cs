@@ -10,10 +10,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     ///  This class defines a descriptor of a local characteristic.
     /// </summary>
-    public sealed class GattLocalDescriptor
+    public class GattLocalDescriptor
     {
         // Each Descriptor will have unique _descriptorId for event lookup, events for descriptors are handled by User app.
-        // This comprises of characteristic ID + GattLocalDescriptorIndex in the form
+        // This comprises of characteristic id + GattLocalDescriptorIndex in the form
         // x'DDCC' where DD is Descriptor and CC characteristic
         internal ushort _descriptorId;
 
@@ -64,7 +64,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <summary>
         ///  Gets the Bluetooth SIG-defined UUID for this local characteristic descriptor.
         /// </summary>
-        public Guid Uuid { get => new Guid(_uuid); }
+        public Guid Uuid { get => new(_uuid); }
 
         /// <summary>
         ///  Gets the write protection level.

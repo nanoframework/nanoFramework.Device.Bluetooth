@@ -41,7 +41,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <param name="protocolError">The protocol error to send. A list of errors with the byte values can be found in GattProtocolError.</param>
         public void RespondWithProtocolError(byte protocolError)
         {
-            NativeReadRespondWithProtocolError(_eventID, (byte)BluetoothError.OtherError);
+            NativeReadRespondWithProtocolError(_eventID, protocolError);
         }
 
         /// <summary>

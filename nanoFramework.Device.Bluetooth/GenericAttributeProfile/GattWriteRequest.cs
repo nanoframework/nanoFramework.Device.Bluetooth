@@ -11,7 +11,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// This class represents a GATT write request.
     /// </summary>
-    public sealed class GattWriteRequest
+    public class GattWriteRequest
     {
         private readonly GattWriteOption _option = GattWriteOption.WriteWithResponse;
         private readonly uint _offset = 0;

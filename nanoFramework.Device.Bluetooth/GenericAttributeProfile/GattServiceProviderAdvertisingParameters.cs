@@ -10,7 +10,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// This class is used to define the GATT service advertisement parameters.
     /// </summary>
-    public sealed class GattServiceProviderAdvertisingParameters
+    public class GattServiceProviderAdvertisingParameters
     {
         const string _defaultDeviceName = "nanoFramework";
 

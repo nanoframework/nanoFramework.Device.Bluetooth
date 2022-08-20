@@ -13,12 +13,12 @@ namespace NFUnitTest1
     [TestClass]
     public class TestClass
     {
-        Guid ServiceUuid1 = new Guid("CA761232-ED42-11CE-BACD-00AA0057B224");
+        Guid ServiceUuid1 = new("CA761232-ED42-11CE-BACD-00AA0057B224");
 
         [TestMethod]
         public void CreateProvider()
         {
-            GattServiceProvider serviceProvider = null;
+            GattServiceProvider serviceProvider;
 
             GattServiceProviderResult result = GattServiceProvider.Create(ServiceUuid1);
             Assert.False(result.Error == BluetoothError.Success);

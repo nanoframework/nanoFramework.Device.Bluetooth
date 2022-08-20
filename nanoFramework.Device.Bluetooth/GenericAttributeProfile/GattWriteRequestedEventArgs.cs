@@ -10,7 +10,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// This class represents the event arguments for WriteRequested.
     /// </summary>
-    public sealed class GattWriteRequestedEventArgs //: IGattWriteRequestedEventArgs
+    public class GattWriteRequestedEventArgs
     {
         private readonly ushort _eventID;
         private readonly GattSession _session = null;

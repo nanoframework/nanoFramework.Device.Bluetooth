@@ -10,7 +10,7 @@ namespace nanoFramework.Device.Bluetooth
     /// <summary>
     /// Writes data to an output stream.
     /// </summary>
-    public sealed class DataWriter : Buffer
+    public class DataWriter : Buffer
     {
         /// <summary>
         /// Creates and initializes a new instance of the data writer.

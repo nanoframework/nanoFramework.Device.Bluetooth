@@ -11,7 +11,7 @@ namespace nanoFramework.Device.Bluetooth.Spp
     /// <summary>
     /// Event argument for SPP receive data events
     /// </summary>
-    public sealed class SppReceivedDataEventArgs
+    public class SppReceivedDataEventArgs
     {
         private readonly byte[] _data;
 

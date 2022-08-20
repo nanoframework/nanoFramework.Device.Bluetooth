@@ -8,7 +8,7 @@ using nanoFramework.Runtime.Events;
 
 namespace nanoFramework.Device.Bluetooth 
 {
-    internal class BluetoothEvent : BaseEvent
+    internal class BluetoothEventClient : BaseEvent
     {
         /// <summary>
         /// Type of Bluetooth event
@@ -16,18 +16,60 @@ namespace nanoFramework.Device.Bluetooth
         public BluetoothEventType type;
 
         /// <summary>
-        /// Event or Connect ID
+        /// Event or Connect id
         /// </summary>
-        public ushort ID;
+        public ushort id;
 
         /// <summary>
-        /// ID of Characteristic
+        /// id of Characteristic
         /// </summary>
         public ushort characteristicId;
 
         /// <summary>
-        /// ID of Descriptor
+        /// id of Descriptor
         /// </summary>
         public ushort descriptorId;
     }
+
+    internal class BluetoothEventScan : BaseEvent
+    {
+        /// <summary>
+        /// Type of Bluetooth event
+        /// </summary>
+        public BluetoothEventType type;
+
+        /// <summary>
+        /// Event id
+        /// </summary>
+        public ushort id;
+    }
+
+    internal class BluetoothEventCentral : BaseEvent
+    {
+        /// <summary>
+        /// Type of Bluetooth event
+        /// </summary>
+        public BluetoothEventType type;
+
+        /// <summary>
+        /// Connection Handle
+        /// </summary>
+        public ushort connectionHandle;
+
+        /// <summary>
+        /// status of event
+        /// </summary>
+        public ushort status;
+
+        /// <summary>
+        /// Attribute Handle of service
+        /// </summary>
+        public ushort serviceHandle;
+
+        /// <summary>
+        /// Attribute Handle of characteristic
+        /// </summary>
+        public ushort characteristicHandle;
+    }
+
 }

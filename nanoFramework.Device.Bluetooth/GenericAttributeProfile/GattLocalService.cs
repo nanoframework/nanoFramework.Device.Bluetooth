@@ -11,7 +11,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     /// This class represents a GATT local service.
     /// </summary>
-    public sealed class GattLocalService
+    public class GattLocalService
     {
         private readonly byte[] _serviceUuid;
         private readonly ArrayList _characteristics;
@@ -30,7 +30,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <returns>An GattLocalCharacteristicResult object</returns>
         public GattLocalCharacteristicResult CreateCharacteristic(Guid characteristicUuid, GattLocalCharacteristicParameters parameters)
         {
-            GattLocalCharacteristic Characteristic = new GattLocalCharacteristic(characteristicUuid, parameters);
+            GattLocalCharacteristic Characteristic = new(characteristicUuid, parameters);
             _characteristics.Add(Characteristic);
 
             return new GattLocalCharacteristicResult(Characteristic, BluetoothError.Success);
@@ -44,6 +44,6 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <summary>
         ///  Gets the local service UUID.
         /// </summary>
-        public Guid Uuid { get => new Guid(_serviceUuid); }
+        public Guid Uuid { get => new(_serviceUuid); }
     }
 }

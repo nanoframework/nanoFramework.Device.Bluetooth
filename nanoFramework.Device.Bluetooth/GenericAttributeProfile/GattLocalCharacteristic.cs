@@ -12,7 +12,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// <summary>
     ///  This class represents a local characteristic.
     /// </summary>
-    public sealed class GattLocalCharacteristic
+    public class GattLocalCharacteristic
     {
         private static ushort GattLocalCharacteristicIndex = 0;
 
@@ -78,10 +78,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             _userDescription = parameters.UserDescription;
             if (!string.IsNullOrEmpty(_userDescription))
             {
-                GattLocalDescriptorParameters dp = new GattLocalDescriptorParameters();
+                GattLocalDescriptorParameters dp = new();
 
                 // Create Static value for User description
-                DataWriter dr = new DataWriter();
+                DataWriter dr = new();
                 dr.WriteString(_userDescription);
                 dp.StaticValue = dr.DetachBuffer();
 
@@ -95,15 +95,19 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
                 _presentationFormats.Add(gpf);
 
                 // Create Static value for PresentationFormat
-                DataWriter dr = new DataWriter();
+                DataWriter dr = new();
 
                 dr.WriteByte(gpf.FormatType);
-                dr.WriteByte((byte)gpf.Exponent);
+                
+                // Create signed byte from int Exponent
+                sbyte exp = (sbyte)gpf.Exponent;
+                dr.WriteByte((byte)exp);
+
                 dr.WriteUInt16(gpf.Unit);
                 dr.WriteByte(gpf.Namespace);
                 dr.WriteUInt16(gpf.Description);
 
-                GattLocalDescriptorParameters dp = new GattLocalDescriptorParameters();
+                GattLocalDescriptorParameters dp = new();
                 dp.StaticValue = dr.DetachBuffer();
 
                 _presentationFormatsDescriptors.Add(new GattLocalDescriptor(GattDescriptorUuids.CharacteristicPresentationFormat, dp, this, _descriptorNextID++));
@@ -238,7 +242,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <summary>
         /// Gets the BluetoothSIG-defined UUID for this local characteristic.
         /// </summary>
-        public Guid Uuid { get => new Guid(_characteristicUuid); }
+        public Guid Uuid { get => new(_characteristicUuid); }
 
         /// <summary>
         /// Gets the write protection level of this local characteristic.
@@ -270,7 +274,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             {
                 handled = true;
                 // Handle static values internally, don't fire an event
-                DataWriter writer = new DataWriter();
+                DataWriter writer = new();
                 writer.WriteBuffer(_staticValue);
                 e.GetRequest().RespondWithValue(_staticValue);
             }

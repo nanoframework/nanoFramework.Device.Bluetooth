@@ -22,7 +22,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <param name="formatType">The Format Type.</param>
         /// <param name="exponent">The exponent.</param>
         /// <param name="unit">The unit.</param>
-        /// <param name="namespaceId">The namespace ID.</param>
+        /// <param name="namespaceId">The namespace id.</param>
         /// <param name="description">The description.</param>
         /// <returns>An instance of GattPresentationFormat.</returns>
         public static GattPresentationFormat FromParts(byte formatType, int exponent, ushort unit, byte namespaceId, ushort description)

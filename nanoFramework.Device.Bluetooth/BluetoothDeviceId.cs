@@ -6,16 +6,16 @@
 namespace nanoFramework.Device.Bluetooth
 {
     /// <summary>
-    /// Represents a Bluetooth device ID.
+    /// Represents a Bluetooth device id.
     /// </summary>
-    public sealed class BluetoothDeviceId 
+    public class BluetoothDeviceId 
     {
         private readonly int _id;
 
         /// <summary>
-        /// Creates a BluetoothDeviceId object from the device ID.
+        /// Creates a BluetoothDeviceId object from the device id.
         /// </summary>
-        /// <param name="deviceId">The device ID.</param>
+        /// <param name="deviceId">The device id.</param>
         /// <returns></returns>
         public static BluetoothDeviceId FromId(int deviceId)
         {
@@ -28,7 +28,7 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Gets the Bluetooth device ID.
+        /// Gets the Bluetooth device id.
         /// </summary>
         public int Id { get => _id; }
 

@@ -6,7 +6,7 @@
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 {
     /// <summary>
-    /// The result of NotifyValue
+    /// The result of a NotifyValue
     /// </summary>
     public class GattClientNotificationResult
     {
