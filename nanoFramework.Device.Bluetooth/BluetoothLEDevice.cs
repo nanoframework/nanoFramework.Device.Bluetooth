@@ -271,7 +271,7 @@ namespace nanoFramework.Device.Bluetooth
                 _connectionStatus = value;
 
                 // Fire event on change
-                ConnectionStatusChanged?.Invoke(this, EventArgs.Empty)
+                ConnectionStatusChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
