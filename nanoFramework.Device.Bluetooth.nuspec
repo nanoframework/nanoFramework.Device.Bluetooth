@@ -24,7 +24,7 @@ This package requires a target with nanoFramework.Device.Bluetooth v$nativeVersi
       <dependency id="nanoFramework.Runtime.Events" version="1.10.0" />
       <dependency id="nanoFramework.System.Text" version="1.2.3" />
       <dependency id="nanoFramework.System.Collections" version="1.4.0" />
-	</dependencies>
+    </dependencies>
   </metadata>
   <files>
     <file src="nanoFramework.Device.Bluetooth\bin\Release\nanoFramework.Device.Bluetooth.dll" target="lib\nanoFramework.Device.Bluetooth.dll" />
