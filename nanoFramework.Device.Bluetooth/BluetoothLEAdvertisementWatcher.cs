@@ -75,7 +75,7 @@ namespace nanoFramework.Device.Bluetooth
             _scanResults = new Hashtable();
 
             NativeStartAdvertisementWatcher((int)_scanningMode);
-            GenericAttributeProfile.GattServiceProvider._bluetoothEventManager.Watcher = this;
+            BluetoothLEServer._bluetoothEventManager.Watcher = this;
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace nanoFramework.Device.Bluetooth
         {
             _status = BluetoothLEAdvertisementWatcherStatus.Stopping;
 
-            GenericAttributeProfile.GattServiceProvider._bluetoothEventManager.Watcher = null;
+            BluetoothLEServer._bluetoothEventManager.Watcher = null;
 
             NativeStopAdvertisementWatcher();
 

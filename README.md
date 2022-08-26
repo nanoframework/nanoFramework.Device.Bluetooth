@@ -21,8 +21,6 @@ This library is based on the Windows.Devices.Bluetooth UWP class library but sim
 The original .Net assembly depended on Windows.Storage.Streams for DataReader & DataWriter; this library has simplified inbuilt versions. 
 So references to IBuffer in .Net UWP examples should now use Buffer instead. 
 
-We have also added an extension to this assembly allowing extra services to be added to ServiceProvider with no restriction on type.
-
 ## Firmware versions
 
 Bluetooth is currently only supported on ESP32 devices with following firmware.
@@ -30,10 +28,12 @@ Bluetooth is currently only supported on ESP32 devices with following firmware.
 - ESP32_BLE_REV0
 - ESP32_BLE_REV3
 - M5Core2
+- LilygoTWatch2021
+- ESP32_ETHERNET_KIT_1.2
 
 This restriction is due to IRAM memory space in the firmware image. 
-With revision 1 of ESP32 devices, the PSRAM implementation requires a large number of PSRAM fixes which greatly reduces the 
-available space in IRAM area so PSRAM is currently disabled for ESP32_BLE_REV0. With the revision 3 devices the Bluetooth and 
+With revision 1 of ESP32 devices, the PSRAM implementation requires a large number of PSRAM library fixes which greatly reduces the 
+available space in the IRAM area, so PSRAM is currently disabled for ESP32_BLE_REV0. With the revision 3 devices the Bluetooth and 
 PSRAM are both available.
 
 ## Samples
@@ -46,6 +46,7 @@ A number of Bluetooth LE samples are available in the [nanoFramework samples rep
 - [Bluetooth Low energy serial (SPP)](https://github.com/nanoframework/Samples/tree/main/samples/Bluetooth/BluetoothLESerial) 
 - [Bluetooth Low energy central 1 (Simple Bluetooth scanner) ](https://github.com/nanoframework/Samples/tree/main/samples/Bluetooth/Central1) 
 - [Bluetooth Low energy central 2 (Data collector) ](https://github.com/nanoframework/Samples/tree/main/samples/Bluetooth/Central2) 
+- [Bluetooth Low energy central 3 (Authenticated Pairing sample) ](https://github.com/nanoframework/Samples/tree/main/samples/Bluetooth/Central3) 
 
 ## Usage
 
@@ -60,8 +61,8 @@ devices while Watcher is scanning.
 
 For more information see relevant sections: -
 
-- Gatt Server
-- Gatt Client / Central
+- [Gatt Server](#gatt-server)
+- [Gatt Client / Central](#gatt-client-central)
 
 Also as part of this assembly is the NordicSPP class which implements a Serial Protocol Profile based on 
 the Nordic specification. This allows clients to easily connect via Bluetooth LE to send and receive messages via a 
@@ -70,7 +71,7 @@ Bluetooth Serial Terminal application. A common use case is for provisioning dev
 ### Attributes and UUIDs
 
 Each service, characteristic and descriptor is defined by it's own unique 128-bit UUID. These are 
-called GUID in this assembly. These are called UUID in the Bluetooth specifications. 
+called GUID in .Net and UUID in the Bluetooth specifications. 
 
 If the attribute is standard UUID defined by the Bluetooth SIG, it will also have a corresponding 16-bit short ID (for example, 
 the characteristic **Battery Level** has a UUID of 00002A19-0000-1000-8000-00805F9B34FB and the short ID is 0x2A19). 
@@ -82,11 +83,28 @@ calling the utility function CreateUuidFromShortCode.
 ```csharp
 Guid uuid1 = Utility.CreateUuidFromShortCode(0x2A19);
 ```
+
+### Security and Pairing
+
+The assembly supports pairing with encryption and authenication.
+
+If you don't do anything in your code it will use the **Just works** method of pairing which will enable encryption on the connection.
+
+To enable **Authentication** you will need to handle the pairing events in your code. 
+
+For more information see [**Pairing**](#pairing) section.
+
 ## Gatt Server
+
+The main object for the Gatt Server is the **BluetoothLEServer** class. This is a singleton class so there can only be one occurance of the BluetoothLEServer object.
+The BluetoothLEServer object can be accessed by using the static **BluetoothLEServer.Instance** property. The first call to this will create the object.
+Calling dispose will remove the object from memory.
+
+This object is new and doesn't exist in the normal Windows implementation and was added to allow better handling of pairing and connections from the managed code.
 
 ### Defining the service and associated Characteristics
 
-The GattServiceProvider is used to create and advertise the primary service definition. An extra device information service will be automatically created.
+The GattServiceProvider is used to create and advertise the primary service definitions. An extra device information service will be automatically created when first service is created.
 
 ```csharp
 GattServiceProviderResult result = GattServiceProvider.Create(uuid);
@@ -98,7 +116,23 @@ if (result.Error != BluetoothError.Success)
 serviceProvider = result.ServiceProvider;
 ```
 
-Now add to the service all the required characteristics and descriptors. 
+To create further services for the Gatt server call **GattServiceProvider.Create(uuid)** for each new service. 
+
+Access all created services via the BluetoothLEServer instance.
+
+```csharp
+BluetoothLEServer server = BluetoothLEServer.instance;
+GattServiceProvider[] services = server.Services()
+```
+
+Or find a specific service by using its UUID.
+
+```csharp
+BluetoothLEServer server = BluetoothLEServer.instance;
+GattServiceProvider service = server.GetServiceByUUID(uuid)
+```
+
+Using the *Service* property of the GattServiceProvider all the required characteristics can be added. 
 Currently only Read, Write, WriteWithoutResponse, Notify and Indicate characteristics are supported.
 
 ### Adding a Read Characteristic
@@ -281,19 +315,6 @@ private static void _notifyCharacteristic_SubscribedClientsChanged(GattLocalChar
 }
 ```
 
-### Adding extra services
-You can add or replace existing services and there are no restrictions on which services you add. 
-See the Bluetooth sample 3 for an example of adding the bluetooth standard 
-services, Device Information, Current Time, Battery level and Environmental Sensor.
-
-```csharp
-// Battery service exposes the current battery level percentage
-BatteryService BatService = new BatteryService(serviceProvider);
-
-// Update the Battery service with the current battery level when ever it is read.
-BatService.BatteryLevel = 94;
-```
-
 ## Advertising your service
 
 Once all the Characteristics have been created you need to advertise the Service so other devices can see it 
@@ -302,7 +323,6 @@ and/or connect to it. We also provide the device name seen on the discovery.
 ```csharp
 serviceProvider.StartAdvertising(new GattServiceProviderAdvertisingParameters()
 {
-    DeviceName = "My Example Device",
     IsConnectable = true,
     IsDiscoverable = true
 });
@@ -311,8 +331,8 @@ serviceProvider.StartAdvertising(new GattServiceProviderAdvertisingParameters()
 # Gatt Client / Central
 
 The Bluetooth LE client is used to look for advertisements from devices(Servers) and to connect to those 
-devices and read and write values to Characteristics. You can set up notification events so you automatically
-get informed when a value changes.
+devices and read and/or write values to Characteristics. Notification can be set up so events will automatically
+fire when a value changes.
 
 We have 2 samples available:
 - Central1  - This straight forward sample to just watch for advertisements and print out results.
@@ -334,8 +354,8 @@ This could be device LocalName or other data supplied in the advertisement data.
 
 See samples for more information.
 
-You can also add filters to the BluetoothLEAdvertisementWatcher.
-Currently this is just an RSSI filter so you only receive from devices within a certain signal strength. 
+Filters can be added to the BluetoothLEAdvertisementWatcher.
+Currently this is just an RSSI filter so Advertisements are only received from devices within a certain signal strength. 
 
 RSSI filter
 ```csharp
@@ -349,16 +369,16 @@ RSSI filter
 To communicate with a device a BluetoothLEDevice class needs to be created using the devices bluetooth address and type.
 This can be the bluetooth address from the BluetoothLEAdvertisementWatcher event or using a hard coded address.
 
-In this case from the Watcher advertisement received event.
+In this case from the Watcher advertisement received event BluetoothAddress argument.
 ```csharp
 BluetoothLEDevice device = BluetoothLEDevice.FromBluetoothAddress(args.BluetoothAddress)
 ```
-There are no specific connection methods but a connection will be made automatically when you query the device 
-for its services. The ConnectionStatusChanged event can used to detect a change in connection status and an attempt to 
+There are no specific connection methods but a connection will be made automatically when the device is queried for services or a Pairing operation is started. 
+The ConnectionStatusChanged event can be used to detect a change in connection status and an attempt to 
 reconnect can be done by a query to the devices services again. Avoid doing this in the event, as it can block other 
 events being fired during the connection.
 
-You can go back to Watching for advertisements with the restriction that you can't connect to newly found devcies until the Watching is stopped.
+After connecting to teh device you can go back to Watching for advertisements with the restriction that you can't connect to newly found devcies until the Watching is stopped.
 You can still communication with connected devices while the Watcher is running. Best way is to collect all found devices in a table until Watcher is
 stopped then connect to all found devices. See [Central 2 sample](https://github.com/nanoframework/Samples/tree/main/samples/Bluetooth/Central2)
 
@@ -385,7 +405,7 @@ Querying for a specific service provided by device.
         
     }
 ```
-Both above get service method will try to connect to device.
+Both above get service methods will try to connect to device.
 
 Note: 
 The services are cached so the first time they are queried it will retrieve them from the device.
@@ -394,7 +414,7 @@ Further calls for services will return the cached results. To clear the cache th
 
 ## Querying service characterisics
 
-When you have the correct GattDeviceService object you can query it for the Characteristics required.
+With the GattDeviceService object a query can be made for the required Characteristics.
 In the same way as the service there is a method to query for a all Characteristics or just specific Characteristics.
 
 Query for all Characteristics
@@ -424,6 +444,7 @@ Descriptors can be retrieved in the same way as Services and Characteristics usi
 GetDescriptors and GetDescriptorsForUuid.
 
 In these examples gc is the GattCharacteristic object.
+
 Get all descriptors.
 ```csharp
     GattDescriptorsResult dr = gc.GetDescriptors();
@@ -441,7 +462,7 @@ Get all descriptors with particular UUID.
     }   
 ```
 The properties **UserDescription** or **PresentationFormats** will automatically retrieve the descriptors
-from the device. Any further calls to get descriptors will come from a local cached.
+from the device. Any further calls to get descriptors will come from a local cache.
 
 ## Reading and Writing attribute values
 
@@ -491,9 +512,10 @@ Example with gc being the GattCharacteristic to enable.
 ```
 To switch off the notifications write the none value to the CCCD descriptor.
 
-Event handle for notification events. 
+## Event handler for notification events. 
+
 The sender is the GattCharacteristic the change is coming from and the valueChangedEventArgs.CharacteristicValue is
-the Buffer value with new value. 
+the Buffer value with the new value. 
 ```csharp
     private static void ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs valueChangedEventArgs)
     {
@@ -505,16 +527,207 @@ the Buffer value with new value.
 
 ## Handling device errors
 
-To handle connection errors you need to monitor the ConnectionStatusChanged event on the 
-BluetoothLEDevice object.  If the connection is lost you can try to reconnect by 
-requesting the services again. See Central2 sample.
+Handle connection errors by monitoring the ConnectionStatusChanged event on the BluetoothLEDevice object.  
+If the connection is lost, reconnect by requesting the services again. 
+
+See Central2 sample.
 
 Make sure you check the return status for all requests to make sure they are successful.
 
 
+# Pairing
+
+Pairing is handled by the **DevicePairing** class which is a property on the *BluetoothLEServer* and *BluetoothLEDevice* classes.
+The properties *ProtectionLevel* and *IOCapabilities* control how the pairing will be done.
+
+For good information on Bluetooth Pairing and how the IO Capabilities effect the type of pairing see this very useful [Blog](https://www.bluetooth.com/blog/bluetooth-pairing-part-2-key-generation-methods/) on www.bluetooth.com
+
+## ProtectionLevel
+
+By default the *ProtectionLevel* is **None** and the *IOCapabilities* is **NoInputNoOutput** so the pairing will use **Just Works** method if both ends are nanoFramework.
+
+The ProtectionLevel will be automaticlly updated depending on the requirements of any added Characteristics.
+This can be manually set to force a different level of protection.
+
+| *ProtectionLevel* | |
+| ------- | ----- |
+| None | No security is used for connection, legacy pairing |
+| Encryption | A Secure connection is used. Keys are automatically generated for connection. | 
+| EncryptionAndAuthentication | As secure connection is used and authentication is required. IoCapabilities must be set correctly |
+
+## IOCapabilities
+
+The IO Capabilities are input and output peripherals availble on the device for pairing.
+Depending on what IOCapabilities each device has will covern how the pairing will be done.
+
+| *IOCapabilities* | |
+| ------- | ----- |
+| DisplayOnly | Only a Display is available. This can be used to display passKey for other device to input. |
+| DisplayYesNo | A Display and a means of inputing Yes or No. i.e 2 buttons. | 
+| NoInputNoOutput | No input or output is available. |
+| KeyboardDisplay | A display and Keyboard is available |
+
+## Pairing Matrix
+
+The Initiator is the devcie thats starts the pairing operation. This would normally be the Client.
+The Responder is the devcie responding to the pairing request.
+
+*Just Works*  : Means there is no inpt required and connection is just set up. If any Characteristics 
+have a protection level of Authentiction then a access error will be given.
+
+| **Responder IOCapabilities** || <- | <- | *Initiator* *IOCapabilities* | ->  | -> |
+| --------- | ----------- | ------------ | ------------ | --------------- | --------------- |
+|  || *DisplayOnly* | *DisplayYesNo* | *KeyboardOnly* | *NoInputNoOutput* | *KeyboardDisplay* | 
+| **DisplayOnly** || Just Works | Just Works | PassKey R->I | Just Works | PassKey R->I |
+| **DisplayYesNo** || Just Works | Just Works or Compare(sec) | PassKey R->I | Just Works | PassKey R->I or Compare(sec) |
+| **KeyboardOnly** || PassKey I->R | PassKey I->R | Passkey R&I | Just Works | PassKey I->R |
+| **NoInputNoOutput** || Just Works | Just Works | Just Works | Just Works | Just Works |
+| **KeyboardDisplay** || PassKey I->R | PassKey I->R or Compare(sec) | PassKey R->I | Just Works | PassKey I->R or Compare(sec) |
+
+Where:-
+* *Passkey R->I* : The passkey is displayed on responder and input done on initiator.
+* *Passkey I->R* : The passkey is displayed on initiator and input done on responder.
+* *Passkey R&I*  : PassKey is inputted on initiator and responder.
+* *Compare(sec)* : Numeric comparison when using secure connection. Both ends input and display passkey.
+
+
+### Common use cases for IOCapabilities.
+
+| Responder(Client) | Pairing | Initiator(Server) |
+| --------- | ----------- | ------------ |
+| *NoInputNoOutput* | Just Works | *NoInputNoOutput* |
+| *KeyboardOnly* | PassKey input/sent from Client, Server checks | *DisplayOnly* |
+
+
+### Code examples 
+
+For a full example see the samples *BluetoothLESample2* and *Central3*. 
+
+#### Server
+
+##### Setup for Server pairing. 
+
+The client has to provide the correct passKey.
+
+```csharp
+    BluetoothLEServer server = BluetoothLEServer.Instance;
+    server.DeviceName = "MyTestEsp32";
+
+    // Set up an event handler for handling pairing requests
+    server.Pairing.PairingRequested += Pairing_PairingRequested;
+    server.Pairing.PairingComplete += Pairing_PairingComplete;
+
+    // Say we have a display
+    server.Pairing.IOCapabilities = DevicePairingIOCapabilities.DisplayOnly;
+
+    // Set ProtectionLevel
+    server.Pairing.ProtectionLevel = DevicePairingProtectionLevel.EncryptionAndAuthentication;
+
+    // Start the Bluetooth server. 
+    server.Start();
+
+    // Add services and advertise
+
+```
+
+##### Event Handler for PairingRequested event. 
+
+The PairingKind indicates what the application needs to do.
+In this case its DevicePairingKinds.DisplayPin which just needs the passKey to compare with client.
+
+For a general use device with a display the passkey should be displayed so client knows what to input.
+
+```csharp
+private static void Pairing_PairingRequested(object sender, DevicePairingRequestedEventArgs args)
+{
+    switch (args.PairingKind)
+    {
+        // Passkey displayed on current device or just a know secret passkey
+        // Tell BLE what passkey is, so it can be checked against what has been entered on other device.
+        case DevicePairingKinds.DisplayPin:
+            args.Accept(654321);
+            break;
+    }
+}
+```
+
+##### Event handle for PairingComplete event. 
+
+This will inform program if pairing was successful or not.
+Check the args.Status is a success and the IsPaired property is true.
+
+```csharp
+private static void Pairing_PairingComplete(object sender, DevicePairingEventArgs args)
+{
+    DevicePairing dp = sender as DevicePairing;
+         
+    Console.WriteLine($"PairingComplete:{args.Status} IOCaps:{dp.IOCapabilities} IsPaired:{dp.IsPaired} IsAuthenticated:{dp.IsAuthenticated}");
+}
+```
+
+
+#### Client
+
+
+##### Setup of BluetoothLEDevice for pairing with Authenication.
+
+```csharp
+static void SetupDevice(BluetoothLEDevice device)
+{
+    // Event handlers pairing
+    device.Pairing.PairingRequested += Pairing_PairingRequested;
+    device.Pairing.PairingComplete += Pairing_PairingComplete;
+
+    // Set up IOCapabilities & ProtectionLevel
+    device.Pairing.IOCapabilities = DevicePairingIOCapabilities.KeyboardOnly;
+    device.Pairing.ProtectionLevel = DevicePairingProtectionLevel.EncryptionAndAuthentication;
+
+    // Pair with device
+    DevicePairingResult pairResult = device.Pairing.Pair();
+
+```
+
+##### Event handler for inputting passkey. 
+
+```csharp
+private static void Pairing_PairingRequested(object sender, DevicePairingRequestedEventArgs args)
+{
+    Console.WriteLine($"Pairing_PairingRequested:{args.PairingKind}");
+
+    switch (args.PairingKind)
+    {
+        case DevicePairingKinds.ProvidePin:
+            // Provide valid passkey
+            args.Accept(654321);
+            break;
+    }
+}
+
+```
+
+##### Event Handler for pairing complete event.
+
+```csharp
+private static void Pairing_PairingComplete(object sender, DevicePairingEventArgs args)
+{
+    // Pick up DevicePairing from sender or just use it directly
+    DevicePairing pairing = (DevicePairing)sender;
+
+    if (args.Status == DevicePairingResultStatus.Paired)
+    {
+        Console.WriteLine($"PairingComplete:{args.Status} IOCaps:{pairing.IOCapabilities} IsPaired:{pairing.IsPaired} IsAuthenticated:{pairing.IsAuthenticated}");
+    }
+    else
+    {
+        Console.WriteLine($"PairingComplete failed - status = {args.Status}");
+    }
+}
+```
 
 
 
+
+---
 
 # Bluetooth Serial Port Profile(SPP)
 

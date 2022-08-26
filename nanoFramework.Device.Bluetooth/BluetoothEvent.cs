@@ -6,9 +6,9 @@
 using System;
 using nanoFramework.Runtime.Events;
 
-namespace nanoFramework.Device.Bluetooth 
+namespace nanoFramework.Device.Bluetooth
 {
-    internal class BluetoothEventClient : BaseEvent
+    internal class BluetoothEventServer : BaseEvent
     {
         /// <summary>
         /// Type of Bluetooth event
@@ -72,4 +72,32 @@ namespace nanoFramework.Device.Bluetooth
         public ushort characteristicHandle;
     }
 
+    internal class BluetoothEventSesssion : BaseEvent
+    {
+        /// <summary>
+        /// Type of Bluetooth event
+        /// </summary>
+        public BluetoothEventType type;
+
+        /// <summary>
+        /// Connection Handle
+        /// </summary>
+        public ushort connectionHandle;
+
+        /// <summary>
+        /// status of event
+        /// </summary>
+        public ushort status;
+
+        /// <summary>
+        /// Any extra data
+        /// </summary>
+        public ushort data;
+
+        /// <summary>
+        /// Used for when 32 bit data supplied (pin)
+        /// </summary>
+        public UInt32 data32;
+
+    }
 }

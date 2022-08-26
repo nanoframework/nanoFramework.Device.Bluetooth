@@ -38,6 +38,7 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
+    <Compile Include="BluetoothAddress.cs" />
     <Compile Include="BluetoothAddressType.cs" />
     <Compile Include="BluetoothConnectionStatus.cs" />
     <Compile Include="BluetoothDeviceId.cs" />
@@ -57,8 +58,11 @@
     <Compile Include="BluetoothLEDevice.cs" />
     <Compile Include="BluetoothLEManufacturerData.cs" />
     <Compile Include="BluetoothLEScanningMode.cs" />
+    <Compile Include="BluetoothLEServer.cs" />
     <Compile Include="BluetoothNanoDevice.cs" />
     <Compile Include="BluetoothSignalStrengthFilter.cs" />
+    <Compile Include="GenericAttributeProfile\GattSessionStatusChangedEventArgs.cs" />
+    <Compile Include="Security\DeviceBonding.cs" />
     <Compile Include="GenericAttributeProfile\GattCharacteristic.cs" />
     <Compile Include="GenericAttributeProfile\GattCharacteristicProperties.cs" />
     <Compile Include="GenericAttributeProfile\GattCharacteristicResult.cs" />
@@ -100,6 +104,17 @@
     <Compile Include="GenericAttributeProfile\GattDescriptorResult.cs" />
     <Compile Include="GenericAttributeProfile\GattWriteResult.cs" />
     <Compile Include="GenericAttributeProfile\IGattAttribute.cs" />
+    <Compile Include="Security\DevicePairingEventArgs.cs" />
+    <Compile Include="Security\DevicePairingIOCapabilities.cs" />
+    <Compile Include="Security\DevicePairingKinds .cs" />
+    <Compile Include="Security\DevicePairingProtectionLevel.cs" />
+    <Compile Include="Security\DevicePairingRequestedEventArgs.cs" />
+    <Compile Include="Security\DevicePairingResult.cs" />
+    <Compile Include="Security\DevicePairingResultStatus.cs" />
+    <Compile Include="Security\DeviceUnpairingResult.cs" />
+    <Compile Include="Security\DeviceUnpairingResultStatus.cs" />
+    <Compile Include="Security\DevicePairing.cs" />
+    <Compile Include="Security\PasswordCredential.cs" />
     <Compile Include="SPP\IBluetoothSpp.cs" />
     <Compile Include="SPP\NordicSpp.cs" />
     <Compile Include="SPP\SppReceiveEventArgs.cs" />

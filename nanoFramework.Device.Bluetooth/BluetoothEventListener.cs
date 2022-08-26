@@ -15,12 +15,19 @@ namespace nanoFramework.Device.Bluetooth
 {
     internal class BluetoothEventListener : IEventProcessor, IEventListener
     {
+        // Current service provider
+        private static BluetoothLEServer _server;
+
         // Map of Bluetooth Characteristic numbers to GattLocalCharacteristic objects.
         private static readonly ArrayList _characteristicMap = new();
 
         // Map of Bluetooth connectionHandles to BluetoothLEDevice objects.
         // Used for routing server events
         private static readonly ArrayList _leDeviceMap = new();
+
+        // Map of Bluetooth connectionHandles to Pairing security objects.
+        // Used for routing security events
+        private static readonly ArrayList _securityMap = new();
 
         // Reference to current BluetoothLEAdvertisementWatcher for events posting
         private static BluetoothLEAdvertisementWatcher _watcher = null;
@@ -53,7 +60,7 @@ namespace nanoFramework.Device.Bluetooth
             if (BLEEventType < BluetoothEventType.AdvertisementDiscovered)
             {
 
-                return new BluetoothEventClient
+                return new BluetoothEventServer
                 {
                     // Data1, Data2 is packed by PostManagedEvent.
                     //
@@ -73,7 +80,7 @@ namespace nanoFramework.Device.Bluetooth
                     id = (ushort)(data2 & 0xffff)
                 };
             }
-            else
+            else if (BLEEventType < BluetoothEventType.ClientConnected)
             {
                 return new BluetoothEventCentral
                 {
@@ -88,6 +95,26 @@ namespace nanoFramework.Device.Bluetooth
                     status = (ushort)(data2 & 0x00ff)
                 };
             }
+            else
+            {
+                // Connection/Pairing & security events for client sessions
+                return new BluetoothEventSesssion
+                {
+                    // Data1, Data2 is packed by PostManagedEvent, so we need to unpack the high word.
+                    //
+                    // Data1  - HHHH00TT where H=Connection_Handle, TT = BluetoothEventType
+                    // Data2  - DDDDxxSS where  DD = data, SS = status(8 bits)
+                    // or 
+                    // Data2 = 32 bit for pins
+
+                    type = BLEEventType,
+                    connectionHandle = data1High,
+
+                    status = (ushort)(data2 & 0x00ff),
+                    data = (ushort)(data2 >> 16),
+                    data32 = data2
+                };
+            }
         }
 
         public void InitializeForEventSource()
@@ -96,7 +123,7 @@ namespace nanoFramework.Device.Bluetooth
             new Thread(WatcherEventQueueThread).Start();
         }
 
-        private bool OnEventClient(BluetoothEventClient btEvent)
+        private bool OnEventServer(BluetoothEventServer btEvent)
         {
             GattLocalCharacteristic lc = null;
 
@@ -104,48 +131,47 @@ namespace nanoFramework.Device.Bluetooth
             {
                 // Search for Characteristic using Characteristic id part of Id
                 lc = FindCharacteristic(btEvent.characteristicId);
-            }
 
-            // Avoid calling this under a lock to prevent a potential lock inversion.
-            if (lc != null)
-            {
-                switch (btEvent.type)
+                // Avoid calling this under a lock to prevent a potential lock inversion.
+                if (lc != null)
                 {
-                    case BluetoothEventType.Read:
-                        lc.OnReadRequested(btEvent.descriptorId, new GattReadRequestedEventArgs(btEvent.id, null));
-                        break;
+                    switch (btEvent.type)
+                    {
+                        case BluetoothEventType.Read:
+                            lc.OnReadRequested(btEvent.descriptorId, new GattReadRequestedEventArgs(btEvent.id, null));
+                            break;
 
-                    case BluetoothEventType.Write:
-                        lc.OnWriteRequested(btEvent.descriptorId, new GattWriteRequestedEventArgs(btEvent.id, null));
-                        break;
+                        case BluetoothEventType.Write:
+                            lc.OnWriteRequested(btEvent.descriptorId, new GattWriteRequestedEventArgs(btEvent.id, null));
+                            break;
 
-                    case BluetoothEventType.ClientSubscribed:
-                        {
-                            GattSession gs = GattSession.FromDeviceId(new BluetoothDeviceId(btEvent.id));
-                            GattSubscribedClient sc = new(gs);
-                            lc.OnSubscribedClientsChanged(true, sc);
-                        }
-                        break;
+                        case BluetoothEventType.ClientSubscribed:
+                            {
+                                GattSession gs = GattSession.FromDeviceId(new BluetoothDeviceId(btEvent.id));
+                                GattSubscribedClient sc = new(gs);
+                                lc.OnSubscribedClientsChanged(true, sc);
+                            }
+                            break;
 
-                    case BluetoothEventType.ClientUnsubscribed:
-                        {
-                            GattSession gs = GattSession.FromDeviceId(new BluetoothDeviceId(btEvent.id));
-                            GattSubscribedClient sc = new(gs);
-                            lc.OnSubscribedClientsChanged(false, sc);
-                        }
-                        break;
+                        case BluetoothEventType.ClientUnsubscribed:
+                            {
+                                GattSession gs = GattSession.FromDeviceId(new BluetoothDeviceId(btEvent.id));
+                                GattSubscribedClient sc = new(gs);
+                                lc.OnSubscribedClientsChanged(false, sc);
+                            }
+                            break;
+                    }
                 }
             }
 
             return true;
-
         }
 
         private bool OnEventScan(BluetoothEventScan btEvent)
         {
             // Process Watcher events on separate thread so events for central don't
             // get held up when trying to connect to device within a watcher event
-            lock(_watcherQueue)
+            lock (_watcherQueue)
             {
                 _watcherQueue.Enqueue(btEvent);
             }
@@ -153,7 +179,7 @@ namespace nanoFramework.Device.Bluetooth
             return true;
         }
 
-        private bool OnEventCentral(BluetoothEventCentral btEvent)
+        private bool OnEventClient(BluetoothEventCentral btEvent)
         {
             // Need to route to correct BluetoothLEDevice
             BluetoothLEDevice ledev = FindLeDevice(btEvent.connectionHandle);
@@ -162,11 +188,27 @@ namespace nanoFramework.Device.Bluetooth
             return true;
         }
 
+        private bool OnEventSession(BluetoothEventSesssion btEvent)
+        {
+            // Route session event to GattServiceProvider or BluetoothLeDevice
+            if (_server != null)
+            {
+                _server.OnEvent(btEvent);
+            }
+            else
+            {
+                BluetoothLEDevice ledev = FindLeDevice(btEvent.connectionHandle);
+                ledev?.OnEvent(btEvent);
+            }
+
+            return true;
+        }
+
         public bool OnEvent(BaseEvent ev)
         {
-            if (ev.GetType() == typeof(BluetoothEventClient))
+            if (ev.GetType() == typeof(BluetoothEventServer))
             {
-                return OnEventClient((BluetoothEventClient)ev);
+                return OnEventServer((BluetoothEventServer)ev);
             }
             else if (ev.GetType() == typeof(BluetoothEventScan))
             {
@@ -174,7 +216,11 @@ namespace nanoFramework.Device.Bluetooth
             }
             else if (ev.GetType() == typeof(BluetoothEventCentral))
             {
-                return OnEventCentral((BluetoothEventCentral)ev);
+                return OnEventClient((BluetoothEventCentral)ev);
+            }
+            else if (ev.GetType() == typeof(BluetoothEventSesssion))
+            {
+                return OnEventSession((BluetoothEventSesssion)ev);
             }
 
             // Not handled
@@ -221,7 +267,7 @@ namespace nanoFramework.Device.Bluetooth
             return null;
         }
 
-        public int LeDeviceCount { get => _leDeviceMap.Count;  }
+        public int LeDeviceCount { get => _leDeviceMap.Count; }
         #endregion
 
         #region Server characteristic routing
@@ -258,6 +304,50 @@ namespace nanoFramework.Device.Bluetooth
             return null;
         }
 
+        #endregion
+
+        #region Session routing
+        public BluetoothLEServer BluetoothServer { get => _server; set => _server = value; }
+
+        //public void AddSecurity(Pairing s)
+        //{
+        //    lock (_securityMap)
+        //    {
+        //        if (!_securityMap.Contains(s))
+        //        {
+        //            _securityMap.Add(s);
+        //        }
+        //        else
+        //        {
+        //        }
+        //    }
+        //}
+        //public void RemoveSecurity(Pairing s)
+        //{
+        //    lock (_securityMap)
+        //    {
+        //        if (_securityMap.Contains(s))
+        //        {
+        //            _securityMap.Remove(s);
+        //        }
+        //    }
+        //}
+
+        //public Pairing FindSecurity(ushort connectionHandle)
+        //{
+        //    for (int i = 0; i < _securityMap.Count; i++)
+        //    {
+        //        if (((Pairing)_securityMap[i]).ConnectionHandle == connectionHandle)
+        //        {
+        //            return (Pairing)_securityMap[i];
+        //        }
+        //    }
+
+        //    return null;
+        //}
+        #endregion
+
+        #region Watcher Queue
         // Run event on separate thread so as not to block event queue
         // This will allow connects to devices in the event thread and they don't just time out
         private void WatcherEventQueueThread()
@@ -269,7 +359,7 @@ namespace nanoFramework.Device.Bluetooth
             {
                 if (_watcherEvent.WaitOne())
                 {
-                    while(_watcherQueue.Count > 0)
+                    while (_watcherQueue.Count > 0)
                     {
                         lock (_watcherQueue)
                         {
@@ -294,6 +384,7 @@ namespace nanoFramework.Device.Bluetooth
             }
         }
         #endregion
+
     }
 }
 

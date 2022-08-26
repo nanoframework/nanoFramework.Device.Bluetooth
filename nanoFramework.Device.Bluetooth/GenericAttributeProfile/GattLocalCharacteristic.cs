@@ -114,7 +114,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             }
 
             // Register with Events
-            GattServiceProvider._bluetoothEventManager.AddCharacteristic(this);
+            BluetoothLEServer._bluetoothEventManager.AddCharacteristic(this);
         }
 
         private static ushort NextCharacteristicIndex()

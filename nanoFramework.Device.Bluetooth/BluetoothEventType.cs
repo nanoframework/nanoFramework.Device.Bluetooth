@@ -45,6 +45,8 @@ namespace nanoFramework.Device.Bluetooth
         /// </summary>
         ScanningComplete,
 
+        // Add further server events here >>>>>>
+
         // ==== BLE Central/Client events ====
 
         /// <summary>
@@ -100,7 +102,41 @@ namespace nanoFramework.Device.Bluetooth
         /// <summary>
         /// Fired when a value on connected device has changed, notify.
         /// </summary>
-        AttributeValueChanged
+        AttributeValueChanged,
 
+        // Add further central events here >>>>>>
+
+
+        // ====  Session / Pairing / Security group events ====
+
+        /// <summary>
+        /// Event when client connects
+        /// </summary>
+        ClientConnected,
+
+        /// <summary>
+        /// Event when client disconnects
+        /// </summary>
+        ClientDisconnected,
+
+        /// <summary>
+        /// Event when session details updated
+        /// </summary>
+        ClientSessionChanged,
+
+        /// <summary>
+        /// Fired when a passkey action is requested 
+        /// </summary>
+        PassKeyActions,
+
+        /// <summary>
+        /// Fired when a passkey action for numeric comparsion is requested 
+        /// </summary>
+        PassKeyActions_numcmp,
+
+        /// <summary>
+        /// Fired when the Authentication has completed, security enabled or failed to enable
+        /// </summary>
+        AuthenticationComplete
     }
 }

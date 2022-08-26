@@ -4,23 +4,34 @@
 //
 
 using System;
+using System.Diagnostics;
 
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 {
     /// <summary>
     /// This class represents a GATT session.
     /// </summary>
-    public class GattSession : IDisposable
+    public class GattSession
     {
         private readonly BluetoothDeviceId _deviceId;
+        private ushort _maxPduSize;
 
         /// <summary>
-        /// Dispose GattSession object
+        /// Delegate for SessionStatusChanged events.
         /// </summary>
-        public void Dispose()
-        {
-            // not used yet
-        }
+        /// <param name="sender">GattSession sending event</param>
+        /// <param name="args">Event arguments</param>
+        public delegate void GattSessionStatusChangedEventHandler(Object sender, GattSessionStatusChangedEventArgs args);
+
+        /// <summary>
+        /// Session status change event.
+        /// </summary>
+        public event GattSessionStatusChangedEventHandler SessionStatusChanged;
+
+        /// <summary>
+        /// Maximum MTU size changed event
+        /// </summary>
+        public event EventHandler MaxPduSizeChanged; 
 
         /// <summary>
         /// Creates a new GattSession object from the specified deviceId.
@@ -37,9 +48,37 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             _deviceId = deviceId;
         }
 
+        internal void OnEvent(BluetoothEventSesssion btEvent)
+        {
+            //Debug.WriteLine($"# GattServiceProvider OnEvent, type:{btEvent.type} status:{btEvent.status}");
+
+            switch (btEvent.type)
+            {
+                case BluetoothEventType.ClientConnected:
+                    SessionStatusChanged?.Invoke(this, new GattSessionStatusChangedEventArgs(GattSessionStatus.Active, 0));
+                    break;
+
+                case BluetoothEventType.ClientDisconnected:
+                    SessionStatusChanged?.Invoke(this, new GattSessionStatusChangedEventArgs(GattSessionStatus.Closed, 0));
+                    break;
+
+                case BluetoothEventType.ClientSessionChanged:
+                    // Update maxpdu size in GattSession
+                    _maxPduSize = btEvent.data;
+                    MaxPduSizeChanged?.Invoke(this, EventArgs.Empty);
+                    break;
+            }
+        }
+
         /// <summary>
         /// Gets the device id.
         /// </summary>
         public BluetoothDeviceId DeviceId { get => _deviceId; }
+
+        /// <summary>
+        /// Gets the current Max PDU size.
+        /// </summary>
+        public ushort MaxPduSize { get => _maxPduSize; }
+
     }
 }

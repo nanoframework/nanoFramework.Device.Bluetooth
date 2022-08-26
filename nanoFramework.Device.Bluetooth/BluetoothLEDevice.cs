@@ -27,6 +27,8 @@ namespace nanoFramework.Device.Bluetooth
         private ArrayList _services;
         private Hashtable _attributes;
 
+        private readonly DevicePairing _pairing;
+
         private bool _disposed;
         private readonly AutoResetEvent _eventComplete;
         private readonly AutoResetEvent _completedEvent = new(false);
@@ -36,7 +38,6 @@ namespace nanoFramework.Device.Bluetooth
         private ushort _eventStatus;
 
         private const int operationTimeout = 7000;
-
 
         private static ushort _routingHandle = 0xff00;
 
@@ -50,6 +51,7 @@ namespace nanoFramework.Device.Bluetooth
 
             _services = new();
             _attributes = new();
+            _pairing = new(this);
 
             _eventComplete = new AutoResetEvent(false);
         }
@@ -70,12 +72,12 @@ namespace nanoFramework.Device.Bluetooth
 
         internal ushort ConnectionHandle { get => _connectionHandle; set => _connectionHandle = value; }
 
-        private GattCommunicationStatus ConnectDeviceIfNotConnected()
+        internal GattCommunicationStatus ConnectDeviceIfNotConnected()
         {
             // Check and set mode, throw exception if wrong state
             BluetoothNanoDevice.CheckMode(BluetoothNanoDevice.Mode.Client);
 
-            GattCommunicationStatus status = GattCommunicationStatus.Unreachable;
+            GattCommunicationStatus status = GattCommunicationStatus.Success;
 
             if (_connectionStatus == BluetoothConnectionStatus.Disconnected)
             {
@@ -83,7 +85,7 @@ namespace nanoFramework.Device.Bluetooth
                 ConnectionHandle = GetConnectingHandle;
 
                 // Add device to event listener so event get routed here
-                GattServiceProvider._bluetoothEventManager.AddLeDevice(this);
+                BluetoothLEServer._bluetoothEventManager.AddLeDevice(this);
 
                 //Debug.WriteLine($"# ConnectDeviceIfNot ConnectionHandle {ConnectionHandle}");
 
@@ -112,7 +114,8 @@ namespace nanoFramework.Device.Bluetooth
                 if (status != GattCommunicationStatus.Success)
                 {
                     // Error so remove from listener
-                    GattServiceProvider._bluetoothEventManager.RemoveLeDevice(this);
+                    BluetoothLEServer._bluetoothEventManager.RemoveLeDevice(this);
+                    status = GattCommunicationStatus.Unreachable;
                 }
             }
 
@@ -306,6 +309,12 @@ namespace nanoFramework.Device.Bluetooth
         public event EventHandler GattServicesChanged;
 
         /// <summary>
+        /// Returns the Pairing object for the state of device paring
+        /// </summary>
+        public DevicePairing Pairing { get => _pairing;  }
+
+ 
+        /// <summary>
         /// Utility method to read an attribute value.
         /// </summary>
         /// <param name="AttributeHandle">Handle of attribute to read.</param>
@@ -315,36 +324,67 @@ namespace nanoFramework.Device.Bluetooth
             GattCommunicationStatus status = GattCommunicationStatus.Unreachable;
             Buffer buffer = null;
             ushort result = 0;
+            bool securityStarted = false;
+            bool retryRead;
 
             lock (lockObj)
             {
-                _completedEvent.Reset();
-
-                //Debug.WriteLine($"# ReadValue start con:{ConnectionHandle} attrHandle:{AttributeHandle}  ");
-                result = NativeStartReadValue(ConnectionHandle, AttributeHandle);
-                if (result == 0)
+                do
                 {
-                    // Read started, wait for completed event
-                    if (_completedEvent.WaitOne(operationTimeout, false))
+                    retryRead = false;
+
+                    //Debug.WriteLine($"# ReadAttributeValue");
+
+                    _completedEvent.Reset();
+
+                    //Debug.WriteLine($"# ReadValue start con:{ConnectionHandle} attrHandle:{AttributeHandle}  ");
+                    result = NativeStartReadValue(ConnectionHandle, AttributeHandle);
+                    if (result == 0)
                     {
-                        //Debug.WriteLine($"# ReadValue complete {_eventStatus} ");
-                        // Read completed, check status and get value
-                        if (_eventStatus == 0)
+                        // Read started, wait for completed event
+                        if (_completedEvent.WaitOne(operationTimeout, false))
                         {
-                            buffer = new Buffer(_eventValue);
-                            status = GattCommunicationStatus.Success;
-                        }
-                        else
-                        {
-                            result = _eventStatus;
+                            //Debug.WriteLine($"# ReadValue complete {_eventStatus} ");
+                            // Read completed, check status and get value
+                            if (_eventStatus == 0)
+                            {
+                                buffer = new Buffer(_eventValue);
+                                status = GattCommunicationStatus.Success;
+                            }
+                            else
+                            {
+                                //Debug.WriteLine($"# ReadAttributeValue error {_eventStatus}");
+                                result = _eventStatus;
+                                switch (result)
+                                {
+                                    case 5:
+                                        if (!securityStarted)
+                                        {
+                                            securityStarted = true;
+
+                                            //Debug.WriteLine($"# Access error - Start pairing");
+
+                                            // Try to pair devices
+                                            var pres = Pairing.Pair();
+
+                                            //Debug.WriteLine($"# Pair result {pres.Status}");
+
+                                            // retry read
+                                            retryRead = true;
+
+                                            continue;
+                                        }
+                                        break;
+
+                                    default:
+                                        break;
+
+                                }
+                            }
                         }
                     }
-                    else
-                    {
-                        //Debug.WriteLine($"# ReadAttributeValue  timeout  ");
-                    }
-                }
-            }
+                } while (retryRead) ;
+            } // lock
 
             return new GattReadResult(buffer, status, (byte)result);
         }
@@ -360,48 +400,69 @@ namespace nanoFramework.Device.Bluetooth
         {
             GattCommunicationStatus status = GattCommunicationStatus.Unreachable;
             ushort result = 0;
+            bool securityStarted = false;
+
 
             // Only allow 1 simultaneous call per device connection
             lock (lockObj)
             {
-                result = NativeStartWriteValue(ConnectionHandle, attributeHandle, writeOption == GattWriteOption.WriteWithResponse, value.Data, (ushort)value.Length);
-                if (result == 0)
+                do
                 {
-                    if (writeOption == GattWriteOption.WriteWithResponse)
+                    result = NativeStartWriteValue(ConnectionHandle, attributeHandle, writeOption == GattWriteOption.WriteWithResponse, value.Data, (ushort)value.Length);
+                    if (result == 0)
                     {
-                        // Wait for response event ?
-                        if (_completedEvent.WaitOne(operationTimeout, false))
+                        if (writeOption == GattWriteOption.WriteWithResponse)
                         {
-                            //Debug.WriteLine($"# WriteValue with response complete {_eventStatus} ");
-                            // Read completed, check status and get value
-                            if (_eventStatus == 0)
+                            // Wait for response event ?
+                            if (_completedEvent.WaitOne(operationTimeout, false))
                             {
-                                status = GattCommunicationStatus.Success;
+                                //Debug.WriteLine($"# WriteValue with response complete {_eventStatus} ");
+                                // Read completed, check status and get value
+                                if (_eventStatus == 0)
+                                {
+                                    status = GattCommunicationStatus.Success;
+                                }
+                                else
+                                {
+                                    result = _eventStatus;
+                                    switch (result)
+                                    {
+                                        case 5:
+                                            if (!securityStarted)
+                                            {
+                                                securityStarted = true;
+                                                Pairing.Pair();
+
+                                                // retry read
+                                                continue;
+                                            }
+                                            break;
+
+                                        default:
+                                            break;
+
+                                    }
+                                }
                             }
                             else
                             {
-                                result = _eventStatus;
+                                //Debug.WriteLine($"# WriteValue timeout  ");
                             }
                         }
                         else
                         {
-                            //Debug.WriteLine($"# WriteValue timeout  ");
+                            status = GattCommunicationStatus.Success;
                         }
                     }
-                    else
-                    {
-                        status = GattCommunicationStatus.Success;
-                    }
-                }
-
-            }
+                } while (false);
+            } // lock
 
             return new GattWriteResult(status, (byte)result);
         }
 
         internal static void IdleOnLastConnection()
         {
-            if (GattServiceProvider._bluetoothEventManager.LeDeviceCount == 0)
+            if (BluetoothLEServer._bluetoothEventManager.LeDeviceCount == 0)
             {
                 // Reset run mode
                 BluetoothNanoDevice.RunMode = BluetoothNanoDevice.Mode.NotRunning;
@@ -442,9 +503,11 @@ namespace nanoFramework.Device.Bluetooth
                     ConnectionStatus = BluetoothConnectionStatus.Disconnected;
 
                     // Remove  device from event handler
-                    GattServiceProvider._bluetoothEventManager.RemoveLeDevice(this);
+                    BluetoothLEServer._bluetoothEventManager.RemoveLeDevice(this);
 
                     NativeDispose(_connectionHandle);
+
+                    Pairing.Reset();
 
                     IdleOnLastConnection();
 
@@ -528,6 +591,18 @@ namespace nanoFramework.Device.Bluetooth
             }
         }
 
+        internal void OnEvent(BluetoothEventSesssion btEvent)
+        {
+            //Debug.WriteLine($"# BluetoothLEdevice OnEvent session, {btEvent.type} status:{btEvent.status}");
+
+            switch (btEvent.type)
+            {
+                default:
+                    _pairing.OnEvent(btEvent);
+                    break;
+            }
+        }
+
         private void UpdateOrAddService(GattDeviceService ds)
         {
             for (int index = 0; index < _services.Count; index++)
@@ -600,7 +675,7 @@ namespace nanoFramework.Device.Bluetooth
                 NativeDispose(_connectionHandle);
 
                 // Make sure we are removed from event listener
-                GattServiceProvider._bluetoothEventManager.RemoveLeDevice(this);
+                BluetoothLEServer._bluetoothEventManager.RemoveLeDevice(this);
 
                 IdleOnLastConnection();
             }
@@ -649,6 +724,7 @@ namespace nanoFramework.Device.Bluetooth
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern ushort NativeStartWriteValue(ushort connection, ushort valueHandle, bool withResponse, byte[] value, ushort dataLength);
+
         #endregion
     }
 }
