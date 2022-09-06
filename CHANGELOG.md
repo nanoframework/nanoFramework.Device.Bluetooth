@@ -2,11 +2,22 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.4...HEAD)
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.8...HEAD)
+
+**Fixed bugs:**
+
+- Enable the Connected Event to Fire [\#38](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/38)
+
+## [v1.1.8](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/v1.1.8) (2022-09-06)
+
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.4...v1.1.8)
+
+**Fixed bugs:**
+
+- Changes to allow scanning and connections to work together [\#41](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/41)
 
 **Documentation and other chores:**
 
-- Changes to allow scanning and connections to work together [\#41](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/41)
 - Update 1 NuGet dependencies [\#40](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/40)
 - Update 1 NuGet dependencies [\#39](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/39)
 
