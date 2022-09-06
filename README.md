@@ -20,7 +20,7 @@ This library is based on the Windows.Devices.Bluetooth UWP class library but sim
 The original .Net assembly depended on Windows.Storage.Streams for DataReader & DataWriter; this library has simplified inbuilt versions. 
 So references to IBuffer in .Net UWP examples should now use Buffer instead. 
 
-We have also added an extension to this assembly allowing extra services to be added with no restriction on type.
+We have also added an extension to this assembly allowing extra services to be added to ServiceProvider with no restriction on type.
 
 ## Firmware versions
 
@@ -28,6 +28,7 @@ Bluetooth is currently only supported on ESP32 devices with following firmware.
 
 - ESP32_BLE_REV0
 - ESP32_BLE_REV3
+- M5Core2
 
 This restriction is due to IRAM memory space in the firmware image. 
 With revision 1 of ESP32 devices, the PSRAM implementation requires a large number of PSRAM fixes which greatly reduces the 
@@ -51,9 +52,10 @@ A number of Bluetooth LE samples are available in the [nanoFramework samples rep
 
 This implementation supports a cut down version of the Gatt Server and Gatt Client implementation.
 
-The device can either run as a Server, Client or Watcher, but not at the same time.  
+The device can either run as a Server or Client, but not at the same time.  
 For example if you start a Watcher to look for advertisements from Server devices you will not 
-be able to connect to those devices until the Watcher has been stopped.
+be able to connect to those devices until the Watcher has been stopped. But you can recieve data from connected 
+devices while Watcher is scanning.
 
 For more information see relevant sections: -
 
@@ -343,7 +345,7 @@ RSSI filter
 
 ## Creating a device and connecting to device.
 
-To communicate with a device a BluetoothLEDevice class needs to be created using the devices bluetooth address.
+To communicate with a device a BluetoothLEDevice class needs to be created using the devices bluetooth address and type.
 This can be the bluetooth address from the BluetoothLEAdvertisementWatcher event or using a hard coded address.
 
 In this case from the Watcher advertisement received event.
@@ -352,11 +354,12 @@ BluetoothLEDevice device = BluetoothLEDevice.FromBluetoothAddress(args.Bluetooth
 ```
 There are no specific connection methods but a connection will be made automatically when you query the device 
 for its services. The ConnectionStatusChanged event can used to detect a change in connection status and an attempt to 
-reconnect can be done by query the devices services again. Avoid doing this in the event it self as it can block other 
+reconnect can be done by a query to the devices services again. Avoid doing this in the event, as it can block other 
 events being fired during the connection.
 
-To go back to Watching for advertisements all connected devices need to be closed or disposed. This
-will put the stack in to an idle state so the Watching can be started.
+You can go back to Watching for advertisements with the restriction that you can't connect to newly found devcies until the Watching is stopped.
+You can still communication with connected devices while the Watcher is running. Best way is to collect all found devices in a table until Watcher is
+stopped then connect to all found devices. See [Central 2 sample](https://github.com/nanoframework/Samples/tree/main/samples/Bluetooth/Central2)
 
 The Close() method is not exposed in the desktop version but it has been implemented in this version 
 to give better control over the connection.
