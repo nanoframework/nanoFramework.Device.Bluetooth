@@ -95,15 +95,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <param name="parameters">The advertising parameters.</param>
         public void StartAdvertising(GattServiceProviderAdvertisingParameters parameters)
         {
-            if (BluetoothNanoDevice.RunMode != BluetoothNanoDevice.Mode.NotRunning)
-            {
-                throw new InvalidOperationException("Wrong state");
-            }
+            // Check and switch to server mode
+            BluetoothNanoDevice.CheckMode(BluetoothNanoDevice.Mode.Server);
 
             BluetoothNanoDevice.DeviceName = parameters.DeviceName;
-
-            // Switch to client/server mode
-            BluetoothNanoDevice.RunMode = BluetoothNanoDevice.Mode.Server;
 
             // Save parameters
             _isConnectable = parameters.IsConnectable;

@@ -72,6 +72,9 @@ namespace nanoFramework.Device.Bluetooth
 
         private GattCommunicationStatus ConnectDeviceIfNotConnected()
         {
+            // Check and set mode, throw exception if wrong state
+            BluetoothNanoDevice.CheckMode(BluetoothNanoDevice.Mode.Client);
+
             GattCommunicationStatus status = GattCommunicationStatus.Unreachable;
 
             if (_connectionStatus == BluetoothConnectionStatus.Disconnected)
@@ -396,6 +399,15 @@ namespace nanoFramework.Device.Bluetooth
             return new GattWriteResult(status, (byte)result);
         }
 
+        internal static void IdleOnLastConnection()
+        {
+            if (GattServiceProvider._bluetoothEventManager.LeDeviceCount == 0)
+            {
+                // Reset run mode
+                BluetoothNanoDevice.RunMode = BluetoothNanoDevice.Mode.NotRunning;
+            }
+        }
+
         /// <summary>
         /// Central event handler from native code.
         /// </summary>
@@ -432,12 +444,9 @@ namespace nanoFramework.Device.Bluetooth
                     // Remove  device from event handler
                     GattServiceProvider._bluetoothEventManager.RemoveLeDevice(this);
 
-                    if (GattServiceProvider._bluetoothEventManager.LeDeviceCount == 0)
-                    {
-                        // Last active device, close down stack
-                        //Debug.WriteLine("# Last active LE device");
-                        NativeDispose(_connectionHandle);
-                    }
+                    NativeDispose(_connectionHandle);
+
+                    IdleOnLastConnection();
 
                     break;
 
@@ -593,6 +602,7 @@ namespace nanoFramework.Device.Bluetooth
                 // Make sure we are removed from event listener
                 GattServiceProvider._bluetoothEventManager.RemoveLeDevice(this);
 
+                IdleOnLastConnection();
             }
         }
 
