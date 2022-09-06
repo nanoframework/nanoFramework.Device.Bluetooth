@@ -273,11 +273,8 @@ namespace nanoFramework.Device.Bluetooth
                 BluetoothConnectionStatus currentStatus = _connectionStatus;
                 _connectionStatus = value;
 
-                if (currentStatus != value)
-                {
-                    // Fire event on change
-                    ConnectionStatusChanged?.Invoke(this, EventArgs.Empty);
-                }
+                // Fire event on change
+                ConnectionStatusChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
