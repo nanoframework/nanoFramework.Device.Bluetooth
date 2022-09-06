@@ -68,13 +68,8 @@ namespace nanoFramework.Device.Bluetooth
         /// </summary>
         public void Start()
         {
-            if (BluetoothNanoDevice.RunMode != BluetoothNanoDevice.Mode.NotRunning)
-            {
-                throw new InvalidOperationException("Wrong state");
-            }
-
-            // Set new run mode. 
-            BluetoothNanoDevice.RunMode = BluetoothNanoDevice.Mode.Scanning;
+            // Check and set mode
+            BluetoothNanoDevice.CheckMode(BluetoothNanoDevice.Mode.Client);
 
             _status = BluetoothLEAdvertisementWatcherStatus.Started;
             _scanResults = new Hashtable();
@@ -97,7 +92,7 @@ namespace nanoFramework.Device.Bluetooth
 
             _status = BluetoothLEAdvertisementWatcherStatus.Stopped;
 
-            BluetoothNanoDevice.RunMode = BluetoothNanoDevice.Mode.NotRunning;
+            BluetoothLEDevice.IdleOnLastConnection();
         }
 
         /// <summary>
