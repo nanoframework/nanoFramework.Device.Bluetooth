@@ -3,6 +3,7 @@
 ![nanoFramework logo](https://raw.githubusercontent.com/nanoframework/Home/main/resources/logo/nanoFramework-repo-logo.png)
 
 -----
+document language: [English](README.md) | [简体中文](README.zh-cn.md)
 
 # Welcome to the .NET **nanoFramework** nanoFramework.Device.Bluetooth Library repository
 
