@@ -8,10 +8,10 @@ using nanoFramework.TestFramework;
 using nanoFramework.Device.Bluetooth;
 using nanoFramework.Device.Bluetooth.GenericAttributeProfile;
 
-namespace NFUnitTest1
+namespace nanoFramework.Device.Bluetooth
 {
     [TestClass]
-    public class TestClass
+    public class TestGenericAttributeProfile
     {
         Guid ServiceUuid1 = new("CA761232-ED42-11CE-BACD-00AA0057B224");
 

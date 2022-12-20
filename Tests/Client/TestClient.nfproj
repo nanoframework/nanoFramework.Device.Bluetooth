@@ -25,6 +25,7 @@
     <Compile Include="Services\DeviceInformationService.cs" />
     <Compile Include="Services\EnvironmentalSensorService.cs" />
     <Compile Include="Services\TestService.cs" />
+    <Compile Include="Services\TestGatt.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

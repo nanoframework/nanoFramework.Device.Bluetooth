@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "NFUnitTest1", "Tests\NFUnitTest1\NFUnitTest1.nfproj", "{F13430A1-C6F5-47D8-BCEC-8B601CF9149B}"
-EndProject
 Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "TestClient", "Tests\Client\TestClient.nfproj", "{7E45875F-6644-472E-8768-0590B15B724B}"
 EndProject
 Global
