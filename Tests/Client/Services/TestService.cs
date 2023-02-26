@@ -40,7 +40,7 @@ namespace nanoFramework.Device.Bluetooth.Services
                 CharacteristicProperties = GattCharacteristicProperties.Write | GattCharacteristicProperties.WriteWithoutResponse
             };
 
-            GattLocalCharacteristicResult rxCommandRes = provider.Service.CreateCharacteristic(rxCommandUUID, rxCommandPar);
+            GattLocalCharacteristicResult rxCommandRes = pr.ServiceProvider.Service.CreateCharacteristic(rxCommandUUID, rxCommandPar);
             if (rxCommandRes.Error != nanoFramework.Device.Bluetooth.BluetoothError.Success)
             {
                 throw new ArgumentException("Unable to create RX Command");
