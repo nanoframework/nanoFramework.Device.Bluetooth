@@ -24,11 +24,15 @@ namespace nanoFramework.Device.Bluetooth.Services
         /// <summary>
         /// Create a test service
         /// </summary>
-        /// <param name="provider"></param>
-        public TestService(GattServiceProvider provider)
+        public TestService()
         {
-            // Add new test  Service to provider
-            _testService = provider.AddService(serviceUUID);
+            GattServiceProviderResult pr = GattServiceProvider.Create(serviceUUID);
+            if (pr.Error != BluetoothError.Success)
+            {
+                throw new Exception("Unable to create service");
+            }
+
+            _testService = pr.ServiceProvider.Service;
 
             GattLocalCharacteristicParameters rxCommandPar = new GattLocalCharacteristicParameters()
             {

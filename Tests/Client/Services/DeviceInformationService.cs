@@ -27,7 +27,6 @@ namespace nanoFramework.Device.Bluetooth.Services
         /// <param name="FirmwareRevision"></param>
         /// <param name="SoftwareRevision"></param>
         public DeviceInformationServiceService(
-            GattServiceProvider provider,
             string Manufacturer,
             string ModelNumber = null,
             string SerialNumber = null,
@@ -36,8 +35,14 @@ namespace nanoFramework.Device.Bluetooth.Services
             string SoftwareRevision = null
             )
         {
-            // Add new Device Information Service to provider
-            _deviceInformationService = provider.AddService(GattServiceUuids.DeviceInformation);
+            GattServiceProviderResult pr = GattServiceProvider.Create(GattServiceUuids.DeviceInformation);
+            if (pr.Error != BluetoothError.Success)
+            {
+                throw new Exception("Unable to create service");
+            }
+
+            // Pick up service
+            _deviceInformationService = pr.ServiceProvider.Service;
 
             CreateReadStaticCharacteristic(GattCharacteristicUuids.ManufacturerNameString, Manufacturer);
             CreateReadStaticCharacteristic(GattCharacteristicUuids.ModelNumberString, ModelNumber);
