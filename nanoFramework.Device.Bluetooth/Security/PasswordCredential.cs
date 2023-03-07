@@ -6,7 +6,7 @@
 namespace nanoFramework.Device.Bluetooth
 {
     /// <summary>
-    /// Object to hold password credentials
+    /// Class to hold password credentials.
     /// </summary>
     public class PasswordCredential
     {
@@ -14,10 +14,10 @@ namespace nanoFramework.Device.Bluetooth
         private string _password;
 
         /// <summary>
-        /// Constructs a PasswordCredential
+        /// Constructs a Password Credential.
         /// </summary>
-        /// <param name="userName">User name in credential</param>
-        /// <param name="password">Password for user name</param>
+        /// <param name="userName">User name in credential.</param>
+        /// <param name="password">Password for user name.</param>
         public PasswordCredential(string userName, string password)
         {
             _username = userName;
@@ -25,13 +25,13 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Returns password from Credential
+        /// Gets password from Credential.
         /// </summary>
-        public string Password { get { return _password; } }
+        public string Password { get => _password; }
 
         /// <summary>
-        /// Returns User name from Credential
+        /// Gets User name from Credential.
         /// </summary>
-        public string UserName { get { return _username; } }
+        public string UserName { get => _username; }
     }
 }

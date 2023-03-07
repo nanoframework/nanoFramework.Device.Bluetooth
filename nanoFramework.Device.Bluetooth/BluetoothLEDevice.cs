@@ -41,6 +41,8 @@ namespace nanoFramework.Device.Bluetooth
 
         private static ushort _routingHandle = 0xff00;
 
+        enum readWriteValueResult { success, acessDenied, failure };
+
         internal BluetoothLEDevice(ulong bluetoothAddress, BluetoothAddressType addressType)
         {
             _bluetoothAddress = bluetoothAddress;
@@ -309,10 +311,9 @@ namespace nanoFramework.Device.Bluetooth
         public event EventHandler GattServicesChanged;
 
         /// <summary>
-        /// Returns the Pairing object for the state of device paring
+        /// Returns the Pairing object for the state of device paring.
         /// </summary>
-        public DevicePairing Pairing { get => _pairing;  }
-
+        public DevicePairing Pairing { get => _pairing; }
  
         /// <summary>
         /// Utility method to read an attribute value.
@@ -323,7 +324,7 @@ namespace nanoFramework.Device.Bluetooth
         {
             GattCommunicationStatus status = GattCommunicationStatus.Unreachable;
             Buffer buffer = null;
-            ushort result = 0;
+            readWriteValueResult result;
             bool securityStarted = false;
             bool retryRead;
 
@@ -338,15 +339,15 @@ namespace nanoFramework.Device.Bluetooth
                     _completedEvent.Reset();
 
                     //Debug.WriteLine($"# ReadValue start con:{ConnectionHandle} attrHandle:{AttributeHandle}  ");
-                    result = NativeStartReadValue(ConnectionHandle, AttributeHandle);
-                    if (result == 0)
+                    result = (readWriteValueResult)NativeStartReadValue(ConnectionHandle, AttributeHandle);
+                    if (result == readWriteValueResult.success)
                     {
                         // Read started, wait for completed event
                         if (_completedEvent.WaitOne(operationTimeout, false))
                         {
                             //Debug.WriteLine($"# ReadValue complete {_eventStatus} ");
                             // Read completed, check status and get value
-                            if (_eventStatus == 0)
+                            if (_eventStatus == (ushort)readWriteValueResult.success)
                             {
                                 buffer = new Buffer(_eventValue);
                                 status = GattCommunicationStatus.Success;
@@ -354,10 +355,10 @@ namespace nanoFramework.Device.Bluetooth
                             else
                             {
                                 //Debug.WriteLine($"# ReadAttributeValue error {_eventStatus}");
-                                result = _eventStatus;
+                                result = (readWriteValueResult)_eventStatus;
                                 switch (result)
                                 {
-                                    case 5:
+                                    case readWriteValueResult.acessDenied:
                                         if (!securityStarted)
                                         {
                                             securityStarted = true;
@@ -399,7 +400,7 @@ namespace nanoFramework.Device.Bluetooth
         internal GattWriteResult WriteAttributeValueWithResult(ushort attributeHandle, Buffer value, GattWriteOption writeOption = GattWriteOption.WriteWithoutResponse)
         {
             GattCommunicationStatus status = GattCommunicationStatus.Unreachable;
-            ushort result = 0;
+            readWriteValueResult result = 0;
             bool securityStarted = false;
 
 
@@ -408,8 +409,8 @@ namespace nanoFramework.Device.Bluetooth
             {
                 do
                 {
-                    result = NativeStartWriteValue(ConnectionHandle, attributeHandle, writeOption == GattWriteOption.WriteWithResponse, value.Data, (ushort)value.Length);
-                    if (result == 0)
+                    result = (readWriteValueResult)NativeStartWriteValue(ConnectionHandle, attributeHandle, writeOption == GattWriteOption.WriteWithResponse, value.Data, (ushort)value.Length);
+                    if (result == readWriteValueResult.success)
                     {
                         if (writeOption == GattWriteOption.WriteWithResponse)
                         {
@@ -418,16 +419,16 @@ namespace nanoFramework.Device.Bluetooth
                             {
                                 //Debug.WriteLine($"# WriteValue with response complete {_eventStatus} ");
                                 // Read completed, check status and get value
-                                if (_eventStatus == 0)
+                                if (_eventStatus == (ushort)readWriteValueResult.success)
                                 {
                                     status = GattCommunicationStatus.Success;
                                 }
                                 else
                                 {
-                                    result = _eventStatus;
+                                    result = (readWriteValueResult)_eventStatus;
                                     switch (result)
                                     {
-                                        case 5:
+                                        case readWriteValueResult.success:
                                             if (!securityStarted)
                                             {
                                                 securityStarted = true;
@@ -595,12 +596,7 @@ namespace nanoFramework.Device.Bluetooth
         {
             //Debug.WriteLine($"# BluetoothLEdevice OnEvent session, {btEvent.type} status:{btEvent.status}");
 
-            switch (btEvent.type)
-            {
-                default:
-                    _pairing.OnEvent(btEvent);
-                    break;
-            }
+            _pairing.OnEvent(btEvent);
         }
 
         private void UpdateOrAddService(GattDeviceService ds)

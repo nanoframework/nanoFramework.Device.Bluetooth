@@ -47,7 +47,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         }
 
         /// <summary>
-        /// Add default Device Information Service
+        /// Add default Device Information Service.
         /// </summary>
         private void AddDeviceInformationService()
         {
@@ -169,7 +169,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
 
         /// <summary>
-        ///  Stop advertising the current GATT service.
+        ///  Stops advertising the current GATT service.
         /// </summary>
         internal void StopAdvertising()
         {
@@ -182,7 +182,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         }
 
         /// <summary>
-        ///  Creates a new GATT service with the specified serviceUuid
+        ///  Creates a new GATT service with the specified serviceUuid.
         /// </summary>
         /// <param name="serviceUuid">The service UUID.</param>
         /// <returns>A GattServiceProviderResult object.</returns>

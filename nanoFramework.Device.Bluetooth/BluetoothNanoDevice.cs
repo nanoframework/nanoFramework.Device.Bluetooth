@@ -32,10 +32,10 @@ namespace nanoFramework.Device.Bluetooth
         internal static string DeviceName { get => _deviceName; set => _deviceName = value; }
 
         /// <summary>
-        /// Check if current mode otherwise switch to mode
+        /// Checks if current mode enabled otherwise switch to mode.
         /// </summary>
-        /// <param name="expectedMode"></param>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <param name="expectedMode">The expected mode.</param>
+        /// <exception cref="InvalidOperationException">When mode is unexpected. i.e switching directly from client to server modes.</exception>
         internal static void CheckMode(Mode expectedMode)
         {
             if (RunMode != expectedMode)
@@ -48,6 +48,7 @@ namespace nanoFramework.Device.Bluetooth
         /// <summary>
         /// Get/Set the current mode of the device.
         /// </summary>
+        /// <exception cref="InvalidOperationException">When mode is unexpected from NativeSetOperationMode.</exception>
         internal static Mode RunMode
         {
             get => _mode;

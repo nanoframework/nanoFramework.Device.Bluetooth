@@ -21,7 +21,7 @@ namespace nanoFramework.Device.Bluetooth
         DisplayYesNo = 1,
 
         /// <summary>
-        /// Device has keyboard
+        /// Device has keyboard.
         /// </summary>
         KeyboardOnly = 2,
 
@@ -32,10 +32,8 @@ namespace nanoFramework.Device.Bluetooth
         NoInputNoOutput = 3,
 
         /// <summary>
-        /// Decice has Keybaord and Display (input/Output)
+        /// Device has Keyboard and Display (input/Output).
         /// </summary>
         KeyboardDisplay = 4
     }
 }
-
-

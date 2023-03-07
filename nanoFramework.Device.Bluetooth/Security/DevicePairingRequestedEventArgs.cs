@@ -30,12 +30,12 @@ namespace nanoFramework.Device.Bluetooth
         /// <summary>
         /// Gets the kind of pairing associated with this pairing event.
         /// </summary>
-        public DevicePairingKinds PairingKind { get { return _kind; } }
+        public DevicePairingKinds PairingKind { get => _kind; }
 
         /// <summary>
         /// Gets the pin associated with a pairing request.
         /// </summary>
-        public uint Pin { get { return _pin; } }
+        public uint Pin { get => _pin; }
 
         /// <summary>
         /// Accepts a PairingRequested event and pairs the device with the application.
@@ -46,9 +46,10 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        ///  Accepts a PairingRequested event and pairs the device with the application. Requires a passkey for pairing purposes.
+        ///  Accepts a PairingRequested event and pairs the device with the application. 
+        ///  Requires a passkey for pairing purposes.
         /// </summary>
-        /// <param name="passkey"></param>
+        /// <param name="passkey">The pass key for pairing.</param>
         public void Accept(int passkey)
         {
             NativeAcceptPasskey(_connectionHandle, _kind,  passkey);
@@ -58,7 +59,7 @@ namespace nanoFramework.Device.Bluetooth
         /// Accepts a PairingRequested event and pairs the device with the application when
         /// a user name and password is required for pairing purposes.
         /// </summary>
-        /// <param name="password"></param>
+        /// <param name="password">The password credential.</param>
         public void AcceptWithPasswordCredential(PasswordCredential password)
         {
             NativeAcceptCredentials(_connectionHandle, _kind, Encoding.UTF8.GetBytes(password.UserName), Encoding.UTF8.GetBytes(password.Password));

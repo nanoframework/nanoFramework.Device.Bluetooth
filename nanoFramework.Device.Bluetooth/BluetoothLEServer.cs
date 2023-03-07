@@ -16,7 +16,7 @@ namespace nanoFramework.Device.Bluetooth
     /// </summary>
     public class BluetoothLEServer : IDisposable
     {
-        private bool disposedValue;
+        private bool _disposedValue;
         private DevicePairing _pairing;
         private GattSession _session;
 
@@ -56,7 +56,7 @@ namespace nanoFramework.Device.Bluetooth
         /// </summary>
         private BluetoothLEServer()
         {
-            this.disposedValue = false;
+            this._disposedValue = false;
 
             Init();
         }
@@ -72,7 +72,7 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Server device name, defaults to 'nanoFramework'
+        /// Server device name, defaults to 'nanoFramework'.
         /// </summary>
         public String DeviceName { get => BluetoothNanoDevice.DeviceName; set => BluetoothNanoDevice.DeviceName = value; }
 
@@ -84,10 +84,10 @@ namespace nanoFramework.Device.Bluetooth
         #region Services
 
         /// <summary>
-        /// Returns service provider with specifued UUID
+        /// Returns service provider with specifued UUID.
         /// </summary>
         /// <param name="serviceUuid"></param>
-        /// <returns>return GattServiceProvider object or null if not found.</returns>
+        /// <returns>The service with the UUID.</returns>
         public GattServiceProvider GetServiceByUUID(Guid serviceUuid)
         {
             foreach (GattServiceProvider srvprov in _services)
@@ -102,7 +102,7 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Get an array of all associated services providers for this Bluetooth LE Server.
+        /// Gets an array of all associated service providers for this Bluetooth LE Server.
         /// </summary>
         /// <remarks>
         /// The primary service will be index 0 followed by the Device Information at index 1.
@@ -120,57 +120,49 @@ namespace nanoFramework.Device.Bluetooth
         public DevicePairing Pairing { get => _pairing; }
 
         /// <summary>
-        /// Evaulate all services and work out security requirements
+        /// Update the pairing.ProtectionLevel if using a greater security requirement.
         /// </summary>
-        /// <returns>Minimum DevicePairingProtectionLevel for servcies/characteristics</returns>
-        private DevicePairingProtectionLevel EvaluateSecurityPairingRequirements()
+        /// <param name="protectionLevel"></param>
+        internal void UpdateSecurityPairingRequirements(GattProtectionLevel protectionLevel)
         {
-            DevicePairingProtectionLevel _minProtectionLevel = DevicePairingProtectionLevel.Default;
+            DevicePairingProtectionLevel newProtectionLevel = DevicePairingProtectionLevel.Default;
 
             bool secureConnection = false;
             bool authentication = false;
 
-            foreach (GattServiceProvider srvp in _services)
+            if (protectionLevel == GattProtectionLevel.EncryptionRequired ||
+                protectionLevel == GattProtectionLevel.EncryptionAndAuthenticationRequired )
             {
-                foreach (GattLocalCharacteristic chr in srvp.Service.Characteristics)
-                {
-                    if (chr.ReadProtectionLevel == GattProtectionLevel.EncryptionRequired ||
-                        chr.ReadProtectionLevel == GattProtectionLevel.EncryptionAndAuthenticationRequired ||
-                        chr.WriteProtectionLevel == GattProtectionLevel.EncryptionRequired ||
-                        chr.WriteProtectionLevel == GattProtectionLevel.EncryptionAndAuthenticationRequired)
-                    {
-                        secureConnection = true;
-                    }
+                secureConnection = true;
+            }
 
-                    if (chr.ReadProtectionLevel == GattProtectionLevel.AuthenticationRequired ||
-                        chr.ReadProtectionLevel == GattProtectionLevel.EncryptionAndAuthenticationRequired ||
-                        chr.WriteProtectionLevel == GattProtectionLevel.AuthenticationRequired ||
-                        chr.WriteProtectionLevel == GattProtectionLevel.EncryptionAndAuthenticationRequired)
-                    {
-                        authentication = true;
-                    }
-                }
+            if (protectionLevel == GattProtectionLevel.AuthenticationRequired ||
+                protectionLevel == GattProtectionLevel.EncryptionAndAuthenticationRequired)
+            {
+                authentication = true;
             }
 
             if (secureConnection)
             {
-                _minProtectionLevel = DevicePairingProtectionLevel.Encryption;
+                newProtectionLevel = DevicePairingProtectionLevel.Encryption;
             }
 
             if (authentication)
             {
-                _minProtectionLevel = DevicePairingProtectionLevel.EncryptionAndAuthentication;
+                newProtectionLevel = DevicePairingProtectionLevel.EncryptionAndAuthentication;
             }
 
-            return _minProtectionLevel;
+            if (newProtectionLevel > Pairing.ProtectionLevel)
+            {
+                Pairing.ProtectionLevel = newProtectionLevel;
+            }
         }
-
         #endregion Security
 
         /// <summary>
-        /// Start Bluetoth stack for server mode
-        /// If already running or in Client mode will give an InvalidOperation Exception.
+        /// Starts Bluetoth stack for server mode.
         /// </summary>
+        /// <exception cref="InvalidOperationException">If already running or in Client mode.</exception>
         public void Start()
         {
             // Check and switch to server mode ( Stack Bluetooth stack )
@@ -178,7 +170,7 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Stop Bluetooth server mode.
+        /// Stops Bluetooth server mode.
         /// This stops the bluetooth stack but doesn't remove the current Services managed objects.
         /// To remove these dispose the BluetoothLEServer instance.
         /// </summary>
@@ -189,9 +181,9 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Route Bluetooth events
+        /// Routes Bluetooth events.
         /// </summary>
-        /// <param name="btEvent"></param>
+        /// <param name="btEvent">The Bluetooth event.</param>
         internal void OnEvent(BluetoothEventSesssion btEvent)
         {
             //Debug.WriteLine($"# BluetoothLEServer OnEvent, type:{btEvent.type} status:{btEvent.status}");
@@ -205,7 +197,7 @@ namespace nanoFramework.Device.Bluetooth
 
                 case BluetoothEventType.ClientSessionChanged:
                 case BluetoothEventType.PassKeyActions:
-                case BluetoothEventType.PassKeyActions_numcmp:
+                case BluetoothEventType.PassKeyActionsNumericComparison:
                 case BluetoothEventType.AuthenticationComplete:
                     Pairing.OnEvent(btEvent);
                     break;
@@ -215,13 +207,10 @@ namespace nanoFramework.Device.Bluetooth
             }
         }
 
-        /// <summary>
-        /// Dispose
-        /// </summary>
-        /// <param name="disposing"></param>
+        /// <inheritdoc/>
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 // Stop, ignore any exceptions
                 try
@@ -232,7 +221,6 @@ namespace nanoFramework.Device.Bluetooth
 
                 if (disposing)
                 {
-
                     _bluetoothEventManager.Reset();
                     _bluetoothEventManager.BluetoothServer = null;
 
@@ -240,7 +228,7 @@ namespace nanoFramework.Device.Bluetooth
                     _instance = null;
                 }
 
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 

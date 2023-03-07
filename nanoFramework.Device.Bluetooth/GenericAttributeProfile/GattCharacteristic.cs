@@ -281,7 +281,6 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             get => _protectionLevel;
             set
             {
-                // TODO - add security
                 _protectionLevel = value;
             }
         }

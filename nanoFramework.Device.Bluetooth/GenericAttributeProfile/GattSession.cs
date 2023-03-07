@@ -19,8 +19,8 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <summary>
         /// Delegate for SessionStatusChanged events.
         /// </summary>
-        /// <param name="sender">GattSession sending event</param>
-        /// <param name="args">Event arguments</param>
+        /// <param name="sender">GattSession sending event.</param>
+        /// <param name="args">Event arguments.</param>
         public delegate void GattSessionStatusChangedEventHandler(Object sender, GattSessionStatusChangedEventArgs args);
 
         /// <summary>
@@ -29,7 +29,8 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         public event GattSessionStatusChangedEventHandler SessionStatusChanged;
 
         /// <summary>
-        /// Maximum MTU size changed event
+        /// An event that is raised when the maximum protocol data unit (PDU) size changes. 
+        /// The PDU is also known as the maximum transmission unit (MTU).
         /// </summary>
         public event EventHandler MaxPduSizeChanged; 
 
@@ -76,7 +77,8 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         public BluetoothDeviceId DeviceId { get => _deviceId; }
 
         /// <summary>
-        /// Gets the current Max PDU size.
+        /// Gets the maximum protocol data unit (PDU) size. 
+        /// This metric is also known as the maximum transmission unit (MTU) size.
         /// </summary>
         public ushort MaxPduSize { get => _maxPduSize; }
 

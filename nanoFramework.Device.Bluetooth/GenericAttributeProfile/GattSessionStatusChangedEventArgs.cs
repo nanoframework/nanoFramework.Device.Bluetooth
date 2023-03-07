@@ -19,7 +19,6 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             _bluetoothError = bluetoothError;
         }
 
-
         /// <summary>
         /// Gets the status of the GATT session.
         /// </summary>

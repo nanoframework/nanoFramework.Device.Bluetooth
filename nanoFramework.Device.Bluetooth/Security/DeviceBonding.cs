@@ -3,6 +3,7 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using System;
 using System.Runtime.CompilerServices;
 
 namespace nanoFramework.Device.Bluetooth.Security
@@ -13,24 +14,24 @@ namespace nanoFramework.Device.Bluetooth.Security
     public static class DeviceBonding
     {
         /// <summary>
-        /// Is passed bluetooth address bonded
+        /// Check if bluetooth address bonded.
         /// </summary>
-        /// <param name="bluetoothAddress"></param>
-        /// <returns></returns>
+        /// <param name="bluetoothAddress">Bluetooth address to check.</param>
+        /// <returns>True if bonded.</returns>
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern bool IsBonded(ulong bluetoothAddress);
 
         /// <summary>
-        /// Delete all stored bonds.
+        /// Deletes all stored bonds.
         /// </summary>
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern void DeleteAllBonds();
 
         /// <summary>
-        /// Delete bond information for peer.
+        /// Deletes bond information for peer.
         /// </summary>
-        /// <param name="peerbluetoothAddress">Bluetooth address of Peer</param>
-        /// <param name="addressType">Type of Bluetooth address</param>
+        /// <param name="peerbluetoothAddress">Peer's Bluetooth address.</param>
+        /// <param name="addressType">Type of Bluetooth address.</param>
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern void DeleteBondForPeer(ulong peerbluetoothAddress, BluetoothAddressType addressType);
 
@@ -44,8 +45,10 @@ namespace nanoFramework.Device.Bluetooth.Security
         /// <summary>
         /// Get Bonding address for peer at index.
         /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        /// <param name="index">The index.</param>
+        /// <returns>The bonded address.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Index out range.</exception>
+        /// <exception cref="NotSupportedException">Bluetooth Stack is not running. run BluetoothLEServer.Start().</exception>        
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern ulong GetBondInformationAt(int index);
     }

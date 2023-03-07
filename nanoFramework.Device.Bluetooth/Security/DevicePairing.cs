@@ -33,9 +33,6 @@ namespace nanoFramework.Device.Bluetooth
         // Protection level to use when pairing
         DevicePairingProtectionLevel _protectionLevel = DevicePairingProtectionLevel.None;
 
-        //// Use Secure connections by default
-        //private bool _secureConnections = true;
-        
         // Allow device to be bonded
         private bool _bondingAllowed;
 
@@ -50,25 +47,25 @@ namespace nanoFramework.Device.Bluetooth
         /// <summary>
         /// Delegate for Pairing requested events.
         /// </summary>
-        /// <param name="sender">Pairing class sending event</param>
-        /// <param name="args">Event arguments</param>
+        /// <param name="sender">Pairing class sending event.</param>
+        /// <param name="args">Event arguments.</param>
         public delegate void DevicePairingRequestedHandler(Object sender, DevicePairingRequestedEventArgs args);
 
         /// <summary>
         /// Delegate for Pairing Complete events.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
+        /// <param name="sender">Event sender.</param>
+        /// <param name="args">Device event arguments.</param>
         public delegate void PairingCompleteHandler(Object sender, DevicePairingEventArgs args);
 
         /// <summary>
-        /// Raised when a pairing action is requested.
+        /// Event raised when a pairing action is requested.
         /// </summary>
         public event DevicePairingRequestedHandler PairingRequested;
 
         /// <summary>
         /// Event fired when a Pairing has completed. Check status for succesful completion
-        /// and the IsPaired, IsAuthenticated
+        /// and the IsPaired, IsAuthenticated.
         /// </summary>
         public event PairingCompleteHandler PairingComplete;
 
@@ -114,16 +111,15 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Use external method for exchange of information for pairing process.
+        /// True if uses external method for exchange of information for pairing process.
         /// Could be predefined info in device.
         /// Defaults to false.
         /// </summary>
         public bool OutOfBand { get => _outOfBand; set => _outOfBand = value; }
 
-
         /// <summary>
-        /// Protection level to be used for pairing.
-        /// The default value is set based on the protection level requirements in added characteristics.
+        /// Gets or sets protection level to be used for pairing.
+        /// The default value is set based on the protection level requirements in added characteristics and descriptors.
         /// </summary>
         public DevicePairingProtectionLevel ProtectionLevel 
         { 
@@ -135,9 +131,8 @@ namespace nanoFramework.Device.Bluetooth
             }
         }
 
-
         /// <summary>
-        /// Get / Set the IO capabilties of the device.
+        /// Gets or sets the IO capabilities of the device.
         /// By default the IO capabilties are set to NoInputNoOutput which will cause Unauthenicated Just Wroks pairing.
         /// </summary>
         public DevicePairingIOCapabilities IOCapabilities 
@@ -150,11 +145,10 @@ namespace nanoFramework.Device.Bluetooth
             }
         }
 
-
         /// <summary>
         /// Attempts to initiate a pairing of device using default protecion level.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The result of the device pairing action.</returns>
         public DevicePairingResult Pair()
         {
             return Pair(_protectionLevel);
@@ -192,7 +186,7 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Unpair the device.
+        /// Unpairs the device.
         /// </summary>
         /// <returns>The result of the unpairing action.</returns>
         public DeviceUnpairingResult Unpair()
@@ -213,12 +207,12 @@ namespace nanoFramework.Device.Bluetooth
         public bool IsPaired { get => _isPaired; }
 
         /// <summary>
-        /// Returns if latest pairing was Authenicated.
+        /// Gets a value that indicates if latest pairing was Authenicated.
         /// </summary>
         public bool IsAuthenticated { get => _isAuthenticated; }
 
         /// <summary>
-        /// Set Pairing Attibutes in Native level
+        /// Sets Pairing Attibutes in Native level.
         /// </summary>
         internal void SetPairAttributes()
         {
@@ -226,9 +220,9 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Internal event handler
+        /// Internal event handler.
         /// </summary>
-        /// <param name="btEvent"></param>
+        /// <param name="btEvent">The Bluetooth Event.</param>
         internal void OnEvent(BluetoothEventSesssion btEvent)
         {
             switch (btEvent.type)
@@ -240,27 +234,24 @@ namespace nanoFramework.Device.Bluetooth
 
                     OnEvent(btEvent, kind, 0);
 
-                    //    // None
-                    //        break;
+                    // == Input passkey ( paaskey displayed on other devicde ) ==
+                    // Enter Passkey by calling Accept with pin
+                    // Event must call -> Accept with passkey
 
-                    //    // == Input passkey ( paaskey displayed on other devicde ) ==
-                    //    // Enter Passkey by calling Accept with pin
-                    //    // Event must call -> Accept with passkey
+                    // Display action, Display passkey on current device so passkey can be entered on peer device. 
+                    // i.e. Set the Passkey to be entered on peer.
+                    // Event must call -> Accept with passkey
 
-                    //    // Display action, Display passkey on current device so passkey can be entered on peer device. 
-                    //    // i.e. Set the Passkey to be entered on peer.
-                    //    // Event must call -> Accept with passkey
+                    // Numbers displayed on both devices 
+                    // Numeric compare
+                    // Accept passkey is same as whats displayed on peer
+                    // Call Accept or ignore
 
-                    //    // Numbers displayed on both devices 
-                    //    // Numeric compare
-                    //    // Accept passkey is same as whats displayed on peer
-                    //    // Call Accept or ignore
-
-                    //    // Out of band (Not implemented)
-                    //    // Accept by calling Accept with Password Credentials
+                    // Out of band (Not implemented)
+                    // Accept by calling Accept with Password Credentials
                     break;
 
-                case BluetoothEventType.PassKeyActions_numcmp:
+                case BluetoothEventType.PassKeyActionsNumericComparison:
                     OnEvent(btEvent, DevicePairingKinds.ConfirmPinMatch, btEvent.data32);
                     break;
 
@@ -279,12 +270,10 @@ namespace nanoFramework.Device.Bluetooth
                     _completedEvent.Set();
 
                     PairingComplete?.Invoke(this, new DevicePairingEventArgs(btEvent.connectionHandle, _pairingStatus));
-
                     break;
 
                 default:
                     break;
-
             }
         }
 

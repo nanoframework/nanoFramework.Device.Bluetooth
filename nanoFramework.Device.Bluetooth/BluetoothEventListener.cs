@@ -25,10 +25,6 @@ namespace nanoFramework.Device.Bluetooth
         // Used for routing server events
         private static readonly ArrayList _leDeviceMap = new();
 
-        // Map of Bluetooth connectionHandles to Pairing security objects.
-        // Used for routing security events
-        private static readonly ArrayList _securityMap = new();
-
         // Reference to current BluetoothLEAdvertisementWatcher for events posting
         private static BluetoothLEAdvertisementWatcher _watcher = null;
 
@@ -309,42 +305,6 @@ namespace nanoFramework.Device.Bluetooth
         #region Session routing
         public BluetoothLEServer BluetoothServer { get => _server; set => _server = value; }
 
-        //public void AddSecurity(Pairing s)
-        //{
-        //    lock (_securityMap)
-        //    {
-        //        if (!_securityMap.Contains(s))
-        //        {
-        //            _securityMap.Add(s);
-        //        }
-        //        else
-        //        {
-        //        }
-        //    }
-        //}
-        //public void RemoveSecurity(Pairing s)
-        //{
-        //    lock (_securityMap)
-        //    {
-        //        if (_securityMap.Contains(s))
-        //        {
-        //            _securityMap.Remove(s);
-        //        }
-        //    }
-        //}
-
-        //public Pairing FindSecurity(ushort connectionHandle)
-        //{
-        //    for (int i = 0; i < _securityMap.Count; i++)
-        //    {
-        //        if (((Pairing)_securityMap[i]).ConnectionHandle == connectionHandle)
-        //        {
-        //            return (Pairing)_securityMap[i];
-        //        }
-        //    }
-
-        //    return null;
-        //}
         #endregion
 
         #region Watcher Queue

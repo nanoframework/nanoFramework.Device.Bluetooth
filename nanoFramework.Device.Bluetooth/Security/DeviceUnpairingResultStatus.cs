@@ -16,12 +16,12 @@ namespace nanoFramework.Device.Bluetooth
         Unpaired = 0,
 
         /// <summary>
-        /// The device object is successfully unpaired.
+        /// The device object is already unpaired.
         /// </summary>
         AlreadyUnpaired = 1,
 
         /// <summary>
-        /// The device object is successfully unpaired.
+        /// Upairing operation already in progress.
         /// </summary>
         OperationAlreadyInProgress = 2,
 

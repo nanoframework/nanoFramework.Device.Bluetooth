@@ -6,7 +6,7 @@
 namespace nanoFramework.Device.Bluetooth
 {
     /// <summary>
-    /// Bluetooth Address object
+    /// Bluetooth Address class.
     /// </summary>
     public class BluetoothAddress
     {
@@ -14,10 +14,10 @@ namespace nanoFramework.Device.Bluetooth
         private BluetoothAddressType _addressType;
 
         /// <summary>
-        /// BluetoothAddress constructor
+        /// BluetoothAddress constructor.
         /// </summary>
-        /// <param name="Address">Bluetooth address </param>
-        /// <param name="AddressType">Bluetooth Address type</param>
+        /// <param name="Address">Bluetooth address.</param>
+        /// <param name="AddressType">Bluetooth Address type.</param>
         public BluetoothAddress(ulong Address, BluetoothAddressType AddressType)
         {
             _address = Address;
@@ -25,13 +25,13 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Get Bluetouth address.
+        /// Get Bluetooth address.
         /// </summary>
-        public ulong Address { get { return _address; } }
+        public ulong Address { get => _address; }
 
         /// <summary>
-        /// Get Bluetooth type.
+        /// Gets Bluetooth type.
         /// </summary>
-        public BluetoothAddressType AddressType { get { return _addressType; } }
+        public BluetoothAddressType AddressType { get => _addressType; }
     }
 }
