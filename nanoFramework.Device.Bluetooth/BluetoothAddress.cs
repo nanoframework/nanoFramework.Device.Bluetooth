@@ -10,8 +10,8 @@ namespace nanoFramework.Device.Bluetooth
     /// </summary>
     public class BluetoothAddress
     {
-        private ulong _address;
-        private BluetoothAddressType _addressType;
+        private readonly ulong _address;
+        private readonly BluetoothAddressType _addressType;
 
         /// <summary>
         /// BluetoothAddress constructor.

@@ -18,11 +18,11 @@ namespace nanoFramework.Device.Bluetooth
     /// </summary>
     public sealed class DevicePairing
     {
-        BluetoothLEDevice _device = null;
-        BluetoothLEServer _server = null;
+        private readonly BluetoothLEDevice _device = null;
+        private readonly BluetoothLEServer _server = null;
         private readonly AutoResetEvent _completedEvent = new(false);
 
-        bool _canPair = true;
+        private readonly bool _canPair = true;
         bool _isPaired;
         bool _isAuthenticated;
 
@@ -260,9 +260,9 @@ namespace nanoFramework.Device.Bluetooth
 
                     _isPaired = (_pairingStatus == DevicePairingResultStatus.Paired);
 
-                    bool isEncrypted = (btEvent.data & 1) != 0;
+                    //bool isEncrypted = (btEvent.data & 1) != 0;
                     _isAuthenticated = (btEvent.data & 2) != 0;
-                    bool isBonded = (btEvent.data & 4) != 0;
+                    //bool isBonded = (btEvent.data & 4) != 0;
 
                     //Debug.WriteLine($"# Pairing AuthenticationComplete isPaired:{_isPaired} status:{btEvent.status} data:{btEvent.data} isEncrypted:{isEncrypted} isAuthenticated:{isAuthenticated} isBonded:{isBonded} ");
 

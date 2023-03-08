@@ -115,59 +115,6 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             }
         }
 
-        #region Security
-
-        /// <summary>
-        /// Evaulate all services and work out default security requirements.
-        /// </summary>
-        /// <returns>
-        /// Minimum DevicePairingProtectionLevel for servcies/characteristics.
-        /// </returns>
-        private DevicePairingProtectionLevel EvaluateSecurityPairingRequirements()
-        {
-            DevicePairingProtectionLevel _minProtectionLevel = DevicePairingProtectionLevel.Default;
-
-            bool secureConnection = false;
-            bool authentication = false;
-
-            foreach (GattLocalService srv in BluetoothLEServer._services)
-            {
-                foreach (GattLocalCharacteristic chr in srv.Characteristics)
-                {
-                    if (chr.ReadProtectionLevel == GattProtectionLevel.EncryptionRequired ||
-                        chr.ReadProtectionLevel == GattProtectionLevel.EncryptionAndAuthenticationRequired ||
-                        chr.WriteProtectionLevel == GattProtectionLevel.EncryptionRequired ||
-                        chr.WriteProtectionLevel == GattProtectionLevel.EncryptionAndAuthenticationRequired)
-                    {
-                        secureConnection = true;
-                    }
-
-                    if (chr.ReadProtectionLevel == GattProtectionLevel.AuthenticationRequired ||
-                        chr.ReadProtectionLevel == GattProtectionLevel.EncryptionAndAuthenticationRequired ||
-                        chr.WriteProtectionLevel == GattProtectionLevel.AuthenticationRequired ||
-                        chr.WriteProtectionLevel == GattProtectionLevel.EncryptionAndAuthenticationRequired)
-                    {
-                        authentication = true;
-                    }
-                }
-            }
-
-            if (secureConnection)
-            {
-                _minProtectionLevel = DevicePairingProtectionLevel.Encryption;
-            }
-
-            if (authentication)
-            {
-                _minProtectionLevel = DevicePairingProtectionLevel.EncryptionAndAuthentication;
-            }
-
-            return _minProtectionLevel;
-        }
-
-        #endregion Security
-
-
         /// <summary>
         ///  Stops advertising the current GATT service.
         /// </summary>

@@ -38,7 +38,7 @@ namespace nanoFramework.Device.Bluetooth.Services
             GattServiceProviderResult pr = GattServiceProvider.Create(GattServiceUuids.DeviceInformation);
             if (pr.Error != BluetoothError.Success)
             {
-                throw new Exception("Unable to create service");
+                throw new ApplicationException("Unable to create service");
             }
 
             // Pick up service

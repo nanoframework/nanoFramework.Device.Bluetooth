@@ -10,8 +10,8 @@ namespace nanoFramework.Device.Bluetooth
     /// </summary>
     public class PasswordCredential
     {
-        private string _username;
-        private string _password;
+        private readonly string _username;
+        private readonly string _password;
 
         /// <summary>
         /// Constructs a Password Credential.

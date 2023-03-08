@@ -366,13 +366,10 @@ namespace nanoFramework.Device.Bluetooth
                                             //Debug.WriteLine($"# Access error - Start pairing");
 
                                             // Try to pair devices
-                                            var pres = Pairing.Pair();
+                                            Pairing.Pair();
 
-                                            //Debug.WriteLine($"# Pair result {pres.Status}");
-
-                                            // retry read
+                                             // retry read
                                             retryRead = true;
-
                                             continue;
                                         }
                                         break;

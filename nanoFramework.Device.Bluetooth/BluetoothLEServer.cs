@@ -96,7 +96,7 @@ namespace nanoFramework.Device.Bluetooth
                 {
                     return srvprov;
                 }
-            };
+            }
 
             return null;
         }
@@ -217,7 +217,10 @@ namespace nanoFramework.Device.Bluetooth
                 {
                     Stop();
                 }
-                catch {}; 
+                catch 
+                { 
+                    // ignore any errors
+                }
 
                 if (disposing)
                 {

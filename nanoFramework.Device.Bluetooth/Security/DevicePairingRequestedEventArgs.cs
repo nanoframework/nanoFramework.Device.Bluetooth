@@ -17,7 +17,7 @@ namespace nanoFramework.Device.Bluetooth
         private readonly DevicePairing _pairing;
         private readonly ushort _connectionHandle;
         private readonly DevicePairingKinds _kind;
-        private uint _pin;
+        private readonly uint _pin;
 
         internal DevicePairingRequestedEventArgs(DevicePairing pairing, ushort connectionHandle, DevicePairingKinds kind, uint pin)
         {

@@ -10,8 +10,8 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// </summary>
     public class GattSessionStatusChangedEventArgs
     {
-        private GattSessionStatus _status;
-        private BluetoothError _bluetoothError;
+        private readonly GattSessionStatus _status;
+        private readonly BluetoothError _bluetoothError;
 
         internal GattSessionStatusChangedEventArgs(GattSessionStatus status, BluetoothError bluetoothError)
         {
