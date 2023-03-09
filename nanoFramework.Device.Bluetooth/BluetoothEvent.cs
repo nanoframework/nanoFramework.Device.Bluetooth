@@ -11,22 +11,22 @@ namespace nanoFramework.Device.Bluetooth
     internal class BluetoothEventServer : BaseEvent
     {
         /// <summary>
-        /// Type of Bluetooth event
+        /// Type of Bluetooth event.
         /// </summary>
         public BluetoothEventType type;
 
         /// <summary>
-        /// Event or Connect id
+        /// Event or Connect id.
         /// </summary>
         public ushort id;
 
         /// <summary>
-        /// id of Characteristic
+        /// id of Characteristic.
         /// </summary>
         public ushort characteristicId;
 
         /// <summary>
-        /// id of Descriptor
+        /// id of Descriptor.
         /// </summary>
         public ushort descriptorId;
     }
@@ -34,12 +34,12 @@ namespace nanoFramework.Device.Bluetooth
     internal class BluetoothEventScan : BaseEvent
     {
         /// <summary>
-        /// Type of Bluetooth event
+        /// Type of Bluetooth event.
         /// </summary>
         public BluetoothEventType type;
 
         /// <summary>
-        /// Event id
+        /// Event id.
         /// </summary>
         public ushort id;
     }
@@ -47,27 +47,27 @@ namespace nanoFramework.Device.Bluetooth
     internal class BluetoothEventCentral : BaseEvent
     {
         /// <summary>
-        /// Type of Bluetooth event
+        /// Type of Bluetooth event.
         /// </summary>
         public BluetoothEventType type;
 
         /// <summary>
-        /// Connection Handle
+        /// Connection Handle.
         /// </summary>
         public ushort connectionHandle;
 
         /// <summary>
-        /// status of event
+        /// status of event.
         /// </summary>
         public ushort status;
 
         /// <summary>
-        /// Attribute Handle of service
+        /// Attribute Handle of service.
         /// </summary>
         public ushort serviceHandle;
 
         /// <summary>
-        /// Attribute Handle of characteristic
+        /// Attribute Handle of characteristic.
         /// </summary>
         public ushort characteristicHandle;
     }
@@ -75,29 +75,28 @@ namespace nanoFramework.Device.Bluetooth
     internal class BluetoothEventSesssion : BaseEvent
     {
         /// <summary>
-        /// Type of Bluetooth event
+        /// Type of Bluetooth event.
         /// </summary>
         public BluetoothEventType type;
 
         /// <summary>
-        /// Connection Handle
+        /// Connection Handle.
         /// </summary>
         public ushort connectionHandle;
 
         /// <summary>
-        /// status of event
+        /// status of event.
         /// </summary>
         public ushort status;
 
         /// <summary>
-        /// Any extra data
+        /// Any extra data.
         /// </summary>
         public ushort data;
 
         /// <summary>
-        /// Used for when 32 bit data supplied (pin)
+        /// Used for when 32 bit data supplied (pin).
         /// </summary>
         public UInt32 data32;
-
     }
 }

@@ -590,14 +590,12 @@ Where:-
 * *Passkey R&I*  : PassKey is inputted on initiator and responder.
 * *Compare(sec)* : Numeric comparison when using secure connection. Both ends input and display passkey.
 
-
 ### Common use cases for IOCapabilities.
 
 | Responder(Client) | Pairing | Initiator(Server) |
 | --------- | ----------- | ------------ |
 | *NoInputNoOutput* | Just Works | *NoInputNoOutput* |
 | *KeyboardOnly* | PassKey input/sent from Client, Server checks | *DisplayOnly* |
-
 
 ### Code examples 
 
@@ -629,13 +627,12 @@ The client has to provide the correct passKey.
     // Add services and advertise
 
 ```
-
 ##### Event Handler for PairingRequested event. 
 
 The PairingKind indicates what the application needs to do.
 In this case its DevicePairingKinds.DisplayPin which just needs the passKey to compare with client.
 
-For a general use device with a display the passkey should be displayed so client knows what to input.
+For a general use device with a display the passkey should be displayd so client knows what to input.
 
 ```csharp
 private static void Pairing_PairingRequested(object sender, DevicePairingRequestedEventArgs args)
@@ -667,7 +664,6 @@ private static void Pairing_PairingComplete(object sender, DevicePairingEventArg
 
 
 #### Client
-
 
 ##### Setup of BluetoothLEDevice for pairing with Authenication.
 

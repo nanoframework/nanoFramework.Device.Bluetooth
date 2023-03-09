@@ -84,9 +84,9 @@ namespace nanoFramework.Device.Bluetooth
         #region Services
 
         /// <summary>
-        /// Returns service provider with specifued UUID.
+        /// Returns service provider with specified UUID.
         /// </summary>
-        /// <param name="serviceUuid"></param>
+        /// <param name="serviceUuid">UUID of the service to get.</param>
         /// <returns>The service with the UUID.</returns>
         public GattServiceProvider GetServiceByUUID(Guid serviceUuid)
         {
