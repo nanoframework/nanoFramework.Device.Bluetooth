@@ -8,6 +8,7 @@ using System.Text;
 using System.Collections;
 using System.Runtime.CompilerServices;
 using nanoFramework.Runtime.Native;
+using nanoFramework.Device.Bluetooth;
 
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 {
@@ -16,12 +17,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// </summary>
     public class GattServiceProvider
     {
-        private  ArrayList _services;
-
         GattServiceProviderAdvertisementStatus _status = GattServiceProviderAdvertisementStatus.Created;
 
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        private byte[] _deviceName;
+        private GattLocalService _service;
 
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private bool _isDiscoverable = true;
@@ -31,32 +30,30 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private Buffer _serviceData;
-
-
-        internal static readonly BluetoothEventListener _bluetoothEventManager = new();
-
+       
         internal GattServiceProvider(Guid serviceUuid)
         {
-            _bluetoothEventManager.Reset();
+            // Add local service
+            _service = new(serviceUuid);
 
-            _services = new ArrayList();
+            // Update services array
+            UpdateServices(this);
 
-            // Add primary
-            AddService(serviceUuid);
-
-            // Add default Device Information service 
-            AddDeviceInformationService();
-
-            NativeInitService();
+            // Add default Device Information service after first service added
+            if (BluetoothLEServer._services.Count == 1)
+            {
+                AddDeviceInformationService();
+            }
         }
 
         /// <summary>
-        /// Add default Device Information Service
+        /// Add default Device Information Service.
         /// </summary>
         private void AddDeviceInformationService()
         {
             // Add and initialised Device Information defaults
-            GattLocalService dinfService = AddService(GattServiceUuids.DeviceInformation);
+            GattServiceProvider ServiceProvider = new GattServiceProvider(GattServiceUuids.DeviceInformation);
+            GattLocalService dinfService = ServiceProvider.Service;
 
             // ManufacturerNameString Characteristic (0x2A29)
             DataWriter manufacturerName = new();
@@ -96,30 +93,32 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         public void StartAdvertising(GattServiceProviderAdvertisingParameters parameters)
         {
             // Check and switch to server mode
-            BluetoothNanoDevice.CheckMode(BluetoothNanoDevice.Mode.Server);
-
-            BluetoothNanoDevice.DeviceName = parameters.DeviceName;
+            if (BluetoothNanoDevice.RunMode != BluetoothNanoDevice.Mode.Server )
+            {
+                BluetoothLEServer.Instance.Start();
+            }
 
             // Save parameters
             _isConnectable = parameters.IsConnectable;
             _isDiscoverable = parameters.IsDiscoverable;
             _serviceData = parameters.ServiceData;
 
-            _deviceName = Encoding.UTF8.GetBytes(parameters.DeviceName);
+            // Make sure pairing attributes set
+            BluetoothLEServer.Instance.Pairing.SetPairAttributes();
 
             // Start advertising.
             // Native code will use the data provided by this GattServiceProvider instance to
             // initialise the BLE advert, service and characteristic definitions.
-            if (NativeStartAdvertising())
+            if (NativeStartAdvertising(BluetoothLEServer._services))
             {
                 _status = GattServiceProviderAdvertisementStatus.Started;
             }
         }
 
         /// <summary>
-        ///  Stop advertising the GATT service.
+        ///  Stops advertising the current GATT service.
         /// </summary>
-        public void StopAdvertising()
+        internal void StopAdvertising()
         {
             // Stop advertising and dispose of native data.
             NativeStopAdvertising();
@@ -130,7 +129,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         }
 
         /// <summary>
-        ///  Creates a new GATT service with the specified serviceUuid
+        ///  Creates a new GATT service with the specified serviceUuid.
         /// </summary>
         /// <param name="serviceUuid">The service UUID.</param>
         /// <returns>A GattServiceProviderResult object.</returns>
@@ -148,54 +147,30 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         public GattServiceProviderAdvertisementStatus AdvertisementStatus { get => _status; }
 
         /// <summary>
-        /// Gets the GATT primary service.
+        /// Gets the GATT local service for this provider.
         /// </summary>
-        /// <returns>The primary service.</returns>
-        public GattLocalService Service { get => Services[0]; }
+        /// <returns>The GattLocalService object.</returns>
+        public GattLocalService Service { get => _service; }
 
-        /// <summary>
-        /// Get an array of all associated services for this service provider.
-        /// </summary>
-        /// <remarks>
-        /// The primary service will be index 0 followed by the Device Information at index 1.
-        /// Any other Services added to provider will follow these in the order they were created.
-        /// </remarks>
-        public GattLocalService[] Services { get { return (GattLocalService[])_services.ToArray(typeof(GattLocalService)); } }
-
-        /// <summary>
-        /// Creates a new service or replaces an existing service.
-        /// Created service is added to this service provider.
-        /// </summary>
-        /// <param name="serviceUuid">Uuid for the service to be created/replaced.</param>
-        /// <returns>
-        /// Returns the created service.
-        /// </returns>
-        public GattLocalService AddService(Guid serviceUuid)
+        private void UpdateServices(GattServiceProvider sprov)
         {
-            for (int index = 0; index < _services.Count; index++)
+            for (int index = 0; index < BluetoothLEServer._services.Count; index++)
             {
-                if (((GattLocalService)_services[index]).Uuid.Equals(serviceUuid))
+                // Service provider with same UUID then replace
+                if (((GattServiceProvider)BluetoothLEServer._services[index]).Service.Uuid.Equals(sprov._service.Uuid))
                 {
                     // Replace existing service on index
-                    GattLocalService replacementService = new(serviceUuid);
-                    _services[index] = replacementService;
-                    return replacementService;
+                    BluetoothLEServer._services[index] = sprov;
                 }
             }
 
-            // Add new service
-            GattLocalService newService = new(serviceUuid);
-            _services.Add(newService);
-            return newService;
+            BluetoothLEServer._services.Add(sprov);
         }
 
         #region external calls to native implementations
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern bool NativeInitService();
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern bool NativeStartAdvertising();
+        private extern bool NativeStartAdvertising(ArrayList services);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern void NativeStopAdvertising();

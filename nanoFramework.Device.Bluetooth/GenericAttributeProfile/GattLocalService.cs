@@ -33,6 +33,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             GattLocalCharacteristic Characteristic = new(characteristicUuid, parameters);
             _characteristics.Add(Characteristic);
 
+            // Update pairing security based on current read/write protectionlevels.
+            BluetoothLEServer.Instance.UpdateSecurityPairingRequirements(Characteristic.ReadProtectionLevel);
+            BluetoothLEServer.Instance.UpdateSecurityPairingRequirements(Characteristic.WriteProtectionLevel);
+
             return new GattLocalCharacteristicResult(Characteristic, BluetoothError.Success);
         }
 

@@ -102,9 +102,10 @@ namespace nanoFramework.Device.Bluetooth.Spp
         /// <returns></returns>
         public bool Start(string deviceName)
         {
+            BluetoothLEServer.Instance.DeviceName = deviceName;
+
             GattServiceProviderAdvertisingParameters advParameters = new GattServiceProviderAdvertisingParameters
             {
-                DeviceName = deviceName,
                 IsDiscoverable = true,
                 IsConnectable = true
             };

@@ -114,7 +114,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             }
 
             // Register with Events
-            GattServiceProvider._bluetoothEventManager.AddCharacteristic(this);
+            BluetoothLEServer._bluetoothEventManager.AddCharacteristic(this);
         }
 
         private static ushort NextCharacteristicIndex()
@@ -156,6 +156,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             {
                 decriptor = new GattLocalDescriptor(descriptorUuid, parameters, this, _descriptorNextID++);
                 _descriptors.Add(decriptor);
+
+                // Update pairing security based on current read/write protectionlevels.
+                BluetoothLEServer.Instance.UpdateSecurityPairingRequirements(decriptor.ReadProtectionLevel);
+                BluetoothLEServer.Instance.UpdateSecurityPairingRequirements(decriptor.WriteProtectionLevel);
             }
 
             return new GattLocalDescriptorResult(decriptor, result);

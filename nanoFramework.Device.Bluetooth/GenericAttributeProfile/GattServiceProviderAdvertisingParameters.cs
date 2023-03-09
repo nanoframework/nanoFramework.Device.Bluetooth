@@ -12,10 +12,6 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     /// </summary>
     public class GattServiceProviderAdvertisingParameters
     {
-        const string _defaultDeviceName = "nanoFramework";
-
-        private string _deviceName = _defaultDeviceName;
-
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private bool _isDiscoverable = true;
 
@@ -41,26 +37,6 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// Gets or sets a boolean that indicates if the GATT service is connect-able.
         /// </summary>
         public bool IsConnectable { get => _isConnectable; set => _isConnectable = value; }
-
-        /// <summary>
-        /// Friendly device name used for advertising service.
-        /// Default "nanoFramework"
-        /// </summary>
-        public string DeviceName
-        {
-            get => _deviceName;
-            set
-            {
-                if (string.IsNullOrEmpty(value))
-                {
-                    _deviceName = _defaultDeviceName;
-                }
-                else
-                {
-                    _deviceName = value;
-                }
-            }
-        }
 
         /// <summary>
         /// For Bluetooth Low Energy, this parameter adds an additional **ServiceData** section

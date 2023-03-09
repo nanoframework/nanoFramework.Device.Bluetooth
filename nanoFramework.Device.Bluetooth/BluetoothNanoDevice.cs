@@ -19,7 +19,7 @@ namespace nanoFramework.Device.Bluetooth
         internal enum Mode { NotRunning, Server, Client };
 
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        private static string _deviceName = "";
+        private static string _deviceName = "nanoFramework";
 
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private static Mode _mode = Mode.NotRunning;
@@ -31,21 +31,24 @@ namespace nanoFramework.Device.Bluetooth
 
         internal static string DeviceName { get => _deviceName; set => _deviceName = value; }
 
+        /// <summary>
+        /// Checks if current mode enabled otherwise switch to mode.
+        /// </summary>
+        /// <param name="expectedMode">The expected mode.</param>
+        /// <exception cref="InvalidOperationException">When mode is unexpected. i.e switching directly from client to server modes.</exception>
         internal static void CheckMode(Mode expectedMode)
         {
-            if (BluetoothNanoDevice.RunMode != expectedMode &&
-                BluetoothNanoDevice.RunMode != Mode.NotRunning)
+            if (RunMode != expectedMode)
             {
-                throw new InvalidOperationException("Wrong state");
+                // Set new run mode. 
+                BluetoothNanoDevice.RunMode = expectedMode;
             }
-
-            // Set new run mode. 
-            BluetoothNanoDevice.RunMode = expectedMode;
         }
 
         /// <summary>
         /// Get/Set the current mode of the device.
         /// </summary>
+        /// <exception cref="InvalidOperationException">When mode is unexpected from NativeSetOperationMode.</exception>
         internal static Mode RunMode
         {
             get => _mode;

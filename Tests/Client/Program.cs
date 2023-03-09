@@ -46,6 +46,8 @@ namespace TestClient
 
             Console.WriteLine("Create Primary service - UUID A7EEDF2C-DA87-4CB5-A9C5-5151C78B0066");
 
+            BluetoothLEServer.Instance.DeviceName = "Test2";
+
             //The GattServiceProvider is used to create and advertise the primary service definition.
             //An extra device information service will be automatically created.
             GattServiceProviderResult result = GattServiceProvider.Create(serviceUuid);
@@ -84,7 +86,6 @@ namespace TestClient
 
             // === Device Information Service ===
             DeviceInformationServiceService DifService = new(
-                    serviceProvider,
                     "nanoFramework",
                     "Test Client",
                     null, // no serial number
@@ -97,7 +98,7 @@ namespace TestClient
             // === Environmental Sensor Service ===
             // https://www.bluetooth.com/specifications/specs/environmental-sensing-service-1-0/
             // This service exposes measurement data from an environmental sensors.
-            EnvService = new EnvironmentalSensorService(serviceProvider);
+            EnvService = new EnvironmentalSensorService();
 
             // Add sensors to service, return index so sensor can be updated later.
             iTempOut = EnvService.AddSensor(EnvironmentalSensorService.SensorType.Temperature, "Outside Temp");
@@ -122,7 +123,6 @@ namespace TestClient
             // devices can see it with a specific device name.
             serviceProvider.StartAdvertising(new GattServiceProviderAdvertisingParameters()
             {
-                DeviceName = "Test2",
                 IsConnectable = true,
                 IsDiscoverable = true
             });

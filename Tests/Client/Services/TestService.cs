@@ -24,11 +24,15 @@ namespace nanoFramework.Device.Bluetooth.Services
         /// <summary>
         /// Create a test service
         /// </summary>
-        /// <param name="provider"></param>
-        public TestService(GattServiceProvider provider)
+        public TestService()
         {
-            // Add new test  Service to provider
-            _testService = provider.AddService(serviceUUID);
+            GattServiceProviderResult pr = GattServiceProvider.Create(serviceUUID);
+            if (pr.Error != BluetoothError.Success)
+            {
+                throw new ApplicationException("Unable to create service");
+            }
+
+            _testService = pr.ServiceProvider.Service;
 
             GattLocalCharacteristicParameters rxCommandPar = new GattLocalCharacteristicParameters()
             {
@@ -36,7 +40,7 @@ namespace nanoFramework.Device.Bluetooth.Services
                 CharacteristicProperties = GattCharacteristicProperties.Write | GattCharacteristicProperties.WriteWithoutResponse
             };
 
-            GattLocalCharacteristicResult rxCommandRes = provider.Service.CreateCharacteristic(rxCommandUUID, rxCommandPar);
+            GattLocalCharacteristicResult rxCommandRes = pr.ServiceProvider.Service.CreateCharacteristic(rxCommandUUID, rxCommandPar);
             if (rxCommandRes.Error != nanoFramework.Device.Bluetooth.BluetoothError.Success)
             {
                 throw new ArgumentException("Unable to create RX Command");

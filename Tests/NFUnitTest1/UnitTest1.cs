@@ -21,12 +21,12 @@ namespace NFUnitTest1
             GattServiceProvider serviceProvider;
 
             GattServiceProviderResult result = GattServiceProvider.Create(ServiceUuid1);
-            Assert.False(result.Error == BluetoothError.Success);
+            Assert.IsFalse(result.Error == BluetoothError.Success);
 
             serviceProvider = result.ServiceProvider;
-            Assert.Null(serviceProvider, "Service provider is null");
+            Assert.IsNull(serviceProvider, "Service provider is null");
 
-            Assert.True(serviceProvider.AdvertisementStatus == GattServiceProviderAdvertisementStatus.Stopped, "Advertisement status should be stopped");
+            Assert.IsTrue(serviceProvider.AdvertisementStatus == GattServiceProviderAdvertisementStatus.Stopped, "Advertisement status should be stopped");
         }
     }
 }

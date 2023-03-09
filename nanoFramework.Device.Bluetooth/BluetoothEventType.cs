@@ -9,46 +9,48 @@ using nanoFramework.Runtime.Events;
 namespace nanoFramework.Device.Bluetooth
 {
     /// <summary>
-    /// Event type for Bluetooth events coming from Native
+    /// Event type for Bluetooth events coming from Native.
     /// </summary>
     public enum BluetoothEventType
     {
         /// <summary>
-        /// Attribute Read
+        /// Attribute Read.
         /// </summary>
         Read,
 
         /// <summary>
-        /// Attribute write
+        /// Attribute write.
         /// </summary>
         Write,
 
         /// <summary>
-        /// Client Subscribed
+        /// Client Subscribed.
         /// </summary>
         ClientSubscribed,
 
         /// <summary>
-        /// Client unsubscribed or connection terminated
+        /// Client unsubscribed or connection terminated.
         /// </summary>
         ClientUnsubscribed,
 
         // ==== BLE Scanning Events ====
 
         /// <summary>
-        /// Advertisement discovered when scanning
+        /// Advertisement discovered when scanning.
         /// </summary>
         AdvertisementDiscovered,
 
         /// <summary>
-        /// Discovery Scan complete
+        /// Discovery Scan complete.
         /// </summary>
         ScanningComplete,
+
+        // Add further server events here >>>>>>
 
         // ==== BLE Central/Client events ====
 
         /// <summary>
-        /// Fires when native connect to device completes
+        /// Fires when native connect to device completes.
         /// </summary>
         ConnectComplete,
 
@@ -58,49 +60,83 @@ namespace nanoFramework.Device.Bluetooth
         ConnectionDisconnected,
 
         /// <summary>
-        /// A Service discovered for a connection
+        /// A Service discovered for a connection.
         /// </summary>
         ServiceDiscovered,
 
         /// <summary>
-        /// Service discovery has completed
+        /// Service discovery has completed.
         /// </summary>
         ServiceDiscoveryComplete,
 
         /// <summary>
-        /// A characteristic discovered on Service
+        /// A characteristic discovered on Service.
         /// </summary>
         CharacteristicDiscovered,
 
         /// <summary>
-        /// The characteristic discovery has completed / error
+        /// The characteristic discovery has completed / error.
         /// </summary>
         CharacteristicDiscoveryComplete,
 
         /// <summary>
-        /// A descriptor discovered on Characteristic
+        /// A descriptor discovered on Characteristic.
         /// </summary>
         DescriptorDiscovered,
 
         /// <summary>
-        /// The Descriptor discovery has completed / error
+        /// The Descriptor discovery has completed / error.
         /// </summary>
         DescriptorDiscoveryComplete,
 
         /// <summary>
-        /// Characteristic read value complete, status=error
+        /// Characteristic read value complete, status=error.
         /// </summary>
         AttributeReadValueComplete,
 
         /// <summary>
-        /// Attribute Write value completed, status = error
+        /// Attribute Write value completed, status = error.
         /// </summary>
         AttributeWriteValueComplete,
 
         /// <summary>
         /// Fired when a value on connected device has changed, notify.
         /// </summary>
-        AttributeValueChanged
+        AttributeValueChanged,
 
+        // Add further central events here >>>>>>
+
+
+        // ====  Session / Pairing / Security group events ====
+
+        /// <summary>
+        /// Event when client connects.
+        /// </summary>
+        ClientConnected,
+
+        /// <summary>
+        /// Event when client disconnects.
+        /// </summary>
+        ClientDisconnected,
+
+        /// <summary>
+        /// Event when session details are updated.
+        /// </summary>
+        ClientSessionChanged,
+
+        /// <summary>
+        /// Event fired when a passkey action is requested.
+        /// </summary>
+        PassKeyActions,
+
+        /// <summary>
+        /// Event Fired when a passkey action for numeric comparison is requested.
+        /// </summary>
+        PassKeyActionsNumericComparison,
+
+        /// <summary>
+        /// Event fired when the Authentication has completed, security enabled or failed to enable.
+        /// </summary>
+        AuthenticationComplete
     }
 }
