@@ -118,7 +118,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <summary>
         ///  Stops advertising the current GATT service.
         /// </summary>
-        internal void StopAdvertising()
+        public void StopAdvertising()
         {
             // Stop advertising and dispose of native data.
             NativeStopAdvertising();
