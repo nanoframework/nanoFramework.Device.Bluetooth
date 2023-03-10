@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.32...HEAD)
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.35...HEAD)
+
+**Fixed bugs:**
+
+- Update GattServiceProvider.cs [\#66](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/66)
+
+## [v1.1.35](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/v1.1.35) (2023-03-09)
+
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.32...v1.1.35)
 
 **Implemented enhancements:**
 
