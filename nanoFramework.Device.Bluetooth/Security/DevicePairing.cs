@@ -25,6 +25,7 @@ namespace nanoFramework.Device.Bluetooth
         private readonly bool _canPair = true;
         bool _isPaired;
         bool _isAuthenticated;
+        bool _isSecure;
 
         // IO Capibilities used for pairing
         // Defualt to NoInputNoOutput
@@ -91,6 +92,7 @@ namespace nanoFramework.Device.Bluetooth
             _protectionLevel = DevicePairingProtectionLevel.None;
             _isPaired = false;
             _isAuthenticated = false;
+            _isSecure = false;
             _outOfBand = false;
             _bondingAllowed = true;
         }
@@ -212,6 +214,11 @@ namespace nanoFramework.Device.Bluetooth
         public bool IsAuthenticated { get => _isAuthenticated; }
 
         /// <summary>
+        /// Gets a value that indicates if connection was secure for pairing.
+        /// </summary>
+        public bool WasSecureConnectionUsedForPairing { get => _isSecure; }
+        
+        /// <summary>
         /// Sets Pairing Attibutes in Native level.
         /// </summary>
         internal void SetPairAttributes()
@@ -260,7 +267,7 @@ namespace nanoFramework.Device.Bluetooth
 
                     _isPaired = (_pairingStatus == DevicePairingResultStatus.Paired);
 
-                    //bool isEncrypted = (btEvent.data & 1) != 0;
+                    _isSecure = (btEvent.data & 1) != 0;
                     _isAuthenticated = (btEvent.data & 2) != 0;
                     //bool isBonded = (btEvent.data & 4) != 0;
 
