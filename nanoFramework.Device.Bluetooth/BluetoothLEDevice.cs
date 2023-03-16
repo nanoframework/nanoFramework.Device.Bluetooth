@@ -50,7 +50,7 @@ namespace nanoFramework.Device.Bluetooth
             _addressType = addressType;
 
             _name = "";
-            _appearance = 0;    // Unkown
+            _appearance = 0;    // Unknown
             _genericAccessRead = false;
 
             _connectionStatus = BluetoothConnectionStatus.Disconnected;
@@ -316,9 +316,9 @@ namespace nanoFramework.Device.Bluetooth
         /// </summary>
         private void LoadGenericAccessValues()
         {
-            if (_genericAccessRead == false && ConnectDeviceIfNotConnected() == GattCommunicationStatus.Success)
+            if (!_genericAccessRead && ConnectDeviceIfNotConnected() == GattCommunicationStatus.Success)
             {
-                // Get Generic Access Serice
+                // Get Generic Access Service
                 GattDeviceServicesResult sr = GetGattServicesForUuid(GattServiceUuids.GenericAccess);
                 if (sr.Status == GattCommunicationStatus.Success)
                 {
