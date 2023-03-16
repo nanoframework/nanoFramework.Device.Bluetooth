@@ -2,7 +2,19 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.35...HEAD)
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.37...HEAD)
+
+**Fixed bugs:**
+
+- Enables the setting of the Generic Access characteristics [\#68](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/68)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#67](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/67)
+
+## [v1.1.37](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/v1.1.37) (2023-03-10)
+
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.35...v1.1.37)
 
 **Fixed bugs:**
 
