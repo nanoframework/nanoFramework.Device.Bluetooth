@@ -56,7 +56,7 @@ This implementation supports a cut down version of the Gatt Server and Gatt Clie
 
 The device can either run as a Server or Client, but not at the same time.  
 For example if you start a Watcher to look for advertisements from Server devices you will not 
-be able to connect to those devices until the Watcher has been stopped. But you can recieve data from connected 
+be able to connect to those devices until the Watcher has been stopped. But you can receive data from connected 
 devices while Watcher is scanning.
 
 For more information see relevant sections: -
@@ -86,7 +86,7 @@ Guid uuid1 = Utility.CreateUuidFromShortCode(0x2A19);
 
 ### Security and Pairing
 
-The assembly supports pairing with encryption and authenication.
+The assembly supports pairing with encryption and authentication.
 
 If you don't do anything in your code it will use the **Just works** method of pairing which will enable encryption on the connection.
 
@@ -102,6 +102,20 @@ Calling dispose will remove the object from memory.
 
 This object is new and doesn't exist in the normal Windows implementation and was added to allow better handling of pairing and connections from the managed code.
 
+### Setting the Device Name and it Appearance
+
+The device name and appearance is part of the Generic Access service which is automatically
+included in each Gatt Server definition. The name should be the name of current device and the appearance which
+is optional is a 16 bit code that represents the use of the device. Defaults to 0 which is "Unknown Device".
+For details on codes see the Bluetooth Sig Assigned numbers document; section **2.6.3 Appearance Sub­category values**. Use the values column for the code.
+For example code 0x0481 is for a cycling computer.
+
+```csharp
+    BluetoothLEServer server = BluetoothLEServer.Instance;
+    server.DeviceName = "Esp32_01";
+    server.Appearance = 0x0481;
+```
+
 ### Defining the service and associated Characteristics
 
 The GattServiceProvider is used to create and advertise the primary service definitions. An extra device information service will be automatically created when first service is created.
@@ -116,7 +130,7 @@ if (result.Error != BluetoothError.Success)
 serviceProvider = result.ServiceProvider;
 ```
 
-To create further services for the Gatt server call **GattServiceProvider.Create(uuid)** for each new service. 
+To create further services for the Gatt server call **GattServiceProvider.Create(UUID)** for each new service. 
 
 Access all created services via the BluetoothLEServer instance.
 
@@ -173,7 +187,7 @@ GattLocalCharacteristicParameters ReadParameters = new GattLocalCharacteristicPa
 };
 
 ```
-If the **StaticValue** is set the the read event will not be called and doesn't need to be defined.
+If the **StaticValue** is set the read event will not be called and doesn't need to be defined.
 
 ### Adding a Write or WriteWithoutResponse Characteristic
 
@@ -240,7 +254,7 @@ private static void UpdateNotifyValue(double newValue)
 ### Read requested event
 
 When a client requests to read a characteristic, the managed event will be called assuming a static value hasn't been set.
-If no event handler is set or you don't respond in a timely manner an Unlikely bluetooth error will be returned to client.  
+If no event handler is set or you don't respond in a timely manner an Unlikely Bluetooth error will be returned to client.  
 If reading the value from a peripheral device takes time then best to put this outside the event handler.
 
 This show the returning of 2 values to client request. 
@@ -265,7 +279,7 @@ private static void _readCharacteristic_ReadRequested(GattLocalCharacteristic se
 ## Write requested event
 
 When data is sent to a write characteristic the managed event is called. If no event handler is 
-set or you don't respond in a timely manner an Unlikely bluetooth error will be returned to client.
+set or you don't respond in a timely manner an Unlikely Bluetooth error will be returned to client.
 
 The data received is a array of bytes and this is formatted as required by characteristic. This could be a single
 value of Int16, Int32, string etc. or it could be a number of different values.
@@ -339,7 +353,7 @@ We have 2 samples available:
 - Central2  - This more of a full on sample and is an example on how to collect values in this case temperatures 
 from a bunch of devices with the Environmental Sensor service. The devices are an updated version of the Sample device example.
 
-## Watching for Advertisments
+## Watching for Advertisements
 
 To watch for advertisements you use the BluetoothLEAdvertisementWatcher class.
 
@@ -366,24 +380,28 @@ RSSI filter
 
 ## Creating a device and connecting to device.
 
-To communicate with a device a BluetoothLEDevice class needs to be created using the devices bluetooth address and type.
-This can be the bluetooth address from the BluetoothLEAdvertisementWatcher event or using a hard coded address.
+To communicate with a device a BluetoothLEDevice class needs to be created using the devices Bluetooth address and type.
+This can be the Bluetooth address from the BluetoothLEAdvertisementWatcher event or using a hard coded address.
 
 In this case from the Watcher advertisement received event BluetoothAddress argument.
 ```csharp
 BluetoothLEDevice device = BluetoothLEDevice.FromBluetoothAddress(args.BluetoothAddress)
 ```
-There are no specific connection methods but a connection will be made automatically when the device is queried for services or a Pairing operation is started. 
+There are no specific connection methods, a connection will be made automatically when the device is queried for services or a Pairing operation is started. 
 The ConnectionStatusChanged event can be used to detect a change in connection status and an attempt to 
 reconnect can be done by a query to the devices services again. Avoid doing this in the event, as it can block other 
 events being fired during the connection.
 
-After connecting to teh device you can go back to Watching for advertisements with the restriction that you can't connect to newly found devcies until the Watching is stopped.
+After connecting to the device go back to Watching for advertisements with the restriction that you can't connect to newly found devices until the Watching is stopped.
 You can still communication with connected devices while the Watcher is running. Best way is to collect all found devices in a table until Watcher is
 stopped then connect to all found devices. See [Central 2 sample](https://github.com/nanoframework/Samples/tree/main/samples/Bluetooth/Central2)
 
 The Close() method is not exposed in the desktop version but it has been implemented in this version 
 to give better control over the connection.
+
+## Getting information about the connected device
+
+The Generic Access device name and appearance code are available as properties of the BluetoothLEDevice object after connecting to the device.
 
 ## Querying device services
 
@@ -412,7 +430,7 @@ The services are cached so the first time they are queried it will retrieve them
 Further calls for services will return the cached results. To clear the cache the device must be disposed.
 
 
-## Querying service characterisics
+## Querying service characteristics
 
 With the GattDeviceService object a query can be made for the required Characteristics.
 In the same way as the service there is a method to query for a all Characteristics or just specific Characteristics.
@@ -438,7 +456,7 @@ Note:
 The Characteristics are cached so the first time requested it will retrieve them from the device.
 Further calls to same service will return the cached results.
 
-## Querying characterisics descriptors
+## Querying characteristics descriptors
 
 Descriptors can be retrieved in the same way as Services and Characteristics using the methods 
 GetDescriptors and GetDescriptorsForUuid.
@@ -497,7 +515,7 @@ This can be used to Write with or without a response.
     }
 ```
                        
-## Enabling the value changed notifcations
+## Enabling the value changed notifications
 
 This enables the receiving of events when a Characteristic value changes on the server. The notifications are enabled
 by setting up an event then setting the value of the CCCD descriptor as below.
@@ -546,7 +564,7 @@ For good information on Bluetooth Pairing and how the IO Capabilities effect the
 
 By default the *ProtectionLevel* is **None** and the *IOCapabilities* is **NoInputNoOutput** so the pairing will use **Just Works** method if both ends are nanoFramework.
 
-The ProtectionLevel will be automaticlly updated depending on the requirements of any added Characteristics.
+The ProtectionLevel will be automatically updated depending on the requirements of any added Characteristics.
 This can be manually set to force a different level of protection.
 
 | *ProtectionLevel* | |
@@ -557,8 +575,8 @@ This can be manually set to force a different level of protection.
 
 ## IOCapabilities
 
-The IO Capabilities are input and output peripherals availble on the device for pairing.
-Depending on what IOCapabilities each device has will covern how the pairing will be done.
+The IO Capabilities are input and output peripherals available on the device for pairing.
+Depending on what IOCapabilities each device has will govern how the pairing will be done.
 
 | *IOCapabilities* | |
 | ------- | ----- |
@@ -569,11 +587,11 @@ Depending on what IOCapabilities each device has will covern how the pairing wil
 
 ## Pairing Matrix
 
-The Initiator is the devcie thats starts the pairing operation. This would normally be the Client.
-The Responder is the devcie responding to the pairing request.
+The Initiator is the device thats starts the pairing operation. This would normally be the Client.
+The Responder is the device responding to the pairing request.
 
-*Just Works*  : Means there is no inpt required and connection is just set up. If any Characteristics 
-have a protection level of Authentiction then a access error will be given.
+*Just Works*  : Means there is no input required and connection is just set up. If any Characteristics 
+have a protection level of Authentication then a access error will be given.
 
 | **Responder IOCapabilities** || <- | <- | *Initiator* *IOCapabilities* | ->  | -> |
 | --------- | ----------- | ------------ | ------------ | --------------- | --------------- |
@@ -632,7 +650,7 @@ The client has to provide the correct passKey.
 The PairingKind indicates what the application needs to do.
 In this case its DevicePairingKinds.DisplayPin which just needs the passKey to compare with client.
 
-For a general use device with a display the passkey should be displayd so client knows what to input.
+For a general use device with a display the passkey should be displayed so client knows what to input.
 
 ```csharp
 private static void Pairing_PairingRequested(object sender, DevicePairingRequestedEventArgs args)
@@ -665,7 +683,7 @@ private static void Pairing_PairingComplete(object sender, DevicePairingEventArg
 
 #### Client
 
-##### Setup of BluetoothLEDevice for pairing with Authenication.
+##### Setup of BluetoothLEDevice for pairing with Authentication.
 
 ```csharp
 static void SetupDevice(BluetoothLEDevice device)
@@ -801,7 +819,7 @@ The **nanoFramework** Class Libraries are licensed under the [MIT license](LICEN
 
 ## Code of Conduct
 
-This project has adopted the code of conduct defined by the Contributor Covenant to clarify expected behaviour in our community.
+This project has adopted the code of conduct defined by the Contributor Covenant to clarify expected behavior in our community.
 For more information see the [.NET Foundation Code of Conduct](https://dotnetfoundation.org/code-of-conduct).
 
 ## .NET Foundation

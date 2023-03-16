@@ -22,6 +22,9 @@ namespace nanoFramework.Device.Bluetooth
         private static string _deviceName = "nanoFramework";
 
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
+        private static ushort _appearance = 0;
+
+        [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private static Mode _mode = Mode.NotRunning;
         
         static BluetoothNanoDevice()
@@ -30,6 +33,8 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         internal static string DeviceName { get => _deviceName; set => _deviceName = value; }
+
+        internal static ushort Appearance { get => _appearance; set => _appearance = value; }
 
         /// <summary>
         /// Checks if current mode enabled otherwise switch to mode.
@@ -55,7 +60,7 @@ namespace nanoFramework.Device.Bluetooth
             set
             {
                 _mode = value;
-                NativeSetOperationMode(_mode, DeviceName);
+                NativeSetOperationMode(_mode, DeviceName, Appearance);
             }
         }
 
@@ -64,7 +69,7 @@ namespace nanoFramework.Device.Bluetooth
         private static extern void NativeInitilise();
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern void NativeSetOperationMode(Mode mode, string deviceName);
+        private static extern void NativeSetOperationMode(Mode mode, string deviceName, ushort appearance);
         #endregion
     }
 }

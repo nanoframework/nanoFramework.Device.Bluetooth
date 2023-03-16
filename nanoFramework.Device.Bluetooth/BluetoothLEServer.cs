@@ -73,8 +73,18 @@ namespace nanoFramework.Device.Bluetooth
 
         /// <summary>
         /// Server device name, defaults to 'nanoFramework'.
+        /// Set in the Generic Access service.
         /// </summary>
         public String DeviceName { get => BluetoothNanoDevice.DeviceName; set => BluetoothNanoDevice.DeviceName = value; }
+
+        /// <summary>
+        /// Appearance value of the device set in the Generic Access service and also the advertisment if enabled.
+        /// The appearance is a 16 bit value comprising of bits 6 to 15 the device category and bits 0 to 5 the sub-categoty.
+        /// See Bluetooth assigned numbers document section "Appearance Sub­category values" for values. 
+        /// For example a "IOT Gateway" has a value of 0x008D.
+        /// The Appearance value defaults to 0, a Generic Unknown device.
+        /// </summary>
+        public ushort Appearance { get => BluetoothNanoDevice.Appearance; set => BluetoothNanoDevice.Appearance = value; }
 
         /// <summary>
         /// Get GattSession aasoicated with this server.

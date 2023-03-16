@@ -20,9 +20,10 @@ namespace nanoFramework.Device.Bluetooth
         private BluetoothConnectionStatus _connectionStatus;
         private readonly ulong _bluetoothAddress;
         private readonly BluetoothAddressType _addressType;
-
-        private readonly string _name;
+        private string _name;
+        private ushort _appearance;
         private ushort _connectionHandle;
+        private bool _genericAccessRead;
 
         private ArrayList _services;
         private Hashtable _attributes;
@@ -49,6 +50,9 @@ namespace nanoFramework.Device.Bluetooth
             _addressType = addressType;
 
             _name = "";
+            _appearance = 0;    // Unknown
+            _genericAccessRead = false;
+
             _connectionStatus = BluetoothConnectionStatus.Disconnected;
 
             _services = new();
@@ -146,7 +150,7 @@ namespace nanoFramework.Device.Bluetooth
         public GattDeviceServicesResult GetGattServices()
         {
             GattCommunicationStatus status = ConnectDeviceIfNotConnected();
-            
+
             // we already have services then we must be trying to re-connect
             // Just return current services
             if (status == GattCommunicationStatus.Success &&
@@ -286,19 +290,80 @@ namespace nanoFramework.Device.Bluetooth
         /// <summary>
         /// Gets the name of the Bluetooth LE device.
         /// </summary>
-        public string Name { get => _name; }
+        public string Name
+        {
+            get
+            {
+                LoadGenericAccessValues();
+                return _name;
+            }
+        }
+
+        /// <summary>
+        /// Gets the appearance of the Bluetooth LE device.
+        /// </summary>
+        public ushort Appearance
+        {
+            get
+            {
+                LoadGenericAccessValues();
+                return _appearance;
+            }
+        }
+
+        /// <summary>
+        /// Access the Generic Access service and retrieve Device name and Appearance to set properties.
+        /// </summary>
+        private void LoadGenericAccessValues()
+        {
+            if (!_genericAccessRead && ConnectDeviceIfNotConnected() == GattCommunicationStatus.Success)
+            {
+                // Get Generic Access Service
+                GattDeviceServicesResult sr = GetGattServicesForUuid(GattServiceUuids.GenericAccess);
+                if (sr.Status == GattCommunicationStatus.Success)
+                {
+                    GattDeviceService srv = sr.Services[0];
+                    GattCharacteristicsResult cr = srv.GetCharacteristicsForUuid(GattCharacteristicUuids.GapDeviceName);
+                    if (cr.Status == GattCommunicationStatus.Success)
+                    {
+                        // Get device name value
+                        GattReadResult grn = ReadAttributeValue(cr.Characteristics[0].AttributeHandle);
+                        if (grn.Status == 0)
+                        {
+                            DataReader rdr = DataReader.FromBuffer(grn.Value);
+                            _name = rdr.ReadString(rdr.UnconsumedBufferLength);
+                        }
+                    }
+
+                    cr = srv.GetCharacteristicsForUuid(GattCharacteristicUuids.GapAppearance);
+                    if (cr.Status == GattCommunicationStatus.Success)
+                    {
+                        // Get device appearance value
+                        GattReadResult gra = ReadAttributeValue(cr.Characteristics[0].AttributeHandle);
+                        if (gra.Status == 0)
+                        {
+                            DataReader rdr = DataReader.FromBuffer(gra.Value);
+                            _appearance = rdr.ReadUInt16();
+                        }
+                    }
+                }
+
+                // Set flag so we don't try to re-read generic access characteristics.
+                // even if we failed this time. The service or characteristics may be missing from device.
+                _genericAccessRead = true;
+            }
+        }
 
         /// <summary>
         /// Gets the address type for the Bluetooth LE device.
         /// </summary>
         public BluetoothAddressType BluetoothAddressType { get => _addressType; }
 
-        // TODO pairing
-        ///// <summary>
-        ///// Gets a boolean indicating whether the BluetoothLEDevice was paired using a Secure
-        ///// Connection.
-        ///// </summary>
-        ////public bool WasSecureConnectionUsedForPairing { get; }
+        /// <summary>
+        /// Gets a boolean indicating whether the BluetoothLEDevice was paired using a Secure
+        /// Connection.
+        /// </summary>
+        public bool WasSecureConnectionUsedForPairing { get => _pairing.WasSecureConnectionUsedForPairing; }
 
         /// <summary>
         /// Occurs when the connection status for the device has changed.
@@ -425,7 +490,7 @@ namespace nanoFramework.Device.Bluetooth
                                     result = (readWriteValueResult)_eventStatus;
                                     switch (result)
                                     {
-                                        case readWriteValueResult.success:
+                                        case readWriteValueResult.acessDenied:
                                             if (!securityStarted)
                                             {
                                                 securityStarted = true;
