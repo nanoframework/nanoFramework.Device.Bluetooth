@@ -2,7 +2,19 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.37...HEAD)
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.40...HEAD)
+
+**Fixed bugs:**
+
+- Fix NordicSPP OOM [\#69](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/69)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#70](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/70)
+
+## [v1.1.40](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/v1.1.40) (2023-03-16)
+
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.37...v1.1.40)
 
 **Fixed bugs:**
 
