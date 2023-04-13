@@ -13,7 +13,7 @@ namespace nanoFramework.Device.Bluetooth
     /// Groups parameters used to configure received signal strength indicator (RSSI)-based
     /// filtering.
     /// </summary>
-    public class BluetoothSignalStrengthFilter 
+    public class BluetoothSignalStrengthFilter
     {
         private short _inRangeThresholdInDBm;
         private short _outOfRangeThresholdInDBm;
@@ -59,20 +59,54 @@ namespace nanoFramework.Device.Bluetooth
         /// The time out for a received signal strength indicator (RSSI) event to be considered
         /// out of range. Value between 1 and 60 seconds.
         /// </summary>
-        public TimeSpan OutOfRangeTimeout { get => _outOfRangeTimeout; set => _outOfRangeTimeout = value; }
+        public TimeSpan OutOfRangeTimeout
+        {
+            get => _outOfRangeTimeout;
+            set
+            {
+                if (value.TotalMilliseconds < 1000 || value.Milliseconds > 60000)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+                _outOfRangeTimeout = value;
+            }
+
+        }
 
         /// <summary>
         /// The minimum received signal strength indicator (RSSI) value in dBm on which RSSI
         /// events will be considered out of range. Value between +20 and -127. Default vale is -127.
         /// </summary>
-        public short OutOfRangeThresholdInDBm { get => _outOfRangeThresholdInDBm; set => _outOfRangeThresholdInDBm = value; }
+        public short OutOfRangeThresholdInDBm 
+        { 
+            get => _outOfRangeThresholdInDBm;
+            set
+            { 
+                if ( value > 20 || value < -127)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+                _outOfRangeThresholdInDBm = value;
+            }
+        }
 
         /// <summary>
         /// The minimum received signal strength indicator (RSSI) value in dBm on which RSSI
         /// events will be propagated or considered in range if the previous events were
         /// considered out of range. Value between +20 and -127. Default vale is -127.
         /// </summary>
-        public short InRangeThresholdInDBm { get => _inRangeThresholdInDBm; set => _inRangeThresholdInDBm = value; }
+        public short InRangeThresholdInDBm 
+        { 
+            get => _inRangeThresholdInDBm;
+            set 
+            {
+                if (value > 20 || value < -127)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+                _inRangeThresholdInDBm = value; 
+            } 
+        }
 
         /// <summary>
         /// Signal strength filter (RSSI).

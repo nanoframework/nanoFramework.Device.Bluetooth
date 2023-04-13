@@ -110,18 +110,23 @@ namespace nanoFramework.Device.Bluetooth
         internal void OnReceived(BluetoothLEAdvertisementReceivedEventArgs args)
         {
             // Check filters
+            // Advertisement section Filter 
+            if (_advertisementFilter != null && !_advertisementFilter.Filter(args))
+            {
+                return;
+            }
+
             // Signal strength filter
             if (!_signalStrengthFilter.Filter(args))
             {
                 return;
             }
 
-            // Advertisement section Filter (TODO)
-            if (_advertisementFilter != null && !_advertisementFilter.Filter(args))
-            {
-                return;
-            }
+            FireEvent(args);
+        }
 
+        internal void FireEvent(BluetoothLEAdvertisementReceivedEventArgs args)
+        {
             Received?.Invoke(this, args);
         }
 

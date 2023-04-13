@@ -27,12 +27,14 @@ Bluetooth is currently only supported on ESP32 devices with following firmware.
 
 - ESP32_BLE_REV0
 - ESP32_BLE_REV3
+- ESP32_PSRAM_BLE_GenericGraphic_REV3
+- ESP32_S3_BLE
 - M5Core2
 - LilygoTWatch2021
 - ESP32_ETHERNET_KIT_1.2
 
-This restriction is due to IRAM memory space in the firmware image. 
-With revision 1 of ESP32 devices, the PSRAM implementation requires a large number of PSRAM library fixes which greatly reduces the 
+The Bluetooth is not in every firmware due to a restriction in the IRAM memory space in the firmware image. 
+For earlier revision 1 ESP32 devices, the PSRAM implementation required a large number of PSRAM library fixes which greatly reduces the 
 available space in the IRAM area, so PSRAM is currently disabled for ESP32_BLE_REV0. With the revision 3 devices the Bluetooth and 
 PSRAM are both available.
 
@@ -52,17 +54,15 @@ A number of Bluetooth LE samples are available in the [nanoFramework samples rep
 
 ### Overview
 
-This implementation supports a cut down version of the Gatt Server and Gatt Client implementation.
+This implementation supports a cut down version of the Gatt Server and Gatt Client implementations.
 
 The device can either run as a Server or Client, but not at the same time.  
-For example if you start a Watcher to look for advertisements from Server devices you will not 
-be able to connect to those devices until the Watcher has been stopped. But you can receive data from connected 
-devices while Watcher is scanning.
 
 For more information see relevant sections: -
 
 - [Gatt Server](#gatt-server)
 - [Gatt Client / Central](#gatt-client-central)
+- [Advertisement Publishing](#advertisement-publishing)
 
 Also as part of this assembly is the NordicSPP class which implements a Serial Protocol Profile based on 
 the Nordic specification. This allows clients to easily connect via Bluetooth LE to send and receive messages via a 
@@ -75,7 +75,7 @@ called GUID in .Net and UUID in the Bluetooth specifications.
 
 If the attribute is standard UUID defined by the Bluetooth SIG, it will also have a corresponding 16-bit short ID (for example, 
 the characteristic **Battery Level** has a UUID of 00002A19-0000-1000-8000-00805F9B34FB and the short ID is 0x2A19). 
-The common standard UUIDs can be seen in GattServiceUuids and GattCharacteristicUuids.
+The common standard UUIDs can be seen in the classes GattServiceUuids and GattCharacteristicUuids.
 
 If the short ID is not present in GattServiceUuids or GattCharacteristicUuids then create your own short GUID by 
 calling the utility function CreateUuidFromShortCode.
@@ -332,8 +332,22 @@ private static void _notifyCharacteristic_SubscribedClientsChanged(GattLocalChar
 ## Advertising your service
 
 Once all the Characteristics have been created you need to advertise the Service so other devices can see it 
-and/or connect to it. We also provide the device name seen on the discovery.
+and/or connect to it. 
 
+As part of the ServiceProvider we add the following data sections to the advertisement 
+payload automatically.
+
+* Flags 
+* Complete Local Name 
+* UUID of service defined on provider.
+* ServiceData ( Optional )
+
+An extension for nanoFramework allows the advertisement to be added to by adding data sections to
+the Advertisement property of the GattServiceProviderAdvertisingParameters object.
+Also by setting the GattServiceProviderAdvertisingParameters.CustomAdvertisement flag all data sections can
+be set up by the user.
+
+### Starting the advertisement.
 ```csharp
 serviceProvider.StartAdvertising(new GattServiceProviderAdvertisingParameters()
 {
@@ -366,17 +380,56 @@ When a advertisement is received an event will be raised calling the Watcher_Rec
 In the event handler you will be able to select a device using the information supplied on the event.
 This could be device LocalName or other data supplied in the advertisement data.
 
+If you start a Watcher to look for advertisements from Server devices you will not 
+be able to connect to those devices until the Watcher has been stopped, but you can receive data from connected 
+devices while Watcher is scanning. So the Watcher needs to be stopped while connections are being made to servers.
+
 See samples for more information.
 
 Filters can be added to the BluetoothLEAdvertisementWatcher.
-Currently this is just an RSSI filter so Advertisements are only received from devices within a certain signal strength. 
+THere are 2 filters  available:-
+* RSSI filter - Advertisements are only received from devices within a certain signal strength. 
+* Advertisement Filter - Advertisements are filtered by the contents of the advertisement.
 
-RSSI filter
+### RSSI filter
 ```csharp
     watcher.SignalStrengthFilter.InRangeThresholdInDBm = -70;
     watcher.SignalStrengthFilter.OutOfRangeThresholdInDBm = -77;
     watcher.SignalStrengthFilter.OutOfRangeTimeout = TimeSpan.FromMilliseconds(10000);
 ```
+
+### Advertisements Filter
+
+Advertisements are only received from devices which match the data sections or part of a data section contained in the filter.
+
+Update the advertisement object with data sections for the filter to match against.
+There are some properties on object for common data sections. For other data sections load the "dataSections" arrayList property with the data sections required to match.
+
+Using a property to match a local name of device.
+Only adverts from devices with a local name of "Sample" will be received.
+```csharp
+    watcher.AdvertisementFilter.Advertisement.LocalName = "Sample";
+```
+
+This filter uses a partial match of part of data section.
+Select all Advertisements with an "a" in 2nd position of Local name
+
+If you want to filter on part of a data section then use the BytePatterns arrayList.
+```csharp
+   BluetoothLEAdvertisementBytePattern pattern = new BluetoothLEAdvertisementBytePattern()
+   {
+      DataType = (byte)BluetoothLEAdvertisementDataSectionType.CompleteLocalName,
+      Data = new Buffer(new Byte[] { (Byte)'a' }),
+      Offset = 1
+   };
+
+   watcher.AdvertisementFilter.BytePatterns.Add(pattern2;
+```
+
+Any data thats contained in an advertisement can be filtered on.
+Advertisement and byte patterns can be used together.
+
+For more examples of advertisement filters see the Watcher filter sample.
 
 ## Creating a device and connecting to device.
 
@@ -736,6 +789,53 @@ private static void Pairing_PairingComplete(object sender, DevicePairingEventArg
         Console.WriteLine($"PairingComplete failed - status = {args.Status}");
     }
 }
+```
+
+# Advertisement Publishing
+
+The BluetoothLEAdvertisementPublisher class allows the configuration and advertising of a Bluetooth LE advertisement packet.
+The payload of the advertisement is configured when the class is constructed via the BluetoothLEAdvertisement class.
+
+The BluetoothLEAdvertisement class is used to control exactly what the advertisement packet contains and is mainly
+used to create beacons.
+
+The advertisement is constructed by adding BluetoothLEAdvertisementDataSection to the BluetoothLEAdvertisement class.
+For some common Data Sections there are properties on the BluetoothLEAdvertisement class which automatically add the correct 
+data section to advertisement. i.e. LocalName, Flags
+
+Once the BluetoothLEAdvertisementPublisher class has been constructed the advertising can be started or stopped with 
+the Start() and Stop() methods.
+
+## Creating an advertisement packet
+For legacy advertisements the packet length is 31 bytes which includes all data sections.
+Each data section is 1 byte for length, 1 byte for section type and the data bytes. Any data section that
+doesn't fit in advertisement will be moved to the scan response or left off it no room.
+
+Currently we don't support extended advertisement. This will be available in future release.
+
+
+```csharp
+BluetoothLEAdvertisementPublisher publisher = new BluetoothLEAdvertisementPublisher();
+
+// Add Flags using property
+publisher.Advertisement.Flags = BluetoothLEAdvertisementFlags.GeneralDiscoverableMode |
+                                BluetoothLEAdvertisementFlags.DualModeControllerCapable |
+                                BluetoothLEAdvertisementFlags.DualModeHostCapable;
+
+// Adding flags using Data Sections
+publisher.Advertisement.
+
+```
+
+
+## Starting and Stopping Publisher
+Advertise for 1 minute.
+```csharp
+publisher.Start();
+
+Thread.Sleep(60000);
+
+publisher.Stop();
 ```
 
 

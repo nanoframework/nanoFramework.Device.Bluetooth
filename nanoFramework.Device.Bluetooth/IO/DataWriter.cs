@@ -115,6 +115,40 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
+        /// Writes a UUID value to the output stream using order expected for service UUIDs.
+        /// The order of bytes is reverse of bytes when displayed.
+        /// </summary>
+        /// <param name="value">The UUID value to write.</param>
+        public void WriteUuid(Guid value)
+        {
+            InternalWriteGuid(value, new int[] { 15, 14, 13, 12, 11, 10, 9, 8, 6, 7, 4, 5, 0, 1, 2, 3 });
+        }
+
+        /// <summary>
+        /// Write a UUID value to the output stream using order expected by Beacon advertisements.
+        /// The order of bytes is same as when displayed.
+        /// </summary>
+        /// <param name="value"></param>
+        public void WriteUuid2(Guid value)
+        {
+            InternalWriteGuid(value, new int[] { 3, 2, 1, 0, 5, 4, 7, 6, 8, 9, 10, 11, 12, 13, 14, 15 });
+        }
+
+        private void InternalWriteGuid(Guid value, int[] order)
+        {
+            byte[] srcUuid = value.ToByteArray();
+            byte[] tarUuid = value.ToByteArray();
+
+            // Fix order
+            int ti = 0;
+            foreach (int index in order)
+            {
+                tarUuid[ti++] = srcUuid[index];
+            }
+            WriteBytes(tarUuid);
+        }
+
+        /// <summary>
         /// Writes a 16-bit integer value to the output stream.
         /// </summary>
         /// <param name="value">The value to write.</param>

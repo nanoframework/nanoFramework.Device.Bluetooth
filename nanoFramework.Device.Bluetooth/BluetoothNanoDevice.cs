@@ -49,7 +49,7 @@ namespace nanoFramework.Device.Bluetooth
                 BluetoothNanoDevice.RunMode = expectedMode;
             }
         }
-
+ 
         /// <summary>
         /// Get/Set the current mode of the device.
         /// </summary>

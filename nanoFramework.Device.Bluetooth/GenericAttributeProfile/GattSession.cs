@@ -14,7 +14,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
     public class GattSession
     {
         private readonly BluetoothDeviceId _deviceId;
-        private ushort _maxPduSize;
+        private ushort _maxMtuSize;
 
         /// <summary>
         /// Delegate for SessionStatusChanged events.
@@ -64,8 +64,8 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
                     break;
 
                 case BluetoothEventType.ClientSessionChanged:
-                    // Update maxpdu size in GattSession
-                    _maxPduSize = btEvent.data;
+                    // Update max MTU size in GattSession
+                    _maxMtuSize = btEvent.data;
                     MaxPduSizeChanged?.Invoke(this, EventArgs.Empty);
                     break;
             }
@@ -77,10 +77,9 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         public BluetoothDeviceId DeviceId { get => _deviceId; }
 
         /// <summary>
-        /// Gets the maximum protocol data unit (PDU) size. 
-        /// This metric is also known as the maximum transmission unit (MTU) size.
+        /// Gets the maximum transmission unit (MTU) size. 
         /// </summary>
-        public ushort MaxPduSize { get => _maxPduSize; }
+        public ushort MaxMtuSize { get => _maxMtuSize; }
 
     }
 }

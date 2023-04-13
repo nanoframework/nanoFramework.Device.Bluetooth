@@ -86,7 +86,7 @@ namespace nanoFramework.Device.Bluetooth
         public ushort Appearance { get => BluetoothNanoDevice.Appearance; set => BluetoothNanoDevice.Appearance = value; }
 
         /// <summary>
-        /// Get GattSession aasoicated with this server.
+        /// Get GattSession associated with this server.
         /// </summary>
         public GattSession Session { get => _session; }
 
@@ -169,7 +169,7 @@ namespace nanoFramework.Device.Bluetooth
         #endregion Security
 
         /// <summary>
-        /// Starts Bluetoth stack for server mode.
+        /// Starts Bluetooth stack for server mode.
         /// </summary>
         /// <exception cref="InvalidOperationException">If already running or in Client mode.</exception>
         public void Start()
@@ -201,10 +201,10 @@ namespace nanoFramework.Device.Bluetooth
             {
                 case BluetoothEventType.ClientConnected:
                 case BluetoothEventType.ClientDisconnected:
+                case BluetoothEventType.ClientSessionChanged:
                     _session.OnEvent(btEvent);
                     break;
 
-                case BluetoothEventType.ClientSessionChanged:
                 case BluetoothEventType.PassKeyActions:
                 case BluetoothEventType.PassKeyActionsNumericComparison:
                 case BluetoothEventType.AuthenticationComplete:
