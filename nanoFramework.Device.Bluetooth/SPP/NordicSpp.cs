@@ -45,6 +45,7 @@ namespace nanoFramework.Device.Bluetooth.Spp
         /// </summary>
         public NordicSpp()
         {
+                          
             GattServiceProviderResult gspr = GattServiceProvider.Create(ServiceUUID);
             if (gspr.Error != nanoFramework.Device.Bluetooth.BluetoothError.Success)
             {
