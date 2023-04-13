@@ -65,8 +65,7 @@ namespace nanoFramework.Device.Bluetooth
         {
             _session = new GattSession(new BluetoothDeviceId(0));
             _pairing = new DevicePairing(this);
-            _services = new();
-
+            
             _bluetoothEventManager.BluetoothServer = this;
             _bluetoothEventManager.Reset();
         }
@@ -237,7 +236,7 @@ namespace nanoFramework.Device.Bluetooth
                     _bluetoothEventManager.Reset();
                     _bluetoothEventManager.BluetoothServer = null;
 
-                    _services = null;
+                    _services = new();
                     _instance = null;
                 }
 
