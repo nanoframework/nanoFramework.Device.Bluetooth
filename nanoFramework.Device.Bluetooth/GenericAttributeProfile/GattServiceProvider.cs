@@ -161,6 +161,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
                 {
                     // Replace existing service on index
                     BluetoothLEServer._services[index] = sprov;
+                    return;
                 }
             }
 
