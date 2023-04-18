@@ -6,6 +6,7 @@
 using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using nanoFramework.Device.Bluetooth.Advertisement;
 
 namespace nanoFramework.Device.Bluetooth
@@ -15,18 +16,21 @@ namespace nanoFramework.Device.Bluetooth
     /// </summary>
     public class BluetoothLEAdvertisementWatcher
     {
-        BluetoothLEAdvertisementWatcherStatus _status;
-        BluetoothLEScanningMode _scanningMode;
-        BluetoothLEAdvertisementFilter _advertisementFilter;
-        BluetoothSignalStrengthFilter _signalStrengthFilter;
+        private BluetoothLEAdvertisementWatcherStatus _status;
+        private BluetoothLEScanningMode _scanningMode;
+        private BluetoothLEAdvertisementFilter _advertisementFilter;
+        private BluetoothSignalStrengthFilter _signalStrengthFilter;
 
+        Timer _scanCheck;
         Hashtable _scanResults = new();
+        Object _scanResultsLock = new Object();
 
         private class ScanItem
         {
-            public short rssi;
-            public bool  inRange;
-            public DateTime outRangeTime;
+            public short rssi;  // RSSI of last scan
+            public bool  inRange; // True if device was in range.
+            public DateTime outRangeTime;  // Time device went out of range
+            public bool active;     // Scan item active, used for purging entries
         }
 
         /// <summary>
@@ -42,7 +46,6 @@ namespace nanoFramework.Device.Bluetooth
         /// <param name="sender"></param>
         /// <param name="args">Event arguments</param>
         public delegate void BluetoothLEAdvertisementStoppedEvenHandler(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementWatcherStoppedEventArgs args);
-
 
         /// <summary>
         /// Creates a new BluetoothLEAdvertisementWatcher object.
@@ -76,6 +79,40 @@ namespace nanoFramework.Device.Bluetooth
 
             NativeStartAdvertisementWatcher((int)_scanningMode);
             BluetoothLEServer._bluetoothEventManager.Watcher = this;
+
+            // Remove inactive entries from scan results every 5 minutes 
+            TimeSpan time = new TimeSpan(0, 5, 0);
+            _scanCheck = new Timer(scanCheckCallback, 0, time, time);
+        }
+
+        /// <summary>
+        /// Called every 5 minutes to purge scan hash.
+        /// </summary>
+        /// <param name="state"></param>
+        private void scanCheckCallback(object state)
+        {
+            lock (_scanResultsLock)
+            {
+                ArrayList removeList = new ArrayList();
+
+                foreach (DictionaryEntry item in _scanResults)
+                {
+                    if (!((ScanItem)item.Value).active)
+                    {
+                        removeList.Add(item.Key);
+                    }
+                    else
+                    {
+                        ((ScanItem)item.Value).active = false;
+                    }
+                }
+
+                // Now delete expired items
+                foreach (ulong addressKey in removeList)
+                {
+                    DeleteScanEntry(addressKey);
+                }
+            }
         }
 
         /// <summary>
@@ -84,6 +121,8 @@ namespace nanoFramework.Device.Bluetooth
         /// </summary>
         public void Stop()
         {
+            _scanCheck.Dispose();
+
             _status = BluetoothLEAdvertisementWatcherStatus.Stopping;
 
             BluetoothLEServer._bluetoothEventManager.Watcher = null;
@@ -119,10 +158,13 @@ namespace nanoFramework.Device.Bluetooth
 
         internal void OnReceived(BluetoothLEAdvertisementReceivedEventArgs args)
         {
-            // Check Scan in RSSI range
-            if (ScanRssiFilter(args))
+            lock (_scanResultsLock)
             {
-                Received?.Invoke(this, args);
+                // Check Scan in RSSI range
+                if (ScanRssiFilter(args))
+                {
+                    Received?.Invoke(this, args);
+                }
             }
         }
 
@@ -143,6 +185,8 @@ namespace nanoFramework.Device.Bluetooth
 
             if (scan != null)
             {
+                scan.active = true;  // flag entry as active so not purged
+
                 if (!inRange)
                 {
                     if (args.RawSignalStrengthInDBm < SignalStrengthFilter.OutOfRangeThresholdInDBm)
@@ -151,17 +195,17 @@ namespace nanoFramework.Device.Bluetooth
                         DeleteScanEntry(args.BluetoothAddress);
                         return false;
                     }
-
+                    
                     // In between in and out of range thresholds, check time out of range
                     if (scan.inRange)
                     {
-                        // If previously in range and not out
-                        // then set date time for time out
+                        // If previously in range and now out
+                        // then set date time for time out of range
                         AddOrReplaceScanEntry(args.BluetoothAddress, args.RawSignalStrengthInDBm, inRange);
                     }
                     else 
                     {
-                        // If previously moved out of range then check timer
+                        // If previously moved out of range then check timer and still out of range.
                         if ((scan.outRangeTime + SignalStrengthFilter.OutOfRangeTimeout) < DateTime.UtcNow )
                         {
                             // Moved out of range for time out period
@@ -192,6 +236,7 @@ namespace nanoFramework.Device.Bluetooth
             {
                 rssi = Rssi,
                 inRange = InRange,
+                active = true
             };
 
             if (!InRange)
@@ -221,7 +266,7 @@ namespace nanoFramework.Device.Bluetooth
 
         /// <summary>
         /// Notification to the application that the Bluetooth LE scanning for advertisements has
-        /// been cancelled or aborted either by the application or due to an error.
+        /// been canceled or aborted either by the application or due to an error.
         /// </summary>
         public event BluetoothLEAdvertisementStoppedEvenHandler Stopped;
 
