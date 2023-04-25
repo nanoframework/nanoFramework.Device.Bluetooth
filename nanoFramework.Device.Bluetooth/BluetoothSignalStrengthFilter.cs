@@ -19,12 +19,12 @@ namespace nanoFramework.Device.Bluetooth
         private short _outOfRangeThresholdInDBm;
         private TimeSpan _outOfRangeTimeout;
 
-        Timer _scanCheck;
-        Hashtable _scanResults = new();
-        Object _scanResultsLock = new Object();
+        private Timer _scanCheck;
+        private Hashtable _scanResults = new();
+        private Object _scanResultsLock = new Object();
 
-        const int DefaultDBM = -127;
-        const int DefaultOorTimeout = 60;
+        private const int DefaultDBM = -127;
+        private const int DefaultOorTimeout = 60;
 
         private class ScanItem
         {
