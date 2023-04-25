@@ -31,5 +31,11 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         ///// a received Bluetooth LE advertisement.
         ///// </summary>
         //public IList<BluetoothLEAdvertisementBytePattern> BytePatterns { get; }
+
+        internal bool Filter(BluetoothLEAdvertisementReceivedEventArgs args)
+        {
+            return true;
+        }
+
     }
 }

@@ -6,6 +6,7 @@
 using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using nanoFramework.Device.Bluetooth.Advertisement;
 
 namespace nanoFramework.Device.Bluetooth
@@ -15,19 +16,10 @@ namespace nanoFramework.Device.Bluetooth
     /// </summary>
     public class BluetoothLEAdvertisementWatcher
     {
-        BluetoothLEAdvertisementWatcherStatus _status;
-        BluetoothLEScanningMode _scanningMode;
-        BluetoothLEAdvertisementFilter _advertisementFilter;
-        BluetoothSignalStrengthFilter _signalStrengthFilter;
-
-        Hashtable _scanResults = new();
-
-        private class ScanItem
-        {
-            public short rssi;
-            public bool  inRange;
-            public DateTime outRangeTime;
-        }
+        private BluetoothLEAdvertisementWatcherStatus _status;
+        private BluetoothLEScanningMode _scanningMode;
+        private BluetoothLEAdvertisementFilter _advertisementFilter;
+        private BluetoothSignalStrengthFilter _signalStrengthFilter;
 
         /// <summary>
         /// Delegate for new Bluetooth LE advertisement events received.
@@ -42,7 +34,6 @@ namespace nanoFramework.Device.Bluetooth
         /// <param name="sender"></param>
         /// <param name="args">Event arguments</param>
         public delegate void BluetoothLEAdvertisementStoppedEvenHandler(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementWatcherStoppedEventArgs args);
-
 
         /// <summary>
         /// Creates a new BluetoothLEAdvertisementWatcher object.
@@ -60,7 +51,7 @@ namespace nanoFramework.Device.Bluetooth
         {
             _status = BluetoothLEAdvertisementWatcherStatus.Created;
             _advertisementFilter = advertisementFilter;
-            SignalStrengthFilter = new BluetoothSignalStrengthFilter();
+            SignalStrengthFilter = new();
         }
 
         /// <summary>
@@ -72,7 +63,6 @@ namespace nanoFramework.Device.Bluetooth
             BluetoothNanoDevice.CheckMode(BluetoothNanoDevice.Mode.Client);
 
             _status = BluetoothLEAdvertisementWatcherStatus.Started;
-            _scanResults = new Hashtable();
 
             NativeStartAdvertisementWatcher((int)_scanningMode);
             BluetoothLEServer._bluetoothEventManager.Watcher = this;
@@ -119,101 +109,22 @@ namespace nanoFramework.Device.Bluetooth
 
         internal void OnReceived(BluetoothLEAdvertisementReceivedEventArgs args)
         {
-            // Check Scan in RSSI range
-            if (ScanRssiFilter(args))
+            // Check filters
+            // Signal strength filter
+            if (!_signalStrengthFilter.Filter(args))
             {
-                Received?.Invoke(this, args);
+                return;
             }
+
+            // Advertisement section Filter (TODO)
+            if (_advertisementFilter != null && !_advertisementFilter.Filter(args))
+            {
+                return;
+            }
+
+            Received?.Invoke(this, args);
         }
 
-        /// <summary>
-        /// Check Event against RSSI filter
-        /// </summary>
-        /// <param name="args">BluetoothLEAdvertisementReceivedEventArgs</param>
-        /// <returns>Returns False to ignore event</returns>
-        internal bool ScanRssiFilter(BluetoothLEAdvertisementReceivedEventArgs args)
-        {
-            ScanItem scan = FindScanEntry(args.BluetoothAddress);
-            bool inRange = (args.RawSignalStrengthInDBm >= SignalStrengthFilter.InRangeThresholdInDBm);
-            if (scan == null && inRange)
-            {
-                // New entry and in range then add it to list
-                scan = AddOrReplaceScanEntry(args.BluetoothAddress, args.RawSignalStrengthInDBm, inRange);
-            }
-
-            if (scan != null)
-            {
-                if (!inRange)
-                {
-                    if (args.RawSignalStrengthInDBm < SignalStrengthFilter.OutOfRangeThresholdInDBm)
-                    {
-                        // Completely out of range, ignore
-                        DeleteScanEntry(args.BluetoothAddress);
-                        return false;
-                    }
-
-                    // In between in and out of range thresholds, check time out of range
-                    if (scan.inRange)
-                    {
-                        // If previously in range and not out
-                        // then set date time for time out
-                        AddOrReplaceScanEntry(args.BluetoothAddress, args.RawSignalStrengthInDBm, inRange);
-                    }
-                    else 
-                    {
-                        // If previously moved out of range then check timer
-                        if ((scan.outRangeTime + SignalStrengthFilter.OutOfRangeTimeout) < DateTime.UtcNow )
-                        {
-                            // Moved out of range for time out period
-                            // Remove scan
-                            DeleteScanEntry(args.BluetoothAddress);
-                            return false;
-                        }
-                    }
-                }
-
-                return true;
-            }
-            return false;
-        }
-
-        private ScanItem FindScanEntry(UInt64 address)
-        {
-            if (_scanResults.Contains(address))
-            {
-                return (ScanItem)_scanResults[address];
-            }
-            return null;
-        }
-
-        private ScanItem AddOrReplaceScanEntry(UInt64 address, short Rssi, bool InRange)
-        {
-            ScanItem item = new()
-            {
-                rssi = Rssi,
-                inRange = InRange,
-            };
-
-            if (!InRange)
-            {
-                // It out of range now, save time for time out checking 
-                item.outRangeTime = DateTime.UtcNow;
-            }
-
-            DeleteScanEntry(address);
-
-            _scanResults.Add(address, item);
-
-            return item;
-        }
-
-        private void DeleteScanEntry(UInt64 address)
-        {
-            if (_scanResults.Contains(address))
-            {
-                _scanResults.Remove(address);
-            }
-        }
         /// <summary>
         ///  Notification for new Bluetooth LE advertisement events received.
         /// </summary>
@@ -221,7 +132,7 @@ namespace nanoFramework.Device.Bluetooth
 
         /// <summary>
         /// Notification to the application that the Bluetooth LE scanning for advertisements has
-        /// been cancelled or aborted either by the application or due to an error.
+        /// been canceled or aborted either by the application or due to an error.
         /// </summary>
         public event BluetoothLEAdvertisementStoppedEvenHandler Stopped;
 
