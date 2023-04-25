@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.43...HEAD)
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.45...HEAD)
+
+**Fixed bugs:**
+
+- Purge scan results [\#72](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/72)
+
+## [v1.1.45](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/v1.1.45) (2023-04-16)
+
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.43...v1.1.45)
 
 **Fixed bugs:**
 
