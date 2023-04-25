@@ -23,15 +23,15 @@ namespace nanoFramework.Device.Bluetooth
         Hashtable _scanResults = new();
         Object _scanResultsLock = new Object();
 
-        const int DEFAULT_DBM = -127;
-        const int DEFAULT_OOR_TIMEOUT = 60;
+        const int DefaultDBM = -127;
+        const int DefaultOorTimeout = 60;
 
         private class ScanItem
         {
-            public short rssi;  // RSSI of last scan
-            public bool inRange; // True if device was in range.
-            public DateTime outRangeTime;  // Time device went out of range
-            public bool active;     // Scan item active, used for purging entries
+            public short Rssi;  // RSSI of last scan
+            public bool InRange; // True if device was in range.
+            public DateTime OutRangeTime;  // Time device went out of range
+            public bool Active;     // Scan item Active, used for purging entries
         }
 
         /// <summary>
@@ -39,15 +39,15 @@ namespace nanoFramework.Device.Bluetooth
         /// </summary>
         public BluetoothSignalStrengthFilter()
         {
-            InRangeThresholdInDBm = DEFAULT_DBM;
-            OutOfRangeThresholdInDBm = DEFAULT_DBM;
-            OutOfRangeTimeout = new TimeSpan(0, 0, DEFAULT_OOR_TIMEOUT); // seconds
+            InRangeThresholdInDBm = DefaultDBM;
+            OutOfRangeThresholdInDBm = DefaultDBM;
+            OutOfRangeTimeout = new TimeSpan(0, 0, DefaultOorTimeout); // seconds
 
             _scanResults = new Hashtable();
 
             // Remove inactive entries from scan results every 1 minute 
             TimeSpan time = new TimeSpan(0, 1, 0);
-            _scanCheck = new Timer(scanCheckCallback, 0, time, time);
+            _scanCheck = new Timer(ScanCheckCallback, 0, time, time);
         }
 
         ///// <summary>
@@ -82,7 +82,7 @@ namespace nanoFramework.Device.Bluetooth
         internal bool Filter(BluetoothLEAdvertisementReceivedEventArgs args)
         {
             // If default setting then just accept all events
-            if (InRangeThresholdInDBm == DEFAULT_DBM)
+            if (InRangeThresholdInDBm == DefaultDBM)
             {
                 return true;
             }
@@ -97,7 +97,7 @@ namespace nanoFramework.Device.Bluetooth
 
             if (scan != null)
             {
-                scan.active = true;  // flag entry as active so not purged
+                scan.Active = true;  // flag entry as active so not purged
 
                 if (!inRange)
                 {
@@ -109,7 +109,7 @@ namespace nanoFramework.Device.Bluetooth
                     }
 
                     // In between in and out of range thresholds, check time out of range
-                    if (scan.inRange)
+                    if (scan.InRange)
                     {
                         // If previously in range and now out
                         // then set date time for time out of range
@@ -118,7 +118,7 @@ namespace nanoFramework.Device.Bluetooth
                     else
                     {
                         // If previously moved out of range then check timer and still out of range.
-                        if ((scan.outRangeTime + OutOfRangeTimeout) < DateTime.UtcNow)
+                        if ((scan.OutRangeTime + OutOfRangeTimeout) < DateTime.UtcNow)
                         {
                             // Moved out of range for time out period
                             // Remove scan
@@ -137,7 +137,7 @@ namespace nanoFramework.Device.Bluetooth
         /// Called every 5 minutes to purge scan hash.
         /// </summary>
         /// <param name="state"></param>
-        private void scanCheckCallback(object state)
+        private void ScanCheckCallback(object state)
         {
             lock (_scanResultsLock)
             {
@@ -145,13 +145,13 @@ namespace nanoFramework.Device.Bluetooth
 
                 foreach (DictionaryEntry item in _scanResults)
                 {
-                    if (!((ScanItem)item.Value).active)
+                    if (!((ScanItem)item.Value).Active)
                     {
                         removeList.Add(item.Key);
                     }
                     else
                     {
-                        ((ScanItem)item.Value).active = false;
+                        ((ScanItem)item.Value).Active = false;
                     }
                 }
 
@@ -169,22 +169,23 @@ namespace nanoFramework.Device.Bluetooth
             {
                 return (ScanItem)_scanResults[address];
             }
+
             return null;
         }
 
-        private ScanItem AddOrReplaceScanEntry(UInt64 address, short Rssi, bool InRange)
+        private ScanItem AddOrReplaceScanEntry(UInt64 address, short rssi, bool inRange)
         {
             ScanItem item = new()
             {
-                rssi = Rssi,
-                inRange = InRange,
-                active = true
+                Rssi = rssi,
+                InRange = inRange,
+                Active = true
             };
 
-            if (!InRange)
+            if (!inRange)
             {
                 // It out of range now, save time for time out checking 
-                item.outRangeTime = DateTime.UtcNow;
+                item.OutRangeTime = DateTime.UtcNow;
             }
 
             DeleteScanEntry(address);

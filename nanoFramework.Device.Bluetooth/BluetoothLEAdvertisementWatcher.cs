@@ -66,7 +66,6 @@ namespace nanoFramework.Device.Bluetooth
 
             NativeStartAdvertisementWatcher((int)_scanningMode);
             BluetoothLEServer._bluetoothEventManager.Watcher = this;
-
         }
 
         /// <summary>
