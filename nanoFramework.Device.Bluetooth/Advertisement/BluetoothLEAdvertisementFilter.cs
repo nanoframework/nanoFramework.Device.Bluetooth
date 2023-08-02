@@ -3,7 +3,6 @@
 // See LICENSE file in the project root for full license information.
 //
 
-using System;
 using System.Collections;
 
 namespace nanoFramework.Device.Bluetooth.Advertisement
@@ -18,7 +17,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         private ArrayList _bytePatterns;
 
         /// <summary>
-        /// Creates a new BluetoothLEAdvertisementFilter object.
+        /// Creates a new <see cref="BluetoothLEAdvertisementFilter"/> object.
         /// </summary>
         public BluetoothLEAdvertisementFilter()
         {
@@ -27,7 +26,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         }
 
         /// <summary>
-        /// A BluetoothLEAdvertisement object that can be applied as filters to received
+        /// A <see cref="BluetoothLEAdvertisement"/> object that can be applied as filters to received
         /// Bluetooth LE advertisements.
         /// </summary>
         public BluetoothLEAdvertisement Advertisement { get => _advertisement; set => _advertisement = value; }

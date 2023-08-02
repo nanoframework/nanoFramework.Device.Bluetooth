@@ -2,13 +2,12 @@
 // Copyright (c) .NET Foundation and Contributors
 // See LICENSE file in the project root for full license information.
 //
-using nanoFramework.Device.Bluetooth.Advertisement;
 using System;
 
 namespace nanoFramework.Device.Bluetooth
 {
     /// <summary>
-    /// Bluetooth library utilities
+    /// Bluetooth library utilities.
     /// </summary>
     public static class Utilities
     {
@@ -19,20 +18,20 @@ namespace nanoFramework.Device.Bluetooth
         /// <summary>
         /// Type of UUID.
         /// </summary>
-        public enum UuidType 
-        { 
+        public enum UuidType
+        {
             /// <summary>
             /// 16 bit UUID.
             /// </summary>
-            Uuid16, 
+            Uuid16,
             /// <summary>
             /// 32 bit UUID.
             /// </summary>
-            Uuid32, 
+            Uuid32,
             /// <summary>
             /// 128 bit UUID
             /// </summary>
-            Uuid128 
+            Uuid128
         };
 
         /// <summary>
@@ -166,7 +165,7 @@ namespace nanoFramework.Device.Bluetooth
         public static bool IsBluetoothSigUUID(Guid uuid)
         {
             byte[] bytes = uuid.ToByteArray();
-            for(int index=0; index<baseUuid.Length; index++)
+            for (int index = 0; index < baseUuid.Length; index++)
             {
                 if (baseUuid[index] != bytes[index])
                 {
@@ -182,10 +181,10 @@ namespace nanoFramework.Device.Bluetooth
         /// </summary>
         /// <param name="uuid">Guid with UUID Sig value.</param>
         /// <returns>True if Sig UUID is 16bit UUID</returns>
-        public static bool IsBluetoothSigUUID16(Guid uuid) 
+        public static bool IsBluetoothSigUUID16(Guid uuid)
         {
             byte[] bytes = uuid.ToByteArray();
-            return (bytes[2] == 0) && (bytes[3] == 0);    
+            return (bytes[2] == 0) && (bytes[3] == 0);
         }
 
         /// <summary>
@@ -195,10 +194,10 @@ namespace nanoFramework.Device.Bluetooth
         /// <returns>UUID type.</returns>
         public static UuidType TypeOfUuid(Guid uuid)
         {
-            if (Utilities.IsBluetoothSigUUID(uuid))
+            if (IsBluetoothSigUUID(uuid))
             {
                 // 16 bit or 32 bit Bluetooth SIG UUID
-                if (Utilities.IsBluetoothSigUUID16(uuid))
+                if (IsBluetoothSigUUID16(uuid))
                 {
                     // 16bit UUID
                     return UuidType.Uuid16;

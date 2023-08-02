@@ -3,8 +3,6 @@
 // See LICENSE file in the project root for full license information.
 //
 
-using System;
-
 namespace nanoFramework.Device.Bluetooth.Advertisement
 {
     /// <summary>
@@ -24,7 +22,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         }
 
         /// <summary>
-        /// Create a new BluetoothLEAdvertisementBytePattern object with an advertisement data type to match, the
+        /// Create a new <see cref="BluetoothLEAdvertisementBytePattern"/> object with an advertisement data type to match, the
         /// advertisement data byte pattern to match, and the offset of the byte pattern from the beginning of the advertisement
         /// data section.
         /// </summary>

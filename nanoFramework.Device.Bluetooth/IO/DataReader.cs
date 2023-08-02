@@ -124,7 +124,7 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Reads a GUID value from the input buffer.
+        /// Reads a <see cref="Guid"/> value from the input buffer.
         /// </summary>
         /// <returns>The value.</returns>
         public Guid ReadGuid()
@@ -160,7 +160,7 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Reads a UUID value from the input buffer which has been written with WriteUuid2
+        /// Reads a UUID value from the input buffer which has been written with <see cref="DataWriter.WriteUuid2"/>.
         /// </summary>
         /// <returns>The GUID/UUID value.</returns>
         public Guid ReadUuid2()

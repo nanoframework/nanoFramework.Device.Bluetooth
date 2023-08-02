@@ -3,11 +3,8 @@
 // See LICENSE file in the project root for full license information.
 //
 
-using System;
-using System.Collections;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using nanoFramework.Device.Bluetooth.Advertisement;
+using System.Runtime.CompilerServices;
 
 namespace nanoFramework.Device.Bluetooth
 {
@@ -43,7 +40,7 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Creates a new BluetoothLEAdvertisementWatcher object with an advertisement filter
+        /// Creates a new <see cref="BluetoothLEAdvertisementWatcher"/> object with an advertisement filter
         /// to initialize the watcher.
         /// </summary>
         /// <param name="advertisementFilter">The advertisement filter to initialize the watcher.</param>
@@ -55,7 +52,7 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Start the BluetoothLEAdvertisementWatcher to scan for Bluetooth LE advertisements.
+        /// Start the <see cref="BluetoothLEAdvertisementWatcher"/> to scan for Bluetooth LE advertisements.
         /// </summary>
         public void Start()
         {
@@ -69,7 +66,7 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Stop the BluetoothLEAdvertisementWatcher and disable the scanning for Bluetooth
+        /// Stop the <see cref="BluetoothLEAdvertisementWatcher"/> and disable the scanning for Bluetooth
         /// LE advertisements.
         /// </summary>
         public void Stop()
@@ -86,7 +83,7 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Gets or sets a BluetoothSignalStrengthFilter object used for configuration of
+        /// Gets or sets a <see cref="BluetoothSignalStrengthFilter"/> object used for configuration of
         /// Bluetooth LE advertisement filtering that uses signal strength-based filtering.
         /// </summary>
         public BluetoothSignalStrengthFilter SignalStrengthFilter { get => _signalStrengthFilter; set => _signalStrengthFilter = value; }
@@ -97,13 +94,13 @@ namespace nanoFramework.Device.Bluetooth
         public BluetoothLEScanningMode ScanningMode { get => _scanningMode; set => _scanningMode = value; }
 
         /// <summary>
-        /// Gets or sets a BluetoothLEAdvertisementFilter object used for configuration of
+        /// Gets or sets a <see cref="BluetoothLEAdvertisementFilter"/> object used for configuration of
         /// Bluetooth LE advertisement filtering that uses payload section-based filtering.
         /// </summary>
         public BluetoothLEAdvertisementFilter AdvertisementFilter { get => _advertisementFilter; set => _advertisementFilter = value; }
 
         /// <summary>
-        /// Gets the current status of the BluetoothLEAdvertisementWatcher.
+        /// Gets the current status of the <see cref="BluetoothLEAdvertisementWatcher"/>.
         /// </summary>
         public BluetoothLEAdvertisementWatcherStatus Status { get => _status; }
 

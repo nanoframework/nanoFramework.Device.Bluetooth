@@ -9,7 +9,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
 {
     /// <summary>
     /// A Bluetooth LE advertisement section. A Bluetooth LE advertisement packet can
-    /// contain multiple instances of these BluetoothLEAdvertisementDataSection objects.
+    /// contain multiple instances of these <see cref="BluetoothLEAdvertisementDataSection"/> objects.
     /// </summary>
     public class BluetoothLEAdvertisementDataSection
     {
@@ -17,14 +17,14 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         private Buffer _buffer;
 
         /// <summary>
-        /// Creates a new BluetoothLEAdvertisementDataSection object.
+        /// Creates a new <see cref="BluetoothLEAdvertisementDataSection"/> object.
         /// </summary>
         public BluetoothLEAdvertisementDataSection() : this(0, new Buffer(16))
         {
         }
 
         /// <summary>
-        /// Creates a new BluetoothLEAdvertisementDataSection object with the Bluetooth LE
+        /// Creates a new <see cref="BluetoothLEAdvertisementDataSection"/> object with the Bluetooth LE
         /// advertisement data type and the payload.
         /// </summary>
         /// <param name="dataType">The Bluetooth LE advertisement data type as defined by the Bluetooth Special Interest Group (SIG).</param>
@@ -66,7 +66,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         /// Returns length of advertisement bytes.
         /// </summary>
         /// <returns></returns>
-        internal int AdvertisentLength() 
+        internal int AdvertisentLength()
         {
             return (int)_buffer.Length + 2;
         }

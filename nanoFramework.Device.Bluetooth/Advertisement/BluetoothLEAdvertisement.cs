@@ -23,7 +23,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         private bool _isDiscovable;
 
         /// <summary>
-        /// Creates a new BluetoothLEAdvertisement object.
+        /// Creates a new <see cref="BluetoothLEAdvertisement"/> object.
         /// </summary>
         public BluetoothLEAdvertisement()
         {
@@ -76,7 +76,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
 
         /// <summary>
         /// Bluetooth LE advertisement flags.
-        /// Defaults to ClassicNotSupported and GeneralDiscoverableMode.
+        /// Defaults to <see cref="BluetoothLEAdvertisementFlags.ClassicNotSupported"/> and <see cref="BluetoothLEAdvertisementFlags.GeneralDiscoverableMode"/>.
         /// </summary>
         public BluetoothLEAdvertisementFlags Flags
         {
@@ -91,7 +91,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         }
 
         /// <summary>
-        /// Gets the list of manufacturer-specific sections in a BluetoothLEAdvertisement.
+        /// Gets the list of manufacturer-specific sections in a <see cref="BluetoothLEAdvertisement"/>.
         /// </summary>
         public ArrayList ManufacturerData { get => _manufacturerData; }
 
@@ -115,13 +115,13 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
 
         #region Methods
         /// <summary>
-        /// Returns an ArrayList of all the BluetoothLEAdvertisementDataSection matching the given advertisement
+        /// Returns a list of all the <see cref="BluetoothLEAdvertisementDataSection"/> matching the given advertisement
         /// type. This method returns an empty list if no such sections are found in the
         /// payload.        
         /// </summary>
         /// <param name="type">The advertisement section type</param>
         /// <returns>
-        /// BluetoothLEAdvertisementDataSection ArrayList of matching advertisement types.
+        /// <see cref="BluetoothLEAdvertisementDataSection"/> list of matching advertisement types.
         /// This method returns an empty list if no such sections are found in the payload.
         /// </returns>
         public ArrayList GetSectionsByType(byte type)
@@ -141,11 +141,11 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         }
 
         /// <summary>
-        /// Return a list of all manufacturer Data sections in the BluetoothLEAdvertisement
+        /// Return a list of all manufacturer Data sections in the <see cref="BluetoothLEAdvertisement"/>
         /// payload matching the specified company id.
         /// </summary>
         /// <param name="companyId">The company identifier code defined by the Bluetooth Special Interest Group (SIG).</param>
-        /// <returns>ArrayList of BluetoothLEManufacturerData by companyId.</returns>
+        /// <returns>A list of <see cref="BluetoothLEManufacturerData"/> by <paramref name="companyId"/>.</returns>
         public ArrayList GetManufacturerDataByCompanyId(ushort companyId)
         {
             ArrayList subset = new();
@@ -315,7 +315,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
             // First remove all manufacturer data from data sections list
             RemoveSectionsOfType(BluetoothLEAdvertisementDataSectionType.ManufacturerSpecificData);
 
-            foreach(BluetoothLEManufacturerData md in _manufacturerData)
+            foreach (BluetoothLEManufacturerData md in _manufacturerData)
             {
                 DataWriter dw = new DataWriter();
                 dw.WriteUInt16(md.CompanyId);

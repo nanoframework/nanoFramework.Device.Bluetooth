@@ -26,7 +26,7 @@ namespace nanoFramework.Device.Bluetooth
 
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private static Mode _mode = Mode.NotRunning;
-        
+
         static BluetoothNanoDevice()
         {
             NativeInitilise();
@@ -49,7 +49,7 @@ namespace nanoFramework.Device.Bluetooth
                 BluetoothNanoDevice.RunMode = expectedMode;
             }
         }
- 
+
         /// <summary>
         /// Get/Set the current mode of the device.
         /// </summary>

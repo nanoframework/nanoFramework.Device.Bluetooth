@@ -4,13 +4,12 @@
 //
 
 using System;
-using System.Collections;
 using System.Runtime.CompilerServices;
 
 namespace nanoFramework.Device.Bluetooth.Advertisement
 {
     /// <summary>
-    /// The BluetoothLEAdvertisementPublisher class allows the configuration and 
+    /// The <see cref="BluetoothLEAdvertisementPublisher"/> class allows the configuration and 
     /// advertising of a Bluetooth LE advertisement packet.
     /// </summary>
     public class BluetoothLEAdvertisementPublisher
@@ -26,26 +25,26 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         private static short _advertisementInstance = 0;  // Extended only
 
         /// <summary>
-        /// Delegate for notification that the status of the BluetoothLEAdvertisementPublisher has changed.
+        /// Delegate for notification that the status of the <see cref="BluetoothLEAdvertisementPublisher"/> has changed.
         /// </summary>
-        /// <param name="sender">BluetoothLEAdvertisementPublisher class sending event.</param>
+        /// <param name="sender"><see cref="BluetoothLEAdvertisementPublisher"/> class sending event.</param>
         /// <param name="args">Event arguments.</param>
         public delegate void BluetoothLEAdvertisementPublisherHandler(Object sender, BluetoothLEAdvertisementPublisherStatusChangedEventArgs args);
 
         /// <summary>
-        /// Notification that the status of the BluetoothLEAdvertisementPublisher has changed.
+        /// Notification that the status of the <see cref="BluetoothLEAdvertisementPublisher"/> has changed.
         /// </summary>
         public event BluetoothLEAdvertisementPublisherHandler StatusChanged;
 
         /// <summary>
-        /// Creates a new BluetoothLEAdvertisementPublisher object.
+        /// Creates a new <see cref="BluetoothLEAdvertisementPublisher"/> object.
         /// </summary>
         public BluetoothLEAdvertisementPublisher(): this(new BluetoothLEAdvertisement())
         {
         }
 
         /// <summary>
-        /// Creates a new BluetoothLEAdvertisementPublisher object with the Bluetooth LE advertisement to publish.
+        /// Creates a new <see cref="BluetoothLEAdvertisementPublisher"/> object with the Bluetooth LE advertisement to publish.
         /// </summary>
         /// <param name="advertisement">The Bluetooth LE advertisement to publish.</param>
         public BluetoothLEAdvertisementPublisher(BluetoothLEAdvertisement advertisement)
@@ -89,7 +88,9 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
             internal set 
             {
                 if (_status == value)
+                {
                     return;
+                }
 
                 _status = value;
 
@@ -101,7 +102,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         /// <summary>
         /// Specifies that the advertisement publisher should use the Extended Advertising format.
         /// Defaults to False, use legacy advertisements. If Bluetooth 5.0 not available on target platform
-        /// then a PlatformNotSupportedException will be thrown.
+        /// then a <see cref="PlatformNotSupportedException"/> will be thrown.
         /// </summary>
         public bool UseExtendedAdvertisement
         {

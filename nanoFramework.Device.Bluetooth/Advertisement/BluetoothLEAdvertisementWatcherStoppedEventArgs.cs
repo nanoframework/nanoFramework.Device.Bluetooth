@@ -6,8 +6,8 @@
 namespace nanoFramework.Device.Bluetooth.Advertisement
 {
     /// <summary>
-    /// Provides data for a Stopped event on a BluetoothLEAdvertisementWatcher. A BluetoothLEAdvertisementWatcherStoppedEventArgs
-    /// instance is created when the Stopped event occurs on a BluetoothLEAdvertisementWatcher
+    /// Provides data for a Stopped event on a <see cref="BluetoothLEAdvertisementWatcher"/>. A <see cref="BluetoothLEAdvertisementWatcherStoppedEventArgs"/>
+    /// instance is created when the Stopped event occurs on a <see cref="BluetoothLEAdvertisementWatcher"/>
     /// object.
     /// </summary>
     public class BluetoothLEAdvertisementWatcherStoppedEventArgs 

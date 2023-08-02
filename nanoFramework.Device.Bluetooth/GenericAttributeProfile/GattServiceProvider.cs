@@ -3,13 +3,11 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using nanoFramework.Device.Bluetooth.Advertisement;
+using nanoFramework.Runtime.Native;
 using System;
-using System.Text;
 using System.Collections;
 using System.Runtime.CompilerServices;
-using nanoFramework.Runtime.Native;
-using nanoFramework.Device.Bluetooth;
-using nanoFramework.Device.Bluetooth.Advertisement;
 
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 {
@@ -88,7 +86,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         public void StartAdvertising(GattServiceProviderAdvertisingParameters parameters)
         {
             // Check and switch to server mode
-            if (BluetoothNanoDevice.RunMode != BluetoothNanoDevice.Mode.Server )
+            if (BluetoothNanoDevice.RunMode != BluetoothNanoDevice.Mode.Server)
             {
                 BluetoothLEServer.Instance.Start();
             }
@@ -101,7 +99,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
             parameters.Advertisement.IsDiscovable = parameters.IsDiscoverable;
 
             // Initialize Service configuration data in native code.
-            if ( NativeInitializeServiceConfig(BluetoothLEServer._services))
+            if (NativeInitializeServiceConfig(BluetoothLEServer._services))
             {
                 // Add default data sections for Service Provider to Advertisement if
                 // not custom.
@@ -179,11 +177,11 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
         private void Publisher_StatusChanged(object sender, BluetoothLEAdvertisementPublisherStatusChangedEventArgs args)
         {
-            switch(args.Status)
+            switch (args.Status)
             {
                 case BluetoothLEAdvertisementPublisherStatus.Started:
-                    _status = _publisher.DataNotFitInAdvertisement?
-                        GattServiceProviderAdvertisementStatus.StartedWithoutAllAdvertisementData:
+                    _status = _publisher.DataNotFitInAdvertisement ?
+                        GattServiceProviderAdvertisementStatus.StartedWithoutAllAdvertisementData :
                         GattServiceProviderAdvertisementStatus.Started;
                     break;
 

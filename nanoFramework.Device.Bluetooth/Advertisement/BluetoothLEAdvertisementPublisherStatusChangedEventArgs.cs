@@ -6,7 +6,7 @@
 namespace nanoFramework.Device.Bluetooth.Advertisement
 {
     /// <summary>
-    /// Provides data for a StatusChanged event on a BluetoothLEAdvertisementPublisher.
+    /// Provides data for a StatusChanged event on a <see cref="BluetoothLEAdvertisementPublisher"/>.
     /// </summary>
     public class BluetoothLEAdvertisementPublisherStatusChangedEventArgs
     {
@@ -22,12 +22,12 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         }
 
         /// <summary>
-        /// Gets the error status for a StatusChanged event on a BluetoothLEAdvertisementPublisher.
+        /// Gets the error status for a StatusChanged event on a <see cref="BluetoothLEAdvertisementPublisher"/>.
         /// </summary>
         public BluetoothError Error { get => _error; }
 
         /// <summary>
-        /// Gets the new status of the BluetoothLEAdvertisementPublisher.
+        /// Gets the new status of the <see cref="BluetoothLEAdvertisementPublisher"/>.
         /// </summary>
         public BluetoothLEAdvertisementPublisherStatus Status { get => _status; }
 

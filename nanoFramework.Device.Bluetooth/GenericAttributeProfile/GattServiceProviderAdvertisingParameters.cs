@@ -30,7 +30,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 
 
         /// <summary>
-        ///  Creates a new GattServiceProviderAdvertisingParameters object.
+        ///  Creates a new <see cref="GattServiceProviderAdvertisingParameters"/> object.
         /// </summary>
         public GattServiceProviderAdvertisingParameters()
         {
@@ -76,14 +76,14 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         public Buffer ServiceData { get => _serviceData; set => _serviceData = value; }
 
         /// <summary>
-        /// Gets the underlying BluetoothLEAdvertisement object for the GattServiceProviderAdvertisingParameters to enable extra 
+        /// Gets the underlying <see cref="BluetoothLEAdvertisement"/> object for the <see cref="GattServiceProviderAdvertisingParameters"/> to enable extra 
         /// advertisement parameters to be set.
         /// </summary>
         public BluetoothLEAdvertisement Advertisement { get => _advertisement; }
 
         /// <summary>
-        /// If set the Advertisement will not be filled in with the default data sections only data sections from
-        /// the Advertisement property will be used. Default is false.
+        /// If set the <see cref="Advertisement"/> will not be filled in with the default data sections only data sections from
+        /// the <see cref="Advertisement"/> property will be used. Default is <see langword="false"/>.
         /// </summary>
         public bool CustomAdvertisement 
         { 

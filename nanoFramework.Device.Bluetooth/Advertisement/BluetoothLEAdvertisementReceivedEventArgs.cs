@@ -5,13 +5,12 @@
 
 using System;
 using System.Runtime.CompilerServices;
-using static nanoFramework.Device.Bluetooth.BluetoothLEAdvertisementWatcher;
 
 namespace nanoFramework.Device.Bluetooth.Advertisement
 {
     /// <summary>
-    /// Provides data for a Received event on a BluetoothLEAdvertisementWatcher. A BluetoothLEAdvertisementReceivedEventArgs
-    /// instance is created when the Received event occurs on a BluetoothLEAdvertisementWatcher object.
+    /// Provides data for a Received event on a <see cref="BluetoothLEAdvertisementWatcher"/>. A <see cref="BluetoothLEAdvertisementReceivedEventArgs"/>
+    /// instance is created when the Received event occurs on a <see cref="BluetoothLEAdvertisementWatcher"/> object.
     /// </summary>
     public class BluetoothLEAdvertisementReceivedEventArgs
     {
@@ -49,9 +48,9 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         }
 
         /// <summary>
-        /// Create BluetoothLEAdvertisementReceivedEventArgs by calling native to fill in fields.
+        /// Create <see cref="BluetoothLEAdvertisementReceivedEventArgs"/> by calling native to fill in fields.
         /// </summary>
-        /// <returns>BluetoothLEAdvertisementReceivedEventArgs object.</returns>
+        /// <returns><see cref="BluetoothLEAdvertisementReceivedEventArgs"/> object.</returns>
         internal static BluetoothLEAdvertisementReceivedEventArgs CreateFromEvent(BluetoothLEAdvertisementWatcher watcher, int eventID)
         {
             BluetoothLEAdvertisementReceivedEventArgs ad = new();
@@ -98,14 +97,14 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         public ulong BluetoothAddress { get => _bluetoothAddress; }
 
         /// <summary>
-        /// Get the Bluetooth address type of BluetoothAddress.
+        /// Get the Bluetooth address type of <see cref="BluetoothAddress"/>.
         /// </summary>
         public BluetoothAddressType BluetoothAddressType { get => _bluetoothAddressType; }
 
         /// <summary>
         /// Gets the received signal strength indicator (RSSI) value, in dBm, for this received
         /// Bluetooth LE advertisement event. This value could be the raw RSSI or a filtered
-        /// RSSI depending on filtering settings configured through BluetoothSignalStrengthFilter.
+        /// RSSI depending on filtering settings configured through <see cref="BluetoothSignalStrengthFilter"/>.
         /// </summary>
         public short RawSignalStrengthInDBm { get => _rawSignalStrengthInDBm; }
 

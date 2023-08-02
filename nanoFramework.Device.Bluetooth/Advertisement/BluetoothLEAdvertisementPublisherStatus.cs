@@ -6,7 +6,7 @@
 namespace nanoFramework.Device.Bluetooth.Advertisement
 {
     /// <summary>
-    /// Represents the possible states of the BluetoothLEAdvertisementPublisher.
+    /// Represents the possible states of the <see cref="BluetoothLEAdvertisementPublisher"/>.
     /// </summary>
     public enum BluetoothLEAdvertisementPublisherStatus
     {
