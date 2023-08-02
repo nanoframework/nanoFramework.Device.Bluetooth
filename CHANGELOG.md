@@ -2,7 +2,23 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.45...HEAD)
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.47...HEAD)
+
+**Implemented enhancements:**
+
+- Advertisement Publisher and filters [\#78](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/78)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#77](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/77)
+- Update 1 NuGet dependencies [\#76](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/76)
+- Update 2 NuGet dependencies [\#75](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/75)
+- Update 1 NuGet dependencies [\#74](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/74)
+- Update 1 NuGet dependencies [\#73](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/73)
+
+## [v1.1.47](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/v1.1.47) (2023-04-25)
+
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.45...v1.1.47)
 
 **Fixed bugs:**
 
