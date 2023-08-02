@@ -38,6 +38,11 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
+    <Compile Include="Advertisement\BluetoothLEAdvertisementBytePattern.cs" />
+    <Compile Include="Advertisement\BluetoothLEAdvertisementPublisher.cs" />
+    <Compile Include="Advertisement\BluetoothLEAdvertisementPublisherStatus.cs" />
+    <Compile Include="Advertisement\BluetoothLEAdvertisementPublisherStatusChangedEventArgs.cs" />
+    <Compile Include="Advertisement\BluetoothLEAdvertisementDataSectionType.cs" />
     <Compile Include="BluetoothAddress.cs" />
     <Compile Include="BluetoothAddressType.cs" />
     <Compile Include="BluetoothConnectionStatus.cs" />

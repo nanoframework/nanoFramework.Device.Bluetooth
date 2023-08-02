@@ -9,18 +9,18 @@ using System.Runtime.CompilerServices;
 namespace nanoFramework.Device.Bluetooth.Advertisement
 {
     /// <summary>
-    /// Provides data for a Received event on a BluetoothLEAdvertisementWatcher. A BluetoothLEAdvertisementReceivedEventArgs
-    /// instance is created when the Received event occurs on a BluetoothLEAdvertisementWatcher
-    /// object.
+    /// Provides data for a Received event on a <see cref="BluetoothLEAdvertisementWatcher"/>. A <see cref="BluetoothLEAdvertisementReceivedEventArgs"/>
+    /// instance is created when the Received event occurs on a <see cref="BluetoothLEAdvertisementWatcher"/> object.
     /// </summary>
     public class BluetoothLEAdvertisementReceivedEventArgs
     {
         private readonly ulong _bluetoothAddress;
         private readonly BluetoothAddressType _bluetoothAddressType;
-        private readonly BluetoothLEAdvertisement _advertisement;
+        private BluetoothLEAdvertisement _advertisement;
         private readonly BluetoothLEAdvertisementType _advertisementType;
         private readonly short _rawSignalStrengthInDBm;
         private DateTime _timestamp;
+        private byte[] _rawAdvertData = null;
 
         internal BluetoothLEAdvertisementReceivedEventArgs()
         {
@@ -48,20 +48,43 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         }
 
         /// <summary>
-        /// Create BluetoothLEAdvertisementReceivedEventArgs by calling native to fill in fields.
+        /// Create <see cref="BluetoothLEAdvertisementReceivedEventArgs"/> by calling native to fill in fields.
         /// </summary>
-        /// <returns>BluetoothLEAdvertisementReceivedEventArgs object</returns>
-        internal static BluetoothLEAdvertisementReceivedEventArgs CreateFromEvent(int eventID)
+        /// <returns><see cref="BluetoothLEAdvertisementReceivedEventArgs"/> object.</returns>
+        internal static BluetoothLEAdvertisementReceivedEventArgs CreateFromEvent(BluetoothLEAdvertisementWatcher watcher, int eventID)
         {
             BluetoothLEAdvertisementReceivedEventArgs ad = new();
+
+            // Call native code to fill in BluetoothLEAdvertisementReceivedEventArgs and BluetoothLEAdvertisement.
             ad.NativeCreateFromEvent(eventID);
+
+            // Parse received data into data sections and properties if available.
+            if (ad._rawAdvertData != null)
+            {
+                ad.Advertisement.ParseBytesToSectionData(ad._rawAdvertData);
+                ad._rawAdvertData = null;
+
+                // TODO can we do this ? merge. extra memory needed, maybe just save last advert
+                //// If a scan response then try to merge advertisement data with original advertisement data.
+                //if (ad.AdvertisementType == BluetoothLEAdvertisementType.ScanResponse)
+                //{
+                //    BluetoothLEAdvertisementWatcher.DeviceItem scanitem = watcher.FindScanEntry(ad.BluetoothAddress);
+                //    if (scanitem != null) 
+                //    {
+                //        // Original item found then update and return that instead
+                //        scanitem.advert.MergeAdvertisement(ad.Advertisement);
+                //        ad.Advertisement = scanitem.advert;
+                //    }
+                //}
+            }
+
             return ad;
         }
 
         /// <summary>
         /// Gets the Bluetooth LE advertisement payload data received.
         /// </summary>
-        public BluetoothLEAdvertisement Advertisement { get => _advertisement; }
+        public BluetoothLEAdvertisement Advertisement { get => _advertisement; internal set => _advertisement = value; }
 
         /// <summary>
         /// Gets the type of the received Bluetooth LE advertisement packet.
@@ -74,14 +97,14 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         public ulong BluetoothAddress { get => _bluetoothAddress; }
 
         /// <summary>
-        /// Get the Bluetooth address type of BluetoothAddress.
+        /// Get the Bluetooth address type of <see cref="BluetoothAddress"/>.
         /// </summary>
         public BluetoothAddressType BluetoothAddressType { get => _bluetoothAddressType; }
 
         /// <summary>
         /// Gets the received signal strength indicator (RSSI) value, in dBm, for this received
         /// Bluetooth LE advertisement event. This value could be the raw RSSI or a filtered
-        /// RSSI depending on filtering settings configured through BluetoothSignalStrengthFilter.
+        /// RSSI depending on filtering settings configured through <see cref="BluetoothSignalStrengthFilter"/>.
         /// </summary>
         public short RawSignalStrengthInDBm { get => _rawSignalStrengthInDBm; }
 

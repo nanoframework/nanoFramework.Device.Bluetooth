@@ -3,12 +3,11 @@
 // See LICENSE file in the project root for full license information.
 //
 
+using nanoFramework.Device.Bluetooth.Advertisement;
+using nanoFramework.Runtime.Native;
 using System;
-using System.Text;
 using System.Collections;
 using System.Runtime.CompilerServices;
-using nanoFramework.Runtime.Native;
-using nanoFramework.Device.Bluetooth;
 
 namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
 {
@@ -23,14 +22,8 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         private GattLocalService _service;
 
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        private bool _isDiscoverable = true;
+        private BluetoothLEAdvertisementPublisher _publisher;
 
-        [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        private bool _isConnectable = true;
-
-        [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        private Buffer _serviceData;
-       
         internal GattServiceProvider(Guid serviceUuid)
         {
             // Add local service
@@ -51,7 +44,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// </summary>
         private void AddDeviceInformationService()
         {
-            // Add and initialised Device Information defaults
+            // Add and initialized Device Information defaults
             GattServiceProvider ServiceProvider = new GattServiceProvider(GattServiceUuids.DeviceInformation);
             GattLocalService dinfService = ServiceProvider.Service;
 
@@ -93,25 +86,115 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         public void StartAdvertising(GattServiceProviderAdvertisingParameters parameters)
         {
             // Check and switch to server mode
-            if (BluetoothNanoDevice.RunMode != BluetoothNanoDevice.Mode.Server )
+            if (BluetoothNanoDevice.RunMode != BluetoothNanoDevice.Mode.Server)
             {
                 BluetoothLEServer.Instance.Start();
             }
 
-            // Save parameters
-            _isConnectable = parameters.IsConnectable;
-            _isDiscoverable = parameters.IsDiscoverable;
-            _serviceData = parameters.ServiceData;
-
             // Make sure pairing attributes set
             BluetoothLEServer.Instance.Pairing.SetPairAttributes();
 
-            // Start advertising.
-            // Native code will use the data provided by this GattServiceProvider instance to
-            // initialise the BLE advert, service and characteristic definitions.
-            if (NativeStartAdvertising(BluetoothLEServer._services))
+            // Save IsConnectable & IsDiscoverable options in Advertisement
+            parameters.Advertisement.IsConnectable = parameters.IsConnectable;
+            parameters.Advertisement.IsDiscovable = parameters.IsDiscoverable;
+
+            // Initialize Service configuration data in native code.
+            if (NativeInitializeServiceConfig(BluetoothLEServer._services))
             {
-                _status = GattServiceProviderAdvertisementStatus.Started;
+                // Add default data sections for Service Provider to Advertisement if
+                // not custom.
+                if (!parameters.CustomAdvertisement)
+                {
+                    BluetoothLEAdvertisementDataSectionType suType;
+                    DataWriter suDataWriter = new();
+
+                    // Add Service UUID
+                    switch (Utilities.TypeOfUuid(_service.Uuid))
+                    {
+                        case Utilities.UuidType.Uuid16:
+                            suType = BluetoothLEAdvertisementDataSectionType.CompleteList16uuid;
+                            suDataWriter.WriteUInt16(Utilities.ConvertUuidToShortId(_service.Uuid));
+                            break;
+
+                        case Utilities.UuidType.Uuid32:
+                            suType = BluetoothLEAdvertisementDataSectionType.CompleteList32uuid;
+                            suDataWriter.WriteUInt32(Utilities.ConvertUuidToIntId(_service.Uuid));
+                            break;
+
+                        case Utilities.UuidType.Uuid128:
+                        default:
+                            suType = BluetoothLEAdvertisementDataSectionType.CompleteList128uuid;
+                            suDataWriter.WriteUuid(_service.Uuid);
+                            break;
+                    }
+
+                    // Add Service UUID with correct type for UUID size.
+                    parameters.Advertisement.AddOrUpdateDataSection(
+                        suType,
+                        suDataWriter.DetachBuffer());
+
+                    // Add Service Data including Service UUID if required.
+                    if (parameters.ServiceData != null)
+                    {
+                        BluetoothLEAdvertisementDataSectionType sdType;
+                        DataWriter sdDataWriter = new();
+
+                        switch (Utilities.TypeOfUuid(_service.Uuid))
+                        {
+                            case Utilities.UuidType.Uuid16:
+                                sdType = BluetoothLEAdvertisementDataSectionType.ServiceData16bitUuid;
+                                sdDataWriter.WriteUInt16(Utilities.ConvertUuidToShortId(_service.Uuid));
+                                break;
+
+                            case Utilities.UuidType.Uuid32:
+                                sdType = BluetoothLEAdvertisementDataSectionType.ServiceData32bitUuid;
+                                sdDataWriter.WriteUInt32(Utilities.ConvertUuidToIntId(_service.Uuid));
+                                break;
+
+                            case Utilities.UuidType.Uuid128:
+                            default:
+                                sdType = BluetoothLEAdvertisementDataSectionType.ServiceData128bitUuid;
+                                sdDataWriter.WriteUuid(_service.Uuid);
+                                break;
+                        }
+                        // Write service data after UUID
+                        sdDataWriter.WriteBytes(parameters.ServiceData.Data);
+
+                        // Add Service Data with correct type for UUID size.
+                        parameters.Advertisement.AddOrUpdateDataSection(
+                            sdType,
+                            sdDataWriter.DetachBuffer());
+                    }
+                }
+
+                _publisher = new BluetoothLEAdvertisementPublisher(parameters.Advertisement);
+                _publisher.StatusChanged += Publisher_StatusChanged;
+
+                // Start advertising.
+                _publisher.Start();
+            }
+        }
+
+        private void Publisher_StatusChanged(object sender, BluetoothLEAdvertisementPublisherStatusChangedEventArgs args)
+        {
+            switch (args.Status)
+            {
+                case BluetoothLEAdvertisementPublisherStatus.Started:
+                    _status = _publisher.DataNotFitInAdvertisement ?
+                        GattServiceProviderAdvertisementStatus.StartedWithoutAllAdvertisementData :
+                        GattServiceProviderAdvertisementStatus.Started;
+                    break;
+
+                case BluetoothLEAdvertisementPublisherStatus.Stopped:
+                    _status = GattServiceProviderAdvertisementStatus.Stopped;
+
+                    NativeDisposeServiceConfig();
+                    BluetoothNanoDevice.RunMode = BluetoothNanoDevice.Mode.NotRunning;
+                    break;
+
+                case BluetoothLEAdvertisementPublisherStatus.Aborted:
+                    _status = GattServiceProviderAdvertisementStatus.Aborted;
+                    break;
             }
         }
 
@@ -120,12 +203,8 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// </summary>
         public void StopAdvertising()
         {
-            // Stop advertising and dispose of native data.
-            NativeStopAdvertising();
-
-            _status = GattServiceProviderAdvertisementStatus.Stopped;
-
-            BluetoothNanoDevice.RunMode = BluetoothNanoDevice.Mode.NotRunning;
+            // Stop advertising and dispose of native data when stopped event received.
+            _publisher.Stop();
         }
 
         /// <summary>
@@ -171,10 +250,10 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         #region external calls to native implementations
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern bool NativeStartAdvertising(ArrayList services);
+        private extern bool NativeInitializeServiceConfig(ArrayList services);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern void NativeStopAdvertising();
+        private extern void NativeDisposeServiceConfig();
 
         #endregion
     }

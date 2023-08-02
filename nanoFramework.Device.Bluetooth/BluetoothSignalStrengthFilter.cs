@@ -13,7 +13,7 @@ namespace nanoFramework.Device.Bluetooth
     /// Groups parameters used to configure received signal strength indicator (RSSI)-based
     /// filtering.
     /// </summary>
-    public class BluetoothSignalStrengthFilter 
+    public class BluetoothSignalStrengthFilter
     {
         private short _inRangeThresholdInDBm;
         private short _outOfRangeThresholdInDBm;
@@ -28,14 +28,29 @@ namespace nanoFramework.Device.Bluetooth
 
         private class ScanItem
         {
-            public short Rssi;  // RSSI of last scan
-            public bool InRange; // True if device was in range.
-            public DateTime OutRangeTime;  // Time device went out of range
-            public bool Active;     // Scan item Active, used for purging entries
+            /// <summary>
+            /// RSSI of last scan.
+            /// </summary>
+            public short Rssi;
+
+            /// <summary>
+            /// <see langword="true"/> if device was in range.
+            /// </summary>
+            public bool InRange;
+
+            /// <summary>
+            /// Time device went out of range.
+            /// </summary>
+            public DateTime OutRangeTime;
+
+            /// <summary>
+            /// Scan item Active, used for purging entries.
+            /// </summary>
+            public bool Active;
         }
 
         /// <summary>
-        /// Create a new BluetoothSignalStrengthFilter object.
+        /// Create a new <see cref="BluetoothSignalStrengthFilter"/> object.
         /// </summary>
         public BluetoothSignalStrengthFilter()
         {
@@ -59,25 +74,59 @@ namespace nanoFramework.Device.Bluetooth
         /// The time out for a received signal strength indicator (RSSI) event to be considered
         /// out of range. Value between 1 and 60 seconds.
         /// </summary>
-        public TimeSpan OutOfRangeTimeout { get => _outOfRangeTimeout; set => _outOfRangeTimeout = value; }
+        public TimeSpan OutOfRangeTimeout
+        {
+            get => _outOfRangeTimeout;
+            set
+            {
+                if (value.TotalMilliseconds < 1000 || value.Milliseconds > 60000)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+                _outOfRangeTimeout = value;
+            }
+
+        }
 
         /// <summary>
         /// The minimum received signal strength indicator (RSSI) value in dBm on which RSSI
         /// events will be considered out of range. Value between +20 and -127. Default vale is -127.
         /// </summary>
-        public short OutOfRangeThresholdInDBm { get => _outOfRangeThresholdInDBm; set => _outOfRangeThresholdInDBm = value; }
+        public short OutOfRangeThresholdInDBm
+        {
+            get => _outOfRangeThresholdInDBm;
+            set
+            {
+                if (value > 20 || value < -127)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+                _outOfRangeThresholdInDBm = value;
+            }
+        }
 
         /// <summary>
         /// The minimum received signal strength indicator (RSSI) value in dBm on which RSSI
         /// events will be propagated or considered in range if the previous events were
         /// considered out of range. Value between +20 and -127. Default vale is -127.
         /// </summary>
-        public short InRangeThresholdInDBm { get => _inRangeThresholdInDBm; set => _inRangeThresholdInDBm = value; }
+        public short InRangeThresholdInDBm
+        {
+            get => _inRangeThresholdInDBm;
+            set
+            {
+                if (value > 20 || value < -127)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+                _inRangeThresholdInDBm = value;
+            }
+        }
 
         /// <summary>
         /// Signal strength filter (RSSI).
         /// </summary>
-        /// <param name="args">BluetoothLEAdvertisementReceivedEventArgs</param>
+        /// <param name="args"><see cref="BluetoothLEAdvertisementReceivedEventArgs"/></param>
         /// <returns>Returns False to ignore event</returns>
         internal bool Filter(BluetoothLEAdvertisementReceivedEventArgs args)
         {

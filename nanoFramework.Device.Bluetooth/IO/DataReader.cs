@@ -124,7 +124,7 @@ namespace nanoFramework.Device.Bluetooth
         }
 
         /// <summary>
-        /// Reads a GUID value from the input buffer.
+        /// Reads a <see cref="Guid"/> value from the input buffer.
         /// </summary>
         /// <returns>The value.</returns>
         public Guid ReadGuid()
@@ -135,6 +135,50 @@ namespace nanoFramework.Device.Bluetooth
             ReadBytes(byteArray);
 
             return new Guid(byteArray);
+        }
+
+        /// <summary>
+        /// Reads a UUID value from the input buffer.
+        /// </summary>
+        /// <returns>The UUID value.</returns>
+        public Guid ReadUuid()
+        {
+            byte[] srcArray = new byte[16];
+            byte[] tarArray = new byte[16];
+
+            // read position update and check are performed on the call
+            ReadBytes(srcArray);
+
+            // Fix order
+            int ti = 0;
+            foreach (int index in new int[] { 12, 13, 14, 15, 10, 11, 8, 9, 7, 6, 5, 4, 3, 2, 1, 0 })
+            {
+                tarArray[ti++] = srcArray[index];
+            }
+
+            return new Guid(tarArray);
+        }
+
+        /// <summary>
+        /// Reads a UUID value from the input buffer which has been written with <see cref="DataWriter.WriteUuid2"/>.
+        /// </summary>
+        /// <returns>The GUID/UUID value.</returns>
+        public Guid ReadUuid2()
+        {
+            byte[] srcArray = new byte[16];
+            byte[] tarArray = new byte[16];
+
+            // read position update and check are performed on the call
+            ReadBytes(srcArray);
+
+            // Fix order
+            int ti = 0;
+            foreach (int index in new int[] { 3, 2, 1, 0, 5, 4, 7, 6, 8, 9, 10, 11, 12, 13, 14, 15 })
+            {
+                tarArray[ti++] = srcArray[index];
+            }
+
+            return new Guid(tarArray);
         }
 
         /// <summary>

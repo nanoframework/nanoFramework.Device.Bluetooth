@@ -15,7 +15,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
     public enum BluetoothLEAdvertisementFlags : uint
     {
         /// <summary>
-        /// None
+        /// None.
         /// </summary>
         None = 0,
 
@@ -40,7 +40,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         DualModeControllerCapable = 8,
 
         /// <summary>
-        /// Simultaneous Bluetooth LE and BR/EDR to same device capable (host)
+        /// Simultaneous Bluetooth LE and BR/EDR to same device capable (host).
         /// </summary>
         DualModeHostCapable = 16
     }

@@ -329,7 +329,7 @@ namespace nanoFramework.Device.Bluetooth
                         switch (btEvent.type)
                         {
                             case BluetoothEventType.AdvertisementDiscovered:
-                                BluetoothLEAdvertisementReceivedEventArgs eventRxArgs = BluetoothLEAdvertisementReceivedEventArgs.CreateFromEvent(btEvent.id);
+                                BluetoothLEAdvertisementReceivedEventArgs eventRxArgs = BluetoothLEAdvertisementReceivedEventArgs.CreateFromEvent(_watcher, btEvent.id);
                                 eventRxArgs.Timestamp = DateTime.UtcNow;
                                 _watcher?.OnReceived(eventRxArgs);
                                 break;

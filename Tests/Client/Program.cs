@@ -156,17 +156,9 @@ namespace TestClient
                     EnvService.UpdateValue(iTempOutMin, t3);
                     Thread.Sleep(5000);
                 }
-
             }
 
-
             Thread.Sleep(Timeout.Infinite);
-        }
-
-        // Receive test commands
-        private static void Test_CommandRX(TestService sender, string args)
-        {
-            
         }
     }
 }
