@@ -117,7 +117,8 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         /// <summary>
         /// Returns an ArrayList of all the BluetoothLEAdvertisementDataSection matching the given advertisement
         /// type. This method returns an empty list if no such sections are found in the
-        /// payload.        /// </summary>
+        /// payload.        
+        /// </summary>
         /// <param name="type">The advertisement section type</param>
         /// <returns>
         /// BluetoothLEAdvertisementDataSection ArrayList of matching advertisement types.
@@ -125,7 +126,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         /// </returns>
         public ArrayList GetSectionsByType(byte type)
         {
-            // Return array containing sections
+            // Return array containing sections.
             ArrayList retArray = new();
 
             foreach (BluetoothLEAdvertisementDataSection s in _dataSections)
@@ -252,7 +253,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         }
 
         /// <summary>
-        /// Load properties from DataSection array
+        /// Load properties from DataSection array.
         /// </summary>
         private void loadPropertiesFromDataSections()
         {
@@ -263,7 +264,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         }
 
         /// <summary>
-        /// Parse raw manufacturer data into _manufacturerData arrayList
+        /// Parse raw manufacturer data into _manufacturerData arrayList.
         /// </summary>
         /// <param name="rawManufacturerData"></param>
         private void ParseManufacturerData(byte[] rawManufacturerData)
@@ -328,7 +329,6 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
                 _dataSections.Add(bds);
             }
         }
-
 
         /// <summary>
         /// Merge the scan response advertisement into original advertisement so all data sections are together.

@@ -11,8 +11,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
 {
     /// <summary>
     /// Provides data for a Received event on a BluetoothLEAdvertisementWatcher. A BluetoothLEAdvertisementReceivedEventArgs
-    /// instance is created when the Received event occurs on a BluetoothLEAdvertisementWatcher
-    /// object.
+    /// instance is created when the Received event occurs on a BluetoothLEAdvertisementWatcher object.
     /// </summary>
     public class BluetoothLEAdvertisementReceivedEventArgs
     {
@@ -66,7 +65,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
                 ad.Advertisement.ParseBytesToSectionData(ad._rawAdvertData);
                 ad._rawAdvertData = null;
 
-                // TODO can we do this. merge. extra mem needed, maybe just save last advert
+                // TODO can we do this ? merge. extra memory needed, maybe just save last advert
                 //// If a scan response then try to merge advertisement data with original advertisement data.
                 //if (ad.AdvertisementType == BluetoothLEAdvertisementType.ScanResponse)
                 //{

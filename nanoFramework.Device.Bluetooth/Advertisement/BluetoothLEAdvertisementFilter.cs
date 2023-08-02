@@ -96,6 +96,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
 
             return true;
         }
+
         private bool CompareBufferWithOffset(Buffer a, Buffer b, short boffset)
         {
             // Check offset is in data

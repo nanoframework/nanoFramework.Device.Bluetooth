@@ -47,7 +47,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         public Buffer Data { get => _buffer; set => _buffer = value; }
 
         /// <summary>
-        /// Returns a byte array formatted with data section data in format for adverts.
+        /// Returns a byte array formatted with data section data in format used for adverts.
         /// 1 byte length, 1 byte type, bytes data
         /// </summary>
         /// <returns>Byte array for advert section.</returns>
