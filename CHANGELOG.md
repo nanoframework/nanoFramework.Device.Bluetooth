@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.47...HEAD)
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.54...HEAD)
+
+**Implemented enhancements:**
+
+- Add extra validation on incoming adverts [\#79](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/79)
+
+## [v1.1.54](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/v1.1.54) (2023-08-02)
+
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.47...v1.1.54)
 
 **Implemented enhancements:**
 
