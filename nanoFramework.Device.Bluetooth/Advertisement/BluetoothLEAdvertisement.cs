@@ -202,10 +202,15 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
             _manufacturerData.Clear();
 
             // Each section is composed of 1 byte dataLength following _advertData, 1 byte type, Data bytes
-            // TODO check dataLength 
             while (byteIndex < bytes.Length)
             {
                 int dataLength = bytes[byteIndex++] - 1;
+                if (dataLength < 0 || (bytes.Length - byteIndex) < dataLength )
+                {
+                    // Invalid section, ignore
+                    break;
+                }
+
                 byte dataType = bytes[byteIndex++];
 
                 // Extract _advertData section from byte array
@@ -224,31 +229,34 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
 
         private void LoadDataSectionToProperty(BluetoothLEAdvertisementDataSection ds)
         {
-            switch ((BluetoothLEAdvertisementDataSectionType)ds.DataType)
+            if (ds.Data.Length > 0)
             {
-                case BluetoothLEAdvertisementDataSectionType.Flags:
-                    _flags = (BluetoothLEAdvertisementFlags)ds.Data.Data[0];
-                    break;
+                switch ((BluetoothLEAdvertisementDataSectionType)ds.DataType)
+                {
+                    case BluetoothLEAdvertisementDataSectionType.Flags:
+                        _flags = (BluetoothLEAdvertisementFlags)ds.Data.Data[0];
+                        break;
 
-                // Local name
-                case BluetoothLEAdvertisementDataSectionType.ShortenedLocalName:
-                case BluetoothLEAdvertisementDataSectionType.CompleteLocalName:
-                    _localName = Encoding.UTF8.GetString(ds.Data.Data, 0, ds.Data.Data.Length);
-                    break;
+                    // Local name
+                    case BluetoothLEAdvertisementDataSectionType.ShortenedLocalName:
+                    case BluetoothLEAdvertisementDataSectionType.CompleteLocalName:
+                        _localName = Encoding.UTF8.GetString(ds.Data.Data, 0, ds.Data.Data.Length);
+                        break;
 
-                case BluetoothLEAdvertisementDataSectionType.ManufacturerSpecificData:
-                    ParseManufacturerData(ds.Data.Data);
-                    break;
+                    case BluetoothLEAdvertisementDataSectionType.ManufacturerSpecificData:
+                        ParseManufacturerData(ds.Data.Data);
+                        break;
 
-                // Service UUID
-                case BluetoothLEAdvertisementDataSectionType.CompleteList16uuid:
-                case BluetoothLEAdvertisementDataSectionType.IncompleteList16uuid:
-                case BluetoothLEAdvertisementDataSectionType.CompleteList32uuid:
-                case BluetoothLEAdvertisementDataSectionType.IncompleteList32uuid:
-                case BluetoothLEAdvertisementDataSectionType.CompleteList128uuid:
-                case BluetoothLEAdvertisementDataSectionType.IncompleteList128uuid:
-                    ParseUuidList(ds.Data.Data);
-                    break;
+                    // Service UUID
+                    case BluetoothLEAdvertisementDataSectionType.CompleteList16uuid:
+                    case BluetoothLEAdvertisementDataSectionType.IncompleteList16uuid:
+                    case BluetoothLEAdvertisementDataSectionType.CompleteList32uuid:
+                    case BluetoothLEAdvertisementDataSectionType.IncompleteList32uuid:
+                    case BluetoothLEAdvertisementDataSectionType.CompleteList128uuid:
+                    case BluetoothLEAdvertisementDataSectionType.IncompleteList128uuid:
+                        ParseUuidList(ds.Data.Data);
+                        break;
+                }
             }
         }
 
@@ -269,15 +277,18 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
         /// <param name="rawManufacturerData"></param>
         private void ParseManufacturerData(byte[] rawManufacturerData)
         {
-            // first 2 bytes are company id
-            ushort CompanyID = (ushort)(rawManufacturerData[0] + (rawManufacturerData[1] << 8));
+            if (rawManufacturerData.Length >= 2)
+            {
+                // first 2 bytes are company id
+                ushort CompanyID = (ushort)(rawManufacturerData[0] + (rawManufacturerData[1] << 8));
 
-            // Rest are the Manufacturers Data
-            byte[] mandata = new byte[rawManufacturerData.Length - 2];
-            Array.Copy(rawManufacturerData, 2, mandata, 0, rawManufacturerData.Length - 2);
+                // Rest are the Manufacturers Data
+                byte[] mandata = new byte[rawManufacturerData.Length - 2];
+                Array.Copy(rawManufacturerData, 2, mandata, 0, rawManufacturerData.Length - 2);
 
-            Buffer data = new(mandata);
-            _manufacturerData.Add(new BluetoothLEManufacturerData(CompanyID, data));
+                Buffer data = new(mandata);
+                _manufacturerData.Add(new BluetoothLEManufacturerData(CompanyID, data));
+            }
         }
 
         /// <summary>
