@@ -45,6 +45,16 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         public static Guid ServerCharacteristicConfiguration { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.ServerCharacteristicConfiguration); }
 
         /// <summary>
+        /// Get the Bluetooth SIG-defined External Report Reference Descriptor UUID.
+        /// </summary>
+        public static Guid ExternalReportReference { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.ExternalReportReference); }
+
+        /// <summary>
+        /// Get the Bluetooth SIG-defined Report Reference Descriptor UUID.
+        /// </summary>
+        public static Guid ReportReference { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.ReportReference); }
+
+        /// <summary>
         /// Gets the Bluetooth SIG-defined Value trigger settings Descriptor UUID.
         /// </summary>
         public static Guid ValueTriggerSetting { get => Utilities.CreateUuidFromShortCode((ushort)Utilities.GattNativeDescriptorUuid.ValueTriggerSetting); }
