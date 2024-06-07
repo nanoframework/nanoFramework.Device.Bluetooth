@@ -194,7 +194,7 @@ namespace nanoFramework.Device.Bluetooth
         /// <returns>UUID type.</returns>
         public static UuidType TypeOfUuid(Guid uuid)
         {
-            if (IsBluetoothSigUUID(uuid))
+            if (!IsBluetoothSigUUID(uuid))
             {
                 // 16 bit or 32 bit Bluetooth SIG UUID
                 if (IsBluetoothSigUUID16(uuid))
