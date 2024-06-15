@@ -2,7 +2,23 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.60...HEAD)
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.65...HEAD)
+
+**Implemented enhancements:**
+
+- When advertising a service with a 16bit UUID, the service is listed as a 128bit UUID on NRF Connect [\#90](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/90)
+
+**Documentation and other chores:**
+
+- Update 1 NuGet dependencies [\#91](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/91)
+- Update 1 NuGet dependencies [\#89](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/89)
+- Update 1 NuGet dependencies [\#88](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/88)
+- Update 1 NuGet dependencies [\#87](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/87)
+- Update 1 NuGet dependencies [\#86](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/86)
+
+## [v1.1.65](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/v1.1.65) (2024-05-09)
+
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.60...v1.1.65)
 
 **Documentation and other chores:**
 
