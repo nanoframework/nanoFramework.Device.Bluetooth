@@ -41,15 +41,15 @@ namespace NFUnitTest1
     [TestMethod]
     public void Test16BitUuids()
     {
-      ushort value16 = 4660; // 0x1234
+      ushort value16 = 0x1234;
 
       var serviceUid = Utilities.CreateUuidFromShortCode(value16);
 
       var bytes = serviceUid.ToByteArray();
-      Assert.AreEqual((byte)52, bytes[0]); // 0x34
-      Assert.AreEqual((byte)18, bytes[1]); // 0x12
-      Assert.AreEqual((byte)0, bytes[2]);  // 0x00
-      Assert.AreEqual((byte)0, bytes[3]);  // 0x00
+      Assert.AreEqual((byte)0x34, bytes[0]);
+      Assert.AreEqual((byte)0x12, bytes[1]);
+      Assert.AreEqual((byte)0x00, bytes[2]);
+      Assert.AreEqual((byte)0x00, bytes[3]);
 
       // the uuid must be recognized as falling in the range of 16 or 32bit uuids
       Assert.IsTrue(Utilities.IsBluetoothSigUUID(serviceUid));
@@ -68,13 +68,13 @@ namespace NFUnitTest1
     [TestMethod]
     public void Test32BitUuids()
     {
-      var uuid32 = new Guid("12345678-0000-1000-8000-00805F9B34FB"); // 0x12345678 - 305419896
+      var uuid32 = new Guid("12345678-0000-1000-8000-00805F9B34FB"); // 32bit value equals 0x12345678
 
       var bytes = uuid32.ToByteArray();
-      Assert.AreEqual((byte)120, bytes[0]); // 0x78
-      Assert.AreEqual((byte)86, bytes[1]);  // 0x56
-      Assert.AreEqual((byte)52, bytes[2]);  // 0x34
-      Assert.AreEqual((byte)18, bytes[3]);  // 0x12
+      Assert.AreEqual((byte)0x78, bytes[0]);
+      Assert.AreEqual((byte)0x56, bytes[1]);
+      Assert.AreEqual((byte)0x34, bytes[2]);
+      Assert.AreEqual((byte)0x12, bytes[3]);
 
       // the uuid must be recognized as falling in the range of 16 or 32bit uuids
       Assert.IsTrue(Utilities.IsBluetoothSigUUID(uuid32));
@@ -83,7 +83,7 @@ namespace NFUnitTest1
 
       var result = Utilities.ConvertUuidToIntId(uuid32);
 
-      Assert.AreEqual(305419896, result, "After conversion, the end result must be the same value we started with");
+      Assert.AreEqual(0x12345678, result, "After conversion, the end result must be the same value we started with");
     }
   }
 }
