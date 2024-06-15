@@ -10,6 +10,6 @@
    </RunConfiguration>
    <nanoFrameworkAdapter>
        <Logging>None</Logging>
-       <IsRealHardware>False</IsRealHardware>
+       <IsRealHardware>true</IsRealHardware>
    </nanoFrameworkAdapter>
 </RunSettings>
