@@ -2,7 +2,15 @@
 
 ## [**Changes available only in 'Preview' NuGet packages:**](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/HEAD)
 
-[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.65...HEAD)
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.73...HEAD)
+
+**Implemented enhancements:**
+
+- feat: add missing report reference and external report reference [\#82](https://github.com/nanoframework/nanoFramework.Device.Bluetooth/pull/82)
+
+## [v1.1.73](https://github.com/nanoframework/nanoframework.Device.Bluetooth/tree/v1.1.73) (2024-06-15)
+
+[Full Changelog](https://github.com/nanoframework/nanoframework.Device.Bluetooth/compare/v1.1.65...v1.1.73)
 
 **Implemented enhancements:**
 
