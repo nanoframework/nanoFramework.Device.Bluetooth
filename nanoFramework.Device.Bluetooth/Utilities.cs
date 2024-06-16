@@ -138,7 +138,7 @@ namespace nanoFramework.Device.Bluetooth
         public static UInt32 ConvertUuidToIntId(Guid uuid)
         {
             byte[] bytes = uuid.ToByteArray();
-            return (UInt32)((bytes[2] << 24) + (bytes[3] << 16) + (bytes[0] << 8) + bytes[1]);
+            return (UInt32)(bytes[0] | (bytes[1] << 8) | (bytes[2] << 16) | bytes[3] << 24);
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace nanoFramework.Device.Bluetooth
         public static bool IsBluetoothSigUUID(Guid uuid)
         {
             byte[] bytes = uuid.ToByteArray();
-            for (int index = 0; index < baseUuid.Length; index++)
+            for (int index = 4; index < baseUuid.Length; index++)
             {
                 if (baseUuid[index] != bytes[index])
                 {
@@ -183,6 +183,12 @@ namespace nanoFramework.Device.Bluetooth
         /// <returns>True if Sig UUID is 16bit UUID</returns>
         public static bool IsBluetoothSigUUID16(Guid uuid)
         {
+            // first check if the uid is based on the bluetooth base uid
+            if (!IsBluetoothSigUUID(uuid))
+            {
+                return false;
+            }
+
             byte[] bytes = uuid.ToByteArray();
             return (bytes[2] == 0) && (bytes[3] == 0);
         }
@@ -194,21 +200,20 @@ namespace nanoFramework.Device.Bluetooth
         /// <returns>UUID type.</returns>
         public static UuidType TypeOfUuid(Guid uuid)
         {
-            if (IsBluetoothSigUUID(uuid))
+            // 16bit values are based on the base uid and have the 2 MSB set to 0
+            if (IsBluetoothSigUUID16(uuid))
             {
-                // 16 bit or 32 bit Bluetooth SIG UUID
-                if (IsBluetoothSigUUID16(uuid))
-                {
-                    // 16bit UUID
-                    return UuidType.Uuid16;
-                }
-                else
-                {
-                    // 32bit UUID
-                    return UuidType.Uuid32;
-                }
+                // 16bit UUID
+                return UuidType.Uuid16;
+            }
+            // a 32bit value is based on the base uid
+            else if (IsBluetoothSigUUID(uuid))
+            {
+                // 32bit UUID
+                return UuidType.Uuid32;
             }
 
+            // the uid is not based on the base uid
             return UuidType.Uuid128;
         }
     }
