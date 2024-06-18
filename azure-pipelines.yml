@@ -12,7 +12,6 @@ trigger:
       - .github_changelog_generator
       - .gitignore
       - CHANGELOG.md
-      - CODE_OF_CONDUCT.md
       - LICENSE.md
       - README.md
       - README.zh-cn.md
