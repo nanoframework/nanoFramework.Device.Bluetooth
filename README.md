@@ -18,8 +18,8 @@ document language: [English](README.md) | [简体中文](README.zh-cn.md)
 Bluetooth Low Energy library.
 
 This library is based on the Windows.Devices.Bluetooth UWP class library but simplified and with the asynchronous related calls made synchronous.
-The original .Net assembly depended on Windows.Storage.Streams for DataReader & DataWriter; this library has simplified inbuilt versions. 
-So references to IBuffer in .Net UWP examples should now use Buffer instead. 
+The original .Net assembly depended on Windows.Storage.Streams for DataReader & DataWriter; this library has simplified inbuilt versions.
+So references to IBuffer in .Net UWP examples should now use Buffer instead.
 
 ## Firmware versions
 
@@ -925,4 +925,3 @@ For more information see the [.NET Foundation Code of Conduct](https://dotnetfou
 ## .NET Foundation
 
 This project is supported by the [.NET Foundation](https://dotnetfoundation.org).
-
