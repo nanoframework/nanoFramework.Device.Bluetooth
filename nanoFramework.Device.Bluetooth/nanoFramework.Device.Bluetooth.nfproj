@@ -36,6 +36,11 @@
     <NF_GenerateSkeletonProjectName>sys_dev_ble_native</NF_GenerateSkeletonProjectName>
     <Name>System.Device.Bluetooth</Name>
   </PropertyGroup>
+  <ItemGroup>
+    <NFMDP_PE_ExcludeClassByName Include="ThisAssembly">
+      <InProject>false</InProject>
+    </NFMDP_PE_ExcludeClassByName>
+  </ItemGroup>  
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="Advertisement\BluetoothLEAdvertisementBytePattern.cs" />
