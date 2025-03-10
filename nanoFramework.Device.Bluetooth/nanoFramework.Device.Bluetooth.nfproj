@@ -40,7 +40,7 @@
     <NFMDP_PE_ExcludeClassByName Include="ThisAssembly">
       <InProject>false</InProject>
     </NFMDP_PE_ExcludeClassByName>
-  </ItemGroup>  
+  </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="Advertisement\BluetoothLEAdvertisementBytePattern.cs" />
@@ -142,14 +142,14 @@
     <Content Include="packages.lock.json" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="mscorlib, Version=1.17.1.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
-      <HintPath>..\packages\nanoFramework.CoreLibrary.1.17.1\lib\mscorlib.dll</HintPath>
+    <Reference Include="mscorlib, Version=1.17.7.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\packages\nanoFramework.CoreLibrary.1.17.7\lib\mscorlib.dll</HintPath>
     </Reference>
-    <Reference Include="nanoFramework.Runtime.Events, Version=1.11.30.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
-      <HintPath>..\packages\nanoFramework.Runtime.Events.1.11.30\lib\nanoFramework.Runtime.Events.dll</HintPath>
+    <Reference Include="nanoFramework.Runtime.Events, Version=1.11.31.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\packages\nanoFramework.Runtime.Events.1.11.31\lib\nanoFramework.Runtime.Events.dll</HintPath>
     </Reference>
-    <Reference Include="nanoFramework.Runtime.Native, Version=1.7.9.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
-      <HintPath>..\packages\nanoFramework.Runtime.Native.1.7.9\lib\nanoFramework.Runtime.Native.dll</HintPath>
+    <Reference Include="nanoFramework.Runtime.Native, Version=1.7.10.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\packages\nanoFramework.Runtime.Native.1.7.10\lib\nanoFramework.Runtime.Native.dll</HintPath>
     </Reference>
     <Reference Include="nanoFramework.System.Collections, Version=1.5.62.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\packages\nanoFramework.System.Collections.1.5.62\lib\nanoFramework.System.Collections.dll</HintPath>
