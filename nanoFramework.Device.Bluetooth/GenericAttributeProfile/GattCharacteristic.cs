@@ -157,7 +157,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
         /// <returns>
         /// Returns an asynchronous operation that completes with a GattWriteResult object.
         /// </returns>
-        public GattWriteResult WriteClientCharacteristicConfigurationDescriptorWithResult(GattClientCharacteristicConfigurationDescriptorValue clientCharacteristicConfigurationDescriptorValue)
+        public GattWriteResult WriteClientCharacteristicConfigurationDescriptorWithResult(GattClientCharacteristicConfigurationDescriptorValue clientCharacteristicConfigurationDescriptorValue, GattWriteOption gattWriteOption = GattWriteOption.WriteWithoutResponse)
         {
             GattCommunicationStatus status = GattCommunicationStatus.AccessDenied;
             byte protocolError = 0;
@@ -181,7 +181,7 @@ namespace nanoFramework.Device.Bluetooth.GenericAttributeProfile
                     GattWriteResult wr = _service.Device.WriteAttributeValueWithResult(
                         _cccdDescriptorHandle,
                         dw.DetachBuffer(),
-                        GattWriteOption.WriteWithoutResponse);
+                        gattWriteOption);
 
                     if (wr.Status == 0)
                     {
