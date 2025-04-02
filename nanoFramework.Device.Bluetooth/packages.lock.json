@@ -22,15 +22,15 @@
       },
       "nanoFramework.System.Collections": {
         "type": "Direct",
-        "requested": "[1.5.63, 1.5.63]",
-        "resolved": "1.5.63",
-        "contentHash": "TuYK0RwyRovRal7HBwVsfJDT7qSKa+6sk16kcV7p+VOPD4h8Pi7Qo0v2BbwAL5YWS+4wTTEWr0JgwOrYpGVrtA=="
+        "requested": "[1.5.67, 1.5.67]",
+        "resolved": "1.5.67",
+        "contentHash": "MjSipUB70vrxjqTm1KfKTUqqjd0wbweiNyYFXONi0XClrH6HXsuX2lhDqXM8NWuYnWyYOqx8y20sXbvsH+4brg=="
       },
       "nanoFramework.System.Text": {
         "type": "Direct",
-        "requested": "[1.3.36, 1.3.36]",
-        "resolved": "1.3.36",
-        "contentHash": "qO0BrmYX4+iV5MSVSIIOSnyPx9Odvgb5Y9hGDWgUCQUGrPG32WPq6YGhTQMK2UIIu3yfB9Nsu2hPhjVSpFYMMA=="
+        "requested": "[1.3.42, 1.3.42]",
+        "resolved": "1.3.42",
+        "contentHash": "68HPjhersNpssbmEMUHdMw3073MHfGTfrkbRk9eILKbNPFfPFck7m4y9BlAi6DaguUJaeKxgyIojXF3SQrF8/A=="
       },
       "Nerdbank.GitVersioning": {
         "type": "Direct",
