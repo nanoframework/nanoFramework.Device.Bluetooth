@@ -15,7 +15,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>NFUnitTest1</RootNamespace>
+    <RootNamespace>NFUnitTests</RootNamespace>
     <AssemblyName>NFUnitTest</AssemblyName>
     <IsCodedUITest>False</IsCodedUITest>
     <IsTestProject>true</IsTestProject>
@@ -27,7 +27,7 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="TestUuidUtilities.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="TestServiceProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

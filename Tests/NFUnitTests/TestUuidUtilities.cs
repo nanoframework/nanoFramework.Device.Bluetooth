@@ -7,7 +7,7 @@ using System;
 using nanoFramework.TestFramework;
 using nanoFramework.Device.Bluetooth;
 
-namespace NFUnitTest1
+namespace NFUnitTests
 {
   /// <summary>
   /// Tests the different conversion and type detection functions for Bluetooth uuids
