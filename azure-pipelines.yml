@@ -54,6 +54,7 @@ steps:
   parameters:
     sonarCloudProject: 'nanoframework_nanoFramework.Device.Bluetooth'
     runUnitTests: false
+    usePreviewBuild: true
 
 # step from template @ nf-tools repo
 # report error

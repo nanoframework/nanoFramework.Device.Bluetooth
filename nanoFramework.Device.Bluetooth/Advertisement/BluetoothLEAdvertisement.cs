@@ -416,7 +416,7 @@ namespace nanoFramework.Device.Bluetooth.Advertisement
 
         private byte[] AdjustByteArraySize(byte[] array, int len)
         {
-            SpanByte sb = new SpanByte(array).Slice(0, len);
+            Span<byte> sb = new Span<byte>(array).Slice(0, len);
             return sb.ToArray();
         }
     }

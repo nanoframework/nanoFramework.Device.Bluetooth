@@ -9,7 +9,8 @@
        <TargetPlatform>x64</TargetPlatform>
    </RunConfiguration>
    <nanoFrameworkAdapter>
-       <Logging>Verbose</Logging>
-       <IsRealHardware>false</IsRealHardware>
+       <Logging>None</Logging>
+       <IsRealHardware>False</IsRealHardware>
+       <UsePreviewClr>True</UsePreviewClr>
    </nanoFrameworkAdapter>
 </RunSettings>
