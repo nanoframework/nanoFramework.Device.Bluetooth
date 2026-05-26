@@ -22,7 +22,7 @@ This package requires a target with nanoFramework.Device.Bluetooth v$nativeVersi
       <group targetFramework=".NETnanoFramework1.0">
         <dependency id="nanoFramework.CoreLibrary" version="2.0.0-preview.52" />
         <dependency id="nanoFramework.Runtime.Native" version="2.0.0-preview.24" />
-        <dependency id="nanoFramework.Runtime.Events" version="2.0.0-preview.12" />
+        <dependency id="nanoFramework.Runtime.Events" version="2.0.0-preview.13" />
         <dependency id="nanoFramework.System.Text" version="2.0.0-preview.18" />
         <dependency id="nanoFramework.System.Collections" version="2.0.0-preview.14" />
       </group>
