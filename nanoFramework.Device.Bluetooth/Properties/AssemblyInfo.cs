@@ -14,10 +14,3 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("nanoFramework Contributors")]
 [assembly: AssemblyProduct("nanoFramework.Device.Bluetooth")]
 [assembly: AssemblyCopyright("Copyright (c) .NET Foundation and Contributors")]
-
-////////////////////////////////////////////////////////////////
-// update this whenever the native assembly signature changes //
-[assembly: AssemblyNativeVersion("100.2.0.0")]
-////////////////////////////////////////////////////////////////
-
-
